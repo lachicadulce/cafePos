@@ -25,3 +25,7 @@ hs_err_pid*
 # macOS temp files
 .DS_Store
 */.DS_Store
+
+# Eclipse + Java
+.classpath
+.project

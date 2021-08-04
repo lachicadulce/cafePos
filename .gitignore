@@ -29,3 +29,6 @@ hs_err_pid*
 # Eclipse + Java
 .classpath
 .project
+
+# Frame Set
+PosFrame.java

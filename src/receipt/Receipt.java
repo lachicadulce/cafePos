@@ -1,12 +1,14 @@
 package receipt;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import baseSettings.PosFrame;
 
@@ -22,10 +24,48 @@ public class Receipt extends PosFrame {
 				DateTimeFormatter.ofPattern("y년 M월 d일");
 		
 		String message = my_date_format.format(LocalDate.now());
+
+		JButton date = new JButton(message);
 		
+		String string = 
+				"<html><center>-------------------------------------------------------------------"
+				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
+				+ "<br>지참하셔야 하며, 카드결제는 30일(09월08일)"
+				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
+				+ "<br>-------------------------------------------------------------------"
+				+ "</center>"
+				+ ""
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>합계수량/금액</td>"
+				+ "<td style='text-align:center;'>1</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				+ ""
+				+ ""
+				+ ""
+				+ "<br>-------------------------------------------------------------------"
+				+ "<br>과세매출"
+				+ ""
+				+ "<br>부가세"
+				+ ""
+				+ "<br>합&emsp계"
+				+ ""
+				+ "<br>현&emsp금"
+				+ ""
+				+ "</html>";
+		
+		
+		
+		// &nbsp 띄어쓰기
+		// <html> +  + <br> + + <p>  + + </html> 줄 바꾸는 법
+		
+		JLabel receipt = new JLabel(string);
 		
 		ArrayList<JButton> buttons = new ArrayList<>();
-		JButton date = new JButton(message);
+		
+		
 		
 		buttons.add(new JButton("전표반품")); // 0 
 		buttons.add(new JButton("재인쇄"));
@@ -35,7 +75,6 @@ public class Receipt extends PosFrame {
 		buttons.add(new JButton("전체"));
 		buttons.add(new JButton("현금"));
 		buttons.add(new JButton("신용카드")); // 6
-		
 		
 		// 버튼 위치 조정
 		buttons.get(0).setBounds(20, 30, 150, 80);
@@ -47,59 +86,35 @@ public class Receipt extends PosFrame {
 		buttons.get(5).setBounds(1010, 30, 120, 80);
 		buttons.get(6).setBounds(1150, 30, 120, 80);
 		
-		date.setBounds(730, 30, 150, 80);
+		for (int i = 0; i < buttons.size(); ++i) {
+			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
+		}
 		
-		// 버튼 추가
+		date.setBounds(730, 30, 120, 80);
+		date.setBackground(new Color(0xffffff));
+		
+		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
+		receipt.setBounds(730, 140, 540, 500);
+		receipt.setOpaque(true); // 백그라운드 색상 허용
+		receipt.setBackground(new Color(0xffffff));
+		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
+		receipt.setVerticalAlignment(JLabel.NORTH);; // 세로 가운데 표시 설정
+		
+		
+		// 좌측 위 버튼 추가
 		add(buttons.get(0));
 		add(buttons.get(1));
 		add(buttons.get(2));
 		add(buttons.get(3));
 		
-		add(date);
+		add(date); // 날짜 출력
 		
+		// 우측 위 버튼
 		add(buttons.get(4));
 		add(buttons.get(5));
 		add(buttons.get(6));
 		
-		
-		
-		
-		
-		
-		
-//		JButton[] btns = new JButton[5];
-//		String[] directions = {"East", "West", "South", "North", "Center"};
-//		
-//		for (int i = 0, len = btns.length; i < len; ++i) {
-//			btns[i] = new JButton("Button" + i);
-//			add(btns[i], directions[i]);
-//		}
-//		// 1. 버튼의 배경색을 바꿀 수도 있다
-//		btns[2].setBackground(new Color(0x42bdff));
-//		
-//		// 2. 버튼에는 글꼴도 추가할 수 있다
-//		btns[1].setFont(new Font("MV Boli", Font.BOLD, 50));
-//		
-//		// 3. 버튼에는 이벤트도 추가할 수 있다.
-//		btns[0].addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				int random = (int)(Math.random() * 10 + 2);
-//				
-//				for (int i = 1; i < random; ++i) {
-//					System.err.print("왜 눌러?");
-//				}
-//				System.out.println();
-//			}
-//		});
-//		
-//		// 4. 버튼 비활성화
-//		btns[4].setEnabled(false);
-		
-		
-		
-		
+        add(receipt);
 
 	}
 	

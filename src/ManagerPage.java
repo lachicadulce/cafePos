@@ -1,10 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,28 +20,21 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import baseSettings.DBConnector;
+import baseSettings.PosFrame;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-public class ManagerPage extends JFrame {
+public class ManagerPage extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
 	
 	public ManagerPage() {
 		super();
+
 		setTB();
 		init();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1300, 800);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frm = this.getSize();
-        int xpos = (int)(screen.getWidth() / 2 - frm.getWidth() / 2);
-        int ypos = (int)(screen.getHeight() / 2 - frm.getHeight() / 2);
-        setLocation(xpos, ypos);
-              
-		setVisible(true);
 	}
 	
 	// table 생성 및 컬럼 사이즈 조정
@@ -150,5 +140,6 @@ public class ManagerPage extends JFrame {
 	
 	public static void main(String[] args) {
 		ManagerPage mp = new ManagerPage();
+		mp.setDefaultOptions();
 	}
 }

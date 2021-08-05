@@ -49,7 +49,7 @@ public class ManagerPage extends JFrame {
 	
 	// table 생성 및 컬럼 사이즈 조정
 	private void setTB() {
-		String sql = "SELECT no, emp_no, name, emp_degree, TO_CHAR(start_work, 'YYYY/MM/DD HH24:MI:SS') AS stime, TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, round((fin_work - start_work) * 24) AS wtime, TO_CHAR(start_date, 'YYYY/MM/DD HH24:MI:SS') AS swork FROM absent_info INNER JOIN employees_info  USING (emp_no)";
+		String sql = "SELECT no, emp_no, name, emp_degree, TO_CHAR(start_work, 'YYYY/MM/DD HH24:MI:SS') AS stime, TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, round((fin_work - start_work) * 24) AS wtime, TO_CHAR(start_date, 'YYYY/MM/DD') AS swork FROM absent_info INNER JOIN employees_info  USING (emp_no)";
 		
 		String header[] = {"No", "사번", "이름", "직위", "출근시간", "퇴근시간", "근무시간", "근무시작일"};
 		DefaultTableModel model = new DefaultTableModel(header, 0);
@@ -80,7 +80,7 @@ public class ManagerPage extends JFrame {
 		}
 		
 		JTable tb = new JTable(model);
-		tb.setFont(new Font("", Font.PLAIN, 10));
+		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.PLAIN, 15));
 //		tbheader.setPreferredSize(new Dimension(tbheader.getWidth(), 30));

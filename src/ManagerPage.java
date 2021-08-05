@@ -5,6 +5,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -14,9 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
+import baseSettings.DBConnector;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -43,16 +49,37 @@ public class ManagerPage extends JFrame {
 	
 	// table 생성 및 컬럼 사이즈 조정
 	private void setTB() {
+		String sql = "SELECT no, emp_no, name, emp_degree, TO_CHAR(start_work, 'YYYY/MM/DD HH24:MI:SS') AS stime, TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, round((fin_work - start_work) * 24) AS wtime, TO_CHAR(start_date, 'YYYY/MM/DD HH24:MI:SS') AS swork FROM absent_info INNER JOIN employees_info  USING (emp_no)";
 		
-		// TODO: DB에서 값 받아와서 뿌리기
 		String header[] = {"No", "사번", "이름", "직위", "출근시간", "퇴근시간", "근무시간", "근무시작일"};
-		String contents[][] = {
-				{"1", "0001", "백길동", "사장", "2021-08-02 17:00", "2021-08-02 17:00", "02:00", "2021-07-02"},
-				{"2", "0002", "강요한", "점장", "2021-08-02 15:10", "2021-08-02 17:00", "01:50", "2021-07-02"},
-				{"3", "0003", "빈센조", "부점장", "2021-08-02 09:00", "2021-08-02 15:00", "06:00", "2021-07-02"}
-		};
+		DefaultTableModel model = new DefaultTableModel(header, 0);
+	    try (
+	    	Connection conn = DBConnector.getConnection();
+	    	PreparedStatement pstmt = conn.prepareStatement(sql);
+	    	ResultSet rs = pstmt.executeQuery();
+	    	){
+	    	
+			while(rs.next()) {
+				int no = rs.getInt("no");
+				int emp_no = rs.getInt("emp_no");
+				String name = rs.getString("name");
+				String emp_degree = rs.getString("emp_degree");
+				String start_work = rs.getString("stime");
+				String fin_work = rs.getString("ftime");
+				int worked_time = rs.getInt("wtime");
+				String start_date = rs.getString("swork");
+				
+				Object data[] = {no, emp_no, name, emp_degree, start_work, fin_work, worked_time, start_date};
+				model.addRow(data);
+//				System.out.println(no + "/" + emp_no + "/" + name + "/" + emp_degree + "/" + start_work + "/" + fin_work + "/" + worked_time + "/" + start_date);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		JTable tb = new JTable(contents, header);
+		JTable tb = new JTable(model);
 		tb.setFont(new Font("", Font.PLAIN, 10));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.PLAIN, 15));
@@ -70,7 +97,7 @@ public class ManagerPage extends JFrame {
 		scrollpane = new JScrollPane(tb);
 	}
 	
-	// 화면 구성.. 나눠서 했어야하는데 한곳에 때려넣었어요..
+	// 화면 구성
 	private void init() {
 		jsp.setResizeWeight(0.9);
 		Container con = this.getContentPane();

@@ -7,6 +7,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,6 +29,32 @@ public class Receipt extends PosFrame {
 	public Receipt() {
 		super();
 		super.setTitle("영수증 관리");
+		try {
+            Connection conn = DriverManager.getConnection(
+            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
+            		"cafe",
+            		"!!22Qorthdud");
+
+            String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = 24" + "";
+            
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+         tmd   ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.print(rs.getString("MENU"));
+                System.out.print(rs.getInt("PRICE"));
+                System.out.println();
+            }
+
+            // 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
+            rs.close();
+            pstmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("getConnection 하다가 문제 생김");
+        }
 		
 		setLayout(null);
 		

@@ -24,15 +24,18 @@ public class ManagerSales extends PosFrame {
 		String sql = "SELECT receipt_no, "
 				+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
 				+ "total, "
-				+ "payment, "
+				+ "credit, "
+				+ "cash, "
 				+ "cus_no, "
 				+ "point_used, "
 				+ "point_saved, "
-				+ "state "
+				+ "state, "
+				+ "receipt_chk "
 				+ "FROM history_payment "
 				+ "WHERE state = 'complete'";
 		
-		String header[] = {"No", "결제일자", "결제금액", "결제방식", "멤버쉽번호", "차감포인트", "적립포인트", "결제상태"};
+		String header[] = {"No", "결제일자", "결제금액", "현금결제","카드결제", "멤버쉽번호", 
+						"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
 		DefaultTableModel model = new DefaultTableModel(header, 0);
 	    try (
 	    	Connection conn = DBConnector.getConnection();
@@ -44,13 +47,16 @@ public class ManagerSales extends PosFrame {
 				int receipt_no = rs.getInt("receipt_no");
 				String dtime = rs.getString("dtime");
 				int total = rs.getInt("total");
-				String payment = rs.getString("payment");
+				int credit = rs.getInt("credit");
+				int cash = rs.getInt("cash");
 				int cus_no = rs.getInt("cus_no");
 				int point_used = rs.getInt("point_used");
 				int point_saved = rs.getInt("point_saved");
 				String state = rs.getString("state");
+				String receipt_chk = rs.getString("receipt_chk");
 				
-				Object data[] = {receipt_no, dtime, total, payment, cus_no, point_used, point_saved, state};
+				Object data[] = {receipt_no, dtime, total, credit, cash, cus_no, 
+							point_used, point_saved, state, receipt_chk};
 				model.addRow(data);
 			}
 
@@ -66,11 +72,13 @@ public class ManagerSales extends PosFrame {
 		colModel.getColumn(0).setPreferredWidth(30);
 		colModel.getColumn(1).setPreferredWidth(150);
 		colModel.getColumn(2).setPreferredWidth(100);
-		colModel.getColumn(3).setPreferredWidth(100);
+		colModel.getColumn(3).setPreferredWidth(50);
 		colModel.getColumn(4).setPreferredWidth(50);
 		colModel.getColumn(5).setPreferredWidth(50);
 		colModel.getColumn(6).setPreferredWidth(50);
 		colModel.getColumn(7).setPreferredWidth(50);
+		colModel.getColumn(8).setPreferredWidth(100);
+		colModel.getColumn(9).setPreferredWidth(50);
 	
 		scrollpane = new JScrollPane(tb);
 		
@@ -163,3 +171,4 @@ public class ManagerSales extends PosFrame {
 		frame.setDefaultOptions();
 	}
 }
+

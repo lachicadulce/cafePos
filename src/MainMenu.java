@@ -37,7 +37,7 @@ public class MainMenu extends PosFrame implements ActionListener{
 		
 	
 		
-//		JTextArea record = new JTextArea("±âº»°ª"); 
+//		JTextArea record = new JTextArea("ï¿½âº»ï¿½ï¿½"); 
 		JTable record = new JTable(data, columnNames);
 		record.setBounds(10, 10, 500, 400);
 		
@@ -52,17 +52,17 @@ public class MainMenu extends PosFrame implements ActionListener{
 		add(record);
 		
 		
-		JButton cof = new JButton("Ä¿ÇÇ");
+		JButton cof = new JButton("ì»¤í”¼");
 		cof.setBounds(540, 10, 160, 100);
 		cof.setFont(new Font("System",Font.BOLD,20));
 		add(cof);
 		cof.setBackground(new Color(0xb0e8f7));
-		JButton bev = new JButton("À½·á");
+		JButton bev = new JButton("ìŒë£Œ");
 		bev.setBounds(715, 10, 160, 100);
 		bev.setFont(new Font("System",Font.BOLD,20));
 		add(bev);
 		bev.setBackground(new Color(0xb0e8f7));
-		JButton blendid = new JButton("ºí·£µğµå");
+		JButton blendid = new JButton("ë¸”ëœë””ë“œ");
 		blendid.setBounds(890, 10, 160, 100);
 		blendid.setBackground(new Color(0xb0e8f7));
 		blendid.setFont(new Font("System",Font.BOLD,20));
@@ -73,96 +73,96 @@ public class MainMenu extends PosFrame implements ActionListener{
 		md.setFont(new Font("System",Font.BOLD,20));
 		add(md);
 		///////////////////////////////////////
-		JButton americano = new JButton("<HTML><body style='text-align:center'>¾Æ¸Ş¸®Ä«³ë(R)<br>3500</body></HTML>");
+		JButton americano = new JButton("<HTML><body style='text-align:center'>ì•„ë©”ë¦¬ì¹´ë…¸(R)<br>3500</body></HTML>");
 		americano.setBounds(540, 125, 160, 100);
 		americano.setBackground(new Color(0xfafeff));
 		americano.setFont(new Font("System",Font.BOLD,17));
 		add(americano);
-		JButton banila = new JButton("<HTML><body style='text-align:center'>¹Ù´Ò¶ó¶ó¶¼(R)<br>4500</body></HTML>");
+		JButton banila = new JButton("<HTML><body style='text-align:center'>ë°”ë‹ë¼ë¼ë–¼(R)<br>4500</body></HTML>");
 		banila.setBounds(715, 125, 160, 100);
 		banila.setBackground(new Color(0xfafeff));
 		banila.setFont(new Font("System",Font.BOLD,17));
 		add(banila);
-		JButton cafelatte = new JButton("<HTML><body style='text-align:center'>Ä«Æä¶ó¶¼(R)<br>4000</body></HTML>");
+		JButton cafelatte = new JButton("<HTML><body style='text-align:center'>ì¹´í˜ë¼ë–¼(R)<br>4000</body></HTML>");
 		cafelatte.setBounds(890, 125, 160, 100);
 		cafelatte.setBackground(new Color(0xfafeff));
 		cafelatte.setFont(new Font("System",Font.BOLD,17));
 		add(cafelatte);
-		JButton moca = new JButton("<HTML><body style='text-align:center'>Ä«Æä¸ğÄ«(R)<br>4300</body></HTML>");
+		JButton moca = new JButton("<HTML><body style='text-align:center'>ì¹´í˜ëª¨ì¹´(R)<br>4300</body></HTML>");
 		moca.setBounds(1065, 125, 160, 100);
 		moca.setBackground(new Color(0xfafeff));
 		moca.setFont(new Font("System",Font.BOLD,17));
 		add(moca);
-		JButton up = new JButton("<HTML><body style='text-align:left'>¡â</body></HTML>");
+		JButton up = new JButton("<HTML><body style='text-align:left'>â–³</body></HTML>");
 		up.setBounds(1240, 125, 35, 100);
 		up.setBackground(new Color(0xb0e8f7));
 		up.setFont(new Font("System",Font.BOLD,10));
 		add(up);
 		///////////////////////////////////////
-		JButton iceame = new JButton("<HTML><body style='text-align:center'>¾ÆÀÌ½º<br>¾Æ¸Ş¸®Ä«³ë(R)<br>3500</body></HTML>");
+		JButton iceame = new JButton("<HTML><body style='text-align:center'>ì•„ì´ìŠ¤<br>ì•„ë©”ë¦¬ì¹´ë…¸(R)<br>3500</body></HTML>");
 		iceame.setBounds(540, 240, 160, 100);
 		iceame.setBackground(new Color(0xfafeff));
 		iceame.setFont(new Font("System",Font.BOLD,17));
 		add(iceame);
-		JButton icebana = new JButton("<HTML><body style='text-align:center'>¾ÆÀÌ½º<br>¹Ù´Ò¶ó¶ó¶¼(R)<br>4500</body></HTML>");
+		JButton icebana = new JButton("<HTML><body style='text-align:center'>ì•„ì´ìŠ¤<br>ë°”ë‹ë¼ë¼ë–¼(R)<br>4500</body></HTML>");
 		icebana.setBounds(715, 240, 160, 100);
 		icebana.setBackground(new Color(0xfafeff));
 		icebana.setFont(new Font("System",Font.BOLD,17));
 		add(icebana);
-		JButton cafelatteL = new JButton("<HTML><body style='text-align:center'>Ä«Æä¶ó¶¼(L)<br>4500</body></HTML>");
+		JButton cafelatteL = new JButton("<HTML><body style='text-align:center'>ì¹´í˜ë¼ë–¼(L)<br>4500</body></HTML>");
 		cafelatteL.setBounds(890, 240, 160, 100);
 		cafelatteL.setBackground(new Color(0xfafeff));
 		cafelatteL.setFont(new Font("System",Font.BOLD,17));
 		add(cafelatteL);
-		JButton mocaL = new JButton("<HTML><body style='text-align:center'>Ä«Æä¸ğÄ«(L)<br>4300</body></HTML>");
+		JButton mocaL = new JButton("<HTML><body style='text-align:center'>ì¹´í˜ëª¨ì¹´(L)<br>4300</body></HTML>");
 		mocaL.setBounds(1065, 240, 160, 100);
 		mocaL.setBackground(new Color(0xfafeff));
 		mocaL.setFont(new Font("System",Font.BOLD,17));
 		add(mocaL);
-		JButton down = new JButton("<HTML><body style='text-align:left'>¡ä</body></HTML>");
+		JButton down = new JButton("<HTML><body style='text-align:left'>â–½</body></HTML>");
 		down.setBounds(1240, 240, 35, 100);
 		down.setBackground(new Color(0xb0e8f7));
 		down.setFont(new Font("System",Font.BOLD,10));
 		add(down);
 		///////////////////////////////////////
-		JButton coldblue = new JButton("<HTML><body style='text-align:center'>Äİµåºê·ç<br>4000</body></HTML>");
+		JButton coldblue = new JButton("<HTML><body style='text-align:center'>ì½œë“œë¸Œë£¨<br>4000</body></HTML>");
 		coldblue.setBounds(540, 355, 160, 100);
 		coldblue.setBackground(new Color(0xfafeff));
 		coldblue.setFont(new Font("System",Font.BOLD,17));
 		add(coldblue);
-		JButton coldbluelt = new JButton("<HTML><body style='text-align:center'>Äİµåºê·ç¶ó¶¼(R)<br>4500</body></HTML>");
+		JButton coldbluelt = new JButton("<HTML><body style='text-align:center'>ì½œë“œë¸Œë£¨ë¼ë–¼(R)<br>4500</body></HTML>");
 		coldbluelt.setBounds(715, 355, 160, 100);
 		coldbluelt.setBackground(new Color(0xfafeff));
 		coldbluelt.setFont(new Font("System",Font.BOLD,17));
 		add(coldbluelt);
-		JButton syrup = new JButton("<HTML><body style='text-align:center'>½Ã·´Ãß°¡<br>500</body></HTML>");
+		JButton syrup = new JButton("<HTML><body style='text-align:center'>ì‹œëŸ½ì¶”ê°€<br>500</body></HTML>");
 		syrup.setBounds(890, 355, 160, 100);
 		syrup.setBackground(new Color(0xfafeff));
 		syrup.setFont(new Font("System",Font.BOLD,17));
 		add(syrup);
-		JButton cup = new JButton("<HTML><body style='text-align:center'>°³ÀÎÄÅ<br>-300</body></HTML>");
+		JButton cup = new JButton("<HTML><body style='text-align:center'>ê°œì¸ì»µ<br>-300</body></HTML>");
 		cup.setBounds(1065, 355, 160, 100);
 		cup.setBackground(new Color(0xfafeff));
 		cup.setFont(new Font("System",Font.BOLD,17));
 		add(cup);
 		
 		///////////////////////////////////////
-		JButton receipt = new JButton("<HTML><body style='text-align:center'>¿µ¼öÁõ<br>°ü¸®</body></HTML>");
+		JButton receipt = new JButton("<HTML><body style='text-align:center'>ì˜ìˆ˜ì¦<br>ê´€ë¦¬</body></HTML>");
 		receipt.setBounds(540, 535, 160, 160);
 		receipt.setBackground(new Color(0xe2d4fc));
 		receipt.setFont(new Font("System",Font.BOLD,25));
 		add(receipt);
-		JButton membership = new JButton("<HTML><body style='text-align:center'>¸É¹ö½±</body></HTML>");
+		JButton membership = new JButton("<HTML><body style='text-align:center'>ë§´ë²„ì‰½</body></HTML>");
 		membership.setBounds(715, 535, 160, 160);
 		membership.setBackground(new Color(0xe3aada));
 		membership.setFont(new Font("System",Font.BOLD,25));
 		add(membership);
-		JButton card = new JButton("<HTML><body style='text-align:center'>½Å¿ëÄ«µå</body></HTML>");
+		JButton card = new JButton("<HTML><body style='text-align:center'>ì‹ ìš©ì¹´ë“œ</body></HTML>");
 		card.setBounds(890, 535, 160, 160);
 		card.setBackground(new Color(0xb5f5c8));
 		card.setFont(new Font("System",Font.BOLD,25));
 		add(card);
-		JButton bill = new JButton("<HTML><body style='text-align:center'>Çö±İ</body></HTML>");
+		JButton bill = new JButton("<HTML><body style='text-align:center'>í˜„ê¸ˆ</body></HTML>");
 		bill.setBounds(1065, 535, 160, 160);
 		bill.setBackground(new Color(0xfff7e0));
 		bill.setFont(new Font("System",Font.BOLD,25));

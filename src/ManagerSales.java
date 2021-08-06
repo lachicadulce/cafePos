@@ -94,6 +94,29 @@ public class ManagerSales extends PosFrame {
 		JPanel p2 = new JPanel(new GridLayout(5, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
 		
+		// 매출 합계 구성패널 추가
+		JPanel p4 = new JPanel();
+		p4.setPreferredSize(new Dimension(0, 140));
+		p4.setBackground(new Color(0xD7E7F7));
+		// 패널에 추가할 라벨 추가
+		JLabel label1 = new JLabel("현금 합계: ");
+		JLabel label2 = new JLabel("카드 합계: ");
+		JLabel label3 = new JLabel("[총 합계] ");
+		label1.setFont(new Font("", Font.BOLD, 16));
+	    label1.setPreferredSize(new Dimension(700,35));
+	    label1.setHorizontalAlignment(SwingConstants.RIGHT);
+	    label2.setFont(new Font("", Font.BOLD, 16));
+	    label2.setPreferredSize(new Dimension(700,35));
+	    label2.setHorizontalAlignment(SwingConstants.RIGHT);
+	    label3.setFont(new Font("", Font.BOLD, 20));
+	    label3.setPreferredSize(new Dimension(700,35));
+	    label3.setHorizontalAlignment(SwingConstants.RIGHT);
+	    p4.add(label1);
+	    p4.add(label2);
+	    p4.add(label3);	    
+	    // 매출합계 패널 아래쪽에 붙이기
+	 	p1.add(p4, BorderLayout.SOUTH);
+		
 		// 달력 출력
 		UtilDateModel model = new UtilDateModel();
 		JDatePanelImpl datePanel = new JDatePanelImpl(model);
@@ -113,14 +136,21 @@ public class ManagerSales extends PosFrame {
 		// 왼쪽 구성요소 추가
 		jsp.setLeftComponent(p1);
 		
-		ArrayList<JButton> btns = new ArrayList<>();
-		btns.add(new JButton("매출 현황"));
-		btns.add(new JButton("마감 용지 출력"));
-		btns.add(new JButton("직원 등록"));
-		btns.add(new JButton("출퇴근 기록 열람"));
-		btns.add(new JButton("메뉴 관리"));
-		for(JButton btn : btns) {
-			p2.add(btn);
+		//기존 버튼 추가 부분
+//		ArrayList<JButton> btns = new ArrayList<>();
+//		btns.add(new JButton("매출 현황"));
+//		btns.add(new JButton("마감 용지 출력"));
+//		btns.add(new JButton("직원 등록"));
+//		btns.add(new JButton("출퇴근 기록 열람"));
+//		btns.add(new JButton("메뉴 관리"));
+//		for(JButton btn : btns) {
+//			p2.add(btn);
+//		}
+		
+		// Manager_Btns class에서 불러온 형태로 추가해봄..(여기만 변경해서 적용해봄)
+		Manager_Btns mb = new Manager_Btns();
+		for (JButton btns : mb.getJBtns()) {
+			p2.add(btns);
 		}
 		
 		// 오른쪽 구성요소 추가

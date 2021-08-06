@@ -34,7 +34,7 @@ public class Receipt extends PosFrame {
 				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
 				+ "<br>-------------------------------------------------------------------"
 				+ "</center>"
-				+ ""
+				
 				+ "<table style='width:100%;'>"
 				+ "<tr>"
 				+ "<td>합계수량/금액</td>"
@@ -42,23 +42,42 @@ public class Receipt extends PosFrame {
 				+ "<td style='text-align:right;'>3000원</td>"
 				+ "</tr>"
 				+ "</table>"
-				+ ""
-				+ ""
-				+ ""
-				+ "<br>-------------------------------------------------------------------"
-				+ "<br>과세매출"
-				+ ""
-				+ "<br>부가세"
-				+ ""
-				+ "<br>합&emsp계"
-				+ ""
-				+ "<br>현&emsp금"
-				+ ""
+				+ "-------------------------------------------------------------------"
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>과세매출</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>부가세</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>합&emsp계</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>현&emsp금</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
 				+ "</html>";
 		
 		
 		
-		// &nbsp 띄어쓰기
+		
+		
+		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
 		// <html> +  + <br> + + <p>  + + </html> 줄 바꾸는 법
 		
 		JLabel receipt = new JLabel(string);

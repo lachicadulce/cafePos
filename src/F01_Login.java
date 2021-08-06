@@ -1,10 +1,10 @@
 import baseSettings.*;
 
-public class F01_Login extends PosFrame {
+public class F01_Login extends PosFrame{
 
 	/*
-	 * �α��� ������
-	 */
+		�α��� ������
+	*/
 	public F01_Login() {
 		super();
 	}

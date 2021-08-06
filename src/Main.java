@@ -21,72 +21,93 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
+import handler.AllCancelActionListener;
 import handler.NumpadBackSpaceActionListener;
 import handler.NumpadHandler;
+import handler.OrderTableListSelectionListener;
+import handler.QuantityDecreaseActionListener;
+import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
+import handler.SelectCancelActionListener;
 
 public class Main extends PosFrame {
 
 
-	/*
-	 	紐⑤뱺 �솕硫대뱾�쓣 �쓣�썙以� 湲곕낯 �봽�옒�엫.
-	 */
 	public Main() {
 		super();
 
 
 		setLayout(new BorderLayout());
 
-		JTextArea orderList = new JTextArea("주문LIST");
-		JTextArea calc = new JTextArea("");
-		JPanel numpadPanel = new JPanel();
+		// 주문리스트 변수
+		DefaultTableModel orderTableModel = new DefaultTableModel(); 
+		JTable orderTable = new JTable(orderTableModel);
 
+		// 주문리스트 버튼 변수
 		JButton allCancel = new JButton("전체취소");
 		JButton selectCancel = new JButton("선택취소");
 		JButton quantityPlus = new JButton("수량 +");
 		JButton quantityMinus = new JButton("수량 -");
-
+		
+		// 숫자패드 변수
+		JPanel numpadPanel = new JPanel();
 		JTextArea numpadText = new JTextArea("");
 		JButton numpadCancel = new JButton(">");
 		JButton numpadEnter = new JButton("E");
 		
+		// 관리자 메뉴, 근태관리, 환전 메뉴 변수
 		JButton managerMenu = new JButton("<html>관리자<br />&nbsp메뉴</html>");
 		JButton absentManager = new JButton("<html>근태<br />관리</html>");
 		JButton exchange = new JButton("환전");
 		
+		// 금액계산 변수
 		String[] calcColumn = { "", "" };
-		JTextArea lumpSum = new JTextArea();
-		JTextArea discount = new JTextArea();
-		JTextArea received = new JTextArea();
-		JTextArea change = new JTextArea();
+		String lumpSum = "";
+		String discount = "";
+		String received = "";
+		String change = "";
 		
-		JTextArea[][] calcdata = { 
-				{new JTextArea("총금액"), lumpSum},
-				{new JTextArea("할인금액"), discount},
-				{new JTextArea("받은금액"), received},
-				{new JTextArea("거스름돈"), change},
+		String[][] calcdata = { 
+				{"총금액", lumpSum},
+				{"할인금액", discount},
+				{"받은금액", received},
+				{"거스름돈", change},
 		};
-		
 		JTable calcTable = new JTable(calcdata, calcColumn);
 
+		
 		// 주문LIST
-		orderList.setBounds(10, 10, 500, 400);
-		orderList.setEditable(false);
+		orderTableModel.addColumn("메뉴이름");
+		orderTableModel.addColumn("수량");
+		orderTableModel.addColumn("가격");
 		
-		add(orderList);
+//		orderTableModel.addRow(new Object[] {"v1", "1", "4500"}); //행추가
+//		orderTableModel.addRow(new Object[] {"v2", "1", "4500"}); //행추가
+//		orderTableModel.addRow(new Object[] {"v3", "1", "4500"}); //행추가
+//		orderTable.setValueAt("", 0, 0); //행수정
 		
+		ListSelectionModel orderTableSelection =  orderTable.getSelectionModel();
+		orderTableSelection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		OrderTableListSelectionListener OTLSL =  new OrderTableListSelectionListener(orderTable);
+		orderTableSelection.addListSelectionListener(OTLSL);
+		
+		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
+		JScrollPane orderScrollPanel = new JScrollPane(orderTable);
+		orderScrollPanel.setBounds(10, 10, 500, 400);
+		add(orderScrollPanel);
+				
 		// 금액계산
 		calcTable.setBounds(10, 480, 250, 250);
 		calcTable.setRowHeight(65);
+		calcTable.setEnabled(false);	// 수정 불가, 클릭표시 안나옴	
 		add(calcTable);
-//		calc.setBounds(10, 480, 250, 250);
-//		calc.setEditable(false);
-//		calc.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-//		add(calc);
 
+		// 숫자패드 입력창
 		numpadText.setBounds(280, 480, 150, 50);
 		numpadText.setEditable(false);
 		numpadText.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
@@ -96,18 +117,22 @@ public class Main extends PosFrame {
 
 		allCancel.setLocation(50, 430);
 		allCancel.setSize(100, 30);
+		allCancel.addActionListener(new AllCancelActionListener(orderTable));
 		add(allCancel);
 
 		selectCancel.setLocation(150, 430);
 		selectCancel.setSize(100, 30);
+		selectCancel.addActionListener(new SelectCancelActionListener(orderTableModel, orderTable));
 		add(selectCancel);
 
 		quantityPlus.setLocation(250, 430);
 		quantityPlus.setSize(100, 30);
+		quantityPlus.addActionListener(new QuantityIncreaseActionListener(orderTable));
 		add(quantityPlus);
 
 		quantityMinus.setLocation(350, 430);
 		quantityMinus.setSize(100, 30);
+		quantityMinus.addActionListener(new QuantityDecreaseActionListener(orderTableModel, orderTable));
 		add(quantityMinus);
 
 
@@ -159,8 +184,6 @@ public class Main extends PosFrame {
 			numpadPanel.add(numpad);
 		}
 		add(numpadPanel);
-		
-		
 
 
 	}

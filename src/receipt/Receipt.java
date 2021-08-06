@@ -1,14 +1,22 @@
 package receipt;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 
 import baseSettings.PosFrame;
 
@@ -27,7 +35,7 @@ public class Receipt extends PosFrame {
 
 		JButton date = new JButton(message);
 		
-		String string = 
+		String string = // 영수증 전체 내용 
 				"<html><center>-------------------------------------------------------------------"
 				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
 				+ "<br>지참하셔야 하며, 카드결제는 30일(09월08일)"
@@ -71,6 +79,20 @@ public class Receipt extends PosFrame {
 				+ "</tr>"
 				+ "</table>"
 				
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>현&emsp금</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>현&emsp금</td>"
+				+ "<td style='text-align:right;'>3000원</td>"
+				+ "</tr>"
+				+ "</table>"
+				
 				+ "</html>";
 		
 		
@@ -80,7 +102,11 @@ public class Receipt extends PosFrame {
 		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
 		// <html> +  + <br> + + <p>  + + </html> 줄 바꾸는 법
 		
+		JPanel frame = new JPanel();
+		
 		JLabel receipt = new JLabel(string);
+		
+		
 		
 		ArrayList<JButton> buttons = new ArrayList<>();
 		
@@ -113,12 +139,19 @@ public class Receipt extends PosFrame {
 		date.setBackground(new Color(0xffffff));
 		
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
-		receipt.setBounds(730, 140, 540, 500);
 		receipt.setOpaque(true); // 백그라운드 색상 허용
-		receipt.setBackground(new Color(0xffffff));
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
 		receipt.setVerticalAlignment(JLabel.NORTH);; // 세로 가운데 표시 설정
+		receipt.setBackground(new Color(0xffffff));// 라벨 배경색
+//		receipt.setBounds(730, 140, 540, 2000);
+//		frame.setBackground(new Color(0xffffff)); // 패널 배경색
+		frame.setBounds(730, 140, 540, 500);
+		receipt.setAutoscrolls(true);
+		JScrollPane scrollPane = new JScrollPane( // 영수증에 수직 스크롤바 추가
+				receipt, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(new Dimension(540, 500)); // 스크롤바 크기조정
 		
+		frame.add(scrollPane);
 		
 		// 좌측 위 버튼 추가
 		add(buttons.get(0));
@@ -133,7 +166,7 @@ public class Receipt extends PosFrame {
 		add(buttons.get(5));
 		add(buttons.get(6));
 		
-        add(receipt);
+        add(frame);
 
 	}
 	

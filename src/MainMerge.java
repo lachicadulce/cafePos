@@ -44,7 +44,7 @@ public class MainMerge extends PosFrame {
 		super();
 
 
-		setLayout(new BorderLayout());
+		setLayout(null);
 
 		// 주문리스트 변수
 		DefaultTableModel orderTableModel = new DefaultTableModel(); 
@@ -57,7 +57,6 @@ public class MainMerge extends PosFrame {
 		JButton quantityMinus = new JButton("수량 -");
 		
 		// 숫자패드 변수
-		JPanel numpadPanel = new JPanel();
 		JTextArea numpadText = new JTextArea("");
 		JButton numpadCancel = new JButton(">");
 		JButton numpadEnter = new JButton("E");
@@ -95,12 +94,12 @@ public class MainMerge extends PosFrame {
 		
 		ListSelectionModel orderTableSelection =  orderTable.getSelectionModel();
 		orderTableSelection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		OrderTableListSelectionListener OTLSL =  new OrderTableListSelectionListener(orderTable);
-		orderTableSelection.addListSelectionListener(OTLSL);
+		orderTableSelection.addListSelectionListener(new OrderTableListSelectionListener(orderTable));
 		
 		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
 		JScrollPane orderScrollPanel = new JScrollPane(orderTable);
 		orderScrollPanel.setBounds(10, 10, 500, 400);
+		orderScrollPanel.setLayout(null);
 		add(orderScrollPanel);
 				
 		// 금액계산
@@ -164,11 +163,10 @@ public class MainMerge extends PosFrame {
 		exchange.setLocation(440, 660);
 		exchange.setSize(75,70);
 		exchange.addActionListener(new SafeOpenActionListener());
-			
-		
 		add(exchange);
 		
-		numpadPanel.setLayout(null);
+		
+		
 		for(int i = 0; i < 10; i++) {
 			JButton numpad = new JButton();
 			if (i == 0 ) {
@@ -181,9 +179,9 @@ public class MainMerge extends PosFrame {
 				numpad.setLocation(280 + ((i-1) % 3 * 50), 650 - ((i -1 )/3 *50) );
 			}
 			numpad.addActionListener(new NumpadHandler(numpadText));
-			numpadPanel.add(numpad);
+			add(numpad);
 		}
-		add(numpadPanel);
+		
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -215,21 +213,19 @@ public class MainMerge extends PosFrame {
 //		record.setCellSelectionEnabled(true);
 //		add(record);
 		
-		JPanel tempPanel = new JPanel();
-		tempPanel.setLayout(null);
-		JButton cof = new JButton("커피");
 		
+		JButton cof = new JButton("커피");
 		cof.setBounds(540, 10, 160, 100);
 		cof.setFont(new Font("System",Font.BOLD,20));
 		cof.setBackground(new Color(0xb0e8f7));
-		tempPanel.add(cof);
-		add(tempPanel);
+		add(cof);
+
 		
 		JButton bev = new JButton("음료");
 		bev.setBounds(715, 10, 160, 100);
 		bev.setFont(new Font("System",Font.BOLD,20));
-		add(bev);
 		bev.setBackground(new Color(0xb0e8f7));
+		add(bev);
 		
 		JButton blendid = new JButton("블랜디드");
 		blendid.setBounds(890, 10, 160, 100);

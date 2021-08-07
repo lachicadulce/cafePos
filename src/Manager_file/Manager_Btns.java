@@ -1,3 +1,5 @@
+package Manager_file;
+
 import java.awt.*;
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class Manager_Btns extends JButton {
 			{
 			setText("매출 현황");
 			setFont(new Font("default", Font.BOLD, 16));
-			setBackground(new Color(0xCED8F6));
+			setBackground(new Color(0xD7E7F7));
 			}
 		});
 		
@@ -24,7 +26,7 @@ public class Manager_Btns extends JButton {
 			{
 			setText("마감 용지 출력");
 			setFont(new Font("default", Font.BOLD, 16));
-			setBackground(new Color(0xCED8F6));
+			setBackground(new Color(0xD7E7F7));
 			}
 		});
 		
@@ -32,7 +34,7 @@ public class Manager_Btns extends JButton {
 			{
 			setText("직원 등록");
 			setFont(new Font("default", Font.BOLD, 16));
-			setBackground(new Color(0xCED8F6));
+			setBackground(new Color(0xD7E7F7));
 			}
 		});
 		
@@ -40,7 +42,7 @@ public class Manager_Btns extends JButton {
 			{
 			setText("출퇴근 기록 열람");
 			setFont(new Font("default", Font.BOLD, 16));
-			setBackground(new Color(0xCED8F6));
+			setBackground(new Color(0xD7E7F7));
 			}
 		});
 		
@@ -48,7 +50,7 @@ public class Manager_Btns extends JButton {
 			{
 			setText("메뉴 관리");
 			setFont(new Font("default", Font.BOLD, 16));
-			setBackground(new Color(0xCED8F6));
+			setBackground(new Color(0xD7E7F7));
 			}
 		});
 	}

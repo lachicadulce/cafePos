@@ -1,7 +1,6 @@
 package Manager_file;
 import java.awt.*;
 import java.sql.*;
-import java.util.*;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -87,9 +86,8 @@ public class ManagerSales extends PosFrame {
 		// JTable Column 가운데 정렬
 		DefaultTableCellRenderer cr = new DefaultTableCellRenderer();
 		cr.setHorizontalAlignment(SwingConstants.CENTER);
-		TableColumnModel cm = tb.getColumnModel();
-		for (int i = 0; i < cm.getColumnCount(); i++) {
-			cm.getColumn(i).setCellRenderer(cr);
+		for (int i = 0; i < colModel.getColumnCount(); i++) {
+			colModel.getColumn(i).setCellRenderer(cr);
 		}
 	}
 	
@@ -105,7 +103,7 @@ public class ManagerSales extends PosFrame {
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		// 매출 합계 구성패널 추가
-		JPanel p4 = new JPanel();
+		JPanel p4 = new JPanel(new GridLayout(3, 2));
 		p4.setPreferredSize(new Dimension(0, 140));
 		p4.setBackground(new Color(0xD7E7F7));
 		

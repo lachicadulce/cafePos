@@ -1,12 +1,35 @@
 package Manager_file;
-import java.awt.*;
-import java.sql.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
-import baseSettings.*;
-import net.sourceforge.jdatepicker.impl.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import baseSettings.DBConnector;
+import baseSettings.PosFrame;
 
 public class ManagerSales extends PosFrame {
 	
@@ -115,14 +138,20 @@ public class ManagerSales extends PosFrame {
 	    // 매출합계 패널 아래쪽에 붙이기
 	 	p1.add(p4, BorderLayout.SOUTH);
 		
-		// 달력 출력
-		UtilDateModel model = new UtilDateModel();
-		JDatePanelImpl datePanel = new JDatePanelImpl(model);
-		JDatePickerImpl datePicker1 = new JDatePickerImpl(datePanel);
-		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel);
+	    // 달력 출력
+ 		Properties p = new Properties();
+ 		p.put("text.today", "Today");
+ 		p.put("text.month", "Month");
+ 		p.put("text.year", "Year");
+ 		UtilDateModel model1 = new UtilDateModel();
+ 		JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
+ 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+ 		UtilDateModel model2 = new UtilDateModel();
+ 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
+ 		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
 
 		// p3에 달력 ~ 달력 조회버튼 추가
-		p3.add(datePicker1);
+		p3.add(datePicker);
 		p3.add(new JLabel("~"));
 		p3.add(datePicker2);
 		p3.add(new JButton("조회"));

@@ -25,8 +25,8 @@ import javax.swing.SwingUtilities;
 
 import baseSettings.PosFrame;
 
-public class Receipt extends PosFrame {
-	public Receipt() {
+public class Receipt_1 extends PosFrame {
+	public Receipt_1() {
 		super();
 		super.setTitle("영수증 관리");
 		try {
@@ -204,7 +204,7 @@ public class Receipt extends PosFrame {
 	}
 	
 	public static void main(String[] args) {
-		 Receipt frame = new Receipt();	
+		 Receipt_1 frame = new Receipt_1();	
 		 frame.setDefaultOptions();
 	}
 }

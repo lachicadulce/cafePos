@@ -39,7 +39,7 @@ public class Receipt extends PosFrame {
             
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
-         tmd   ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 System.out.print(rs.getString("MENU"));

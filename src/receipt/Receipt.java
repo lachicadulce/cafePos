@@ -18,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import baseSettings.PosFrame;
 
@@ -26,6 +29,7 @@ public class Receipt extends PosFrame {
 	
 	static ArrayList<ArrayList<String>> list_data = new ArrayList<ArrayList<String>>();
 	String[] columnNames = null;
+	String RECEIPT_NO = "1";
 	
 	public Receipt() {
 		super();
@@ -36,7 +40,7 @@ public class Receipt extends PosFrame {
             		"cafe",
             		"!!22Qorthdud");
 
-            String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = 24" + "";
+            String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = " + RECEIPT_NO;
             
             // ================================================================================================
             // ================================================================================================            	
@@ -84,9 +88,8 @@ public class Receipt extends PosFrame {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                System.out.print(rs.getString("MENU"));
-                System.out.print(rs.getInt("PRICE"));
-                System.out.println();
+                rs.getString("MENU");
+                rs.getInt("PRICE");              
             }
 
             // 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
@@ -107,6 +110,8 @@ public class Receipt extends PosFrame {
 		String message = my_date_format.format(LocalDate.now());
 
 		JButton date = new JButton(message);
+		
+		
 		String product = "";
 		
 		String string = // 영수증 전체 내용 
@@ -277,8 +282,22 @@ public class Receipt extends PosFrame {
      	
      	table.setPreferredSize(new Dimension(660, 1000));
      	scrollPane1.setPreferredSize(new Dimension(660, 1000));
-     	
-     	
+//     	승민 영수증넘버 받아오는 로직-----------------------------------------------------------
+     	ListSelectionModel selection = table.getSelectionModel();
+		
+		selection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setRowSelectionAllowed(false);
+		
+		
+		selection.addListSelectionListener(new ListSelectionListener() {
+		
+			public void valueChanged(ListSelectionEvent e) {
+				RECEIPT_NO = String.valueOf(table.getValueAt(table.getSelectedRow(), 2));
+			}
+		
+				
+		});	
+//     	-------------------------------------------------------------------------------------------------
      	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
      	
      	table.setRowSelectionAllowed(true);

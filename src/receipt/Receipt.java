@@ -40,7 +40,7 @@ public class Receipt extends PosFrame {
             
             // ================================================================================================
             // ================================================================================================            	
-            	String Receipt_list = "select * from payment_view_1";
+            	String Receipt_list = "select * from payment_view_1 ORDER BY DATETIME";
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
             	
             	ResultSet rs_list = pstmt_Receipt_list.executeQuery();
@@ -175,7 +175,7 @@ public class Receipt extends PosFrame {
 		
 		
 		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
-		// <html> +  + <br> + + <p>  + + </html> 줄 바꾸는 법
+		// <html> +  + <br> +  + </html> 줄 바꾸는 법
 		
 		JPanel frame = new JPanel();
 		

@@ -404,7 +404,7 @@ public class Receipt_duck extends PosFrame {
      	receipt_panel.setBackground(Color.black);
      	receipt_panel.setLocation(20, 140);
      	receipt_panel.setSize(660, 500);
-
+     	receipt_panel.setAutoscrolls(true);
      	JPanel a = new JPanel();
      	
      	
@@ -467,7 +467,7 @@ public class Receipt_duck extends PosFrame {
         		
         	});
        // ================================================================================================
-       // ================================================================================================
+       // ================================================================================================ 
               
               buttons.get(6).addActionListener(new ActionListener() {
            	   
@@ -480,13 +480,6 @@ public class Receipt_duck extends PosFrame {
            			table.setModel(model);
            			JTable table = new JTable(model);
            			
-           			for(int i = 0; i < data_credit.length; i++) {
-           				for(int x = 0; x < data_credit[i].length; x++) {
-           					System.out.print(data_credit[i][x] + " ");
-           					System.out.println(model.getColumnName(x));
-           				}
-           				System.out.println();
-           			}
            			model.fireTableDataChanged();
            		}
            		

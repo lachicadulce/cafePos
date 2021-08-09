@@ -159,9 +159,9 @@ public class Receipt_duck_2 extends PosFrame {
             	int credit_w_size = list_data_credit.size(), credit_h_size = list_data_credit.get(0).size();
             	
             	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
-             	data_default = new String[w_size+1][h_size];
-             	data_cash = new String[cash_w_size+1][cash_h_size];
-             	data_credit = new String[credit_w_size+1][credit_h_size];
+             	data_default = new String[w_size][h_size];
+             	data_cash = new String[cash_w_size][cash_h_size];
+             	data_credit = new String[credit_w_size][credit_h_size];
              	
              	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
              	for (int i = 0; i < w_size; i++) {
@@ -402,11 +402,10 @@ public class Receipt_duck_2 extends PosFrame {
      	
      	JScrollPane scrollPane1 = new JScrollPane(table);
      	
-     	scrollPane1.setBackground(Color.pink);
+//     	scrollPane1.setBackground(Color.pink);
      	
      	table.setPreferredSize(new Dimension(660, 500));
      	scrollPane1.setPreferredSize(new Dimension(660, 500));
-     	
      	
      	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
      	
@@ -414,7 +413,7 @@ public class Receipt_duck_2 extends PosFrame {
      	table.setColumnSelectionAllowed(false);
      	
      	
-     	table.setShowGrid(true);
+//     	table.setShowGrid(true);
      	
 //     	a.add(scrollPane1);
      	receipt_panel.add(scrollPane1);
@@ -469,7 +468,25 @@ public class Receipt_duck_2 extends PosFrame {
         		@Override
         		public void actionPerformed(ActionEvent e) {
         			
-        			payment_change aa = new payment_change(select_receipt_no);
+//        			int select_receipt_no = -1;
+//        			String select_receipt_no_string = "";
+        			
+//        			if (select_receipt_no == -1) {
+//        				System.out.println("11");
+//        				
+//        				System.out.println("22");
+//        			} else if (select_receipt_no > 0) {
+//        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
+//        				select_receipt_no = Integer.parseInt(select_receipt_no_string);
+//        				
+//        				payment_change aa = new payment_change(select_receipt_no);
+//        				
+//        			} 
+        			
+//        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
+//        				select_receipt_no = Integer.parseInt(select_receipt_no_string);
+        			
+        				payment_change aa = new payment_change(select_receipt_no);
         			
 
         		}
@@ -505,13 +522,24 @@ public class Receipt_duck_2 extends PosFrame {
         		public void actionPerformed(ActionEvent e) {
 
 //        			cash_list();
+        			
 
         			DefaultTableModel model = new DefaultTableModel(data_cash, columnNames);
-
+        			
+        			System.out.println(data_cash.length);
+//        			
+//        			for (int a = 0; a < data_cash.length; a++) {
+//        				for (int b = 0; b < data_cash[a].length; b++) {
+//        					System.out.print(a + "\t");
+//        				}
+//        				System.out.println();
+//        			}
+        			
         			table.setModel(model);
         			JTable table = new JTable(model);
         			
         			model.fireTableDataChanged();
+        			
         		}
         		
         	});
@@ -564,8 +592,8 @@ class payment_change extends JDialog{
         
 	setLayout(null);
 	
-	new_s1.setBounds(30, 30, 200, 200);
-	new_s2.setBounds(260, 30, 200, 200);
+	new_s1.setBounds(10, 30, 210, 210);
+	new_s2.setBounds(240, 30, 220, 210);
 	
 //	new_s1.setBackground(Color.CYAN);
 //	new_s2.setBackground(Color.black);
@@ -580,7 +608,7 @@ class payment_change extends JDialog{
 	
 //      btn1.setText("현금결제");
       btn1.setFont(new Font("돋움", Font.PLAIN, 20));
-      btn1.setIcon(new ImageIcon("image/cash22.png"));
+      btn1.setIcon(new ImageIcon("image/cash.png"));
       btn1.setLocation(150, 150);
       btn1.setSize(300, 300);
       btn1.setBackground(Color.white);
@@ -589,7 +617,7 @@ class payment_change extends JDialog{
       
       
 //      btn2.setText("신용카드결제");
-      btn2.setIcon(new ImageIcon("image/credit22.png"));
+      btn2.setIcon(new ImageIcon("image/credit.png"));
       btn2.setLocation(150, 150);
       btn2.setSize(300, 300);
       btn2.setBackground(Color.white);

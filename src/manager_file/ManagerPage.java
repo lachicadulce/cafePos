@@ -1,4 +1,4 @@
-package Manager_file;
+package manager_file;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -138,7 +138,7 @@ public class ManagerPage extends PosFrame {
 						+ "TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, "
 						+ "round((fin_work - start_work) * 24) AS wtime, "
 						+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-						+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e;
+						+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
 				setTB();
 			}
 		});

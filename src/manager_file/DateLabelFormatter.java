@@ -1,4 +1,4 @@
-package Manager_file;
+package manager_file;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

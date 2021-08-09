@@ -1,6 +1,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Iterator;
 
@@ -23,6 +24,7 @@ import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 import main_component.MainBtns;
+import main_component.OrderButton;
 
 public class main_test2 extends PosFrame {
 
@@ -58,7 +60,7 @@ public class main_test2 extends PosFrame {
 			orderTableModel.addColumn("메뉴이름");
 			orderTableModel.addColumn("수량");
 			orderTableModel.addColumn("가격");
-
+			
 			//			orderTableModel.addRow(new Object[] {"v1", "1", "4500"}); //행추가
 			//			orderTableModel.addRow(new Object[] {"v2", "1", "4500"}); //행추가
 			//			orderTableModel.addRow(new Object[] {"v3", "1", "4500"}); //행추가
@@ -225,6 +227,14 @@ public class main_test2 extends PosFrame {
 	      gl2.setVgap(40);
 	      gl2.setHgap(40);
 	      JPanel rightR = new JPanel();
+	      //"MD",1065,10,160,100,0xb0e8f7,20
+	      rightR.setLayout(new GridLayout(2,1));
+	      JButton up = new OrderButton("△",1240,125,10,100,0xb0e8f7,15);
+	      JButton down = new OrderButton("▽",1240,240,10,100,0xb0e8f7,15);
+
+	      rightR.setBorder(BorderFactory.createEmptyBorder(200 , 5 , 400 , 15));
+	      rightR.add(up);
+	      rightR.add(down);
 	      
 	      
 	      rightScreen.add("West",rightL);

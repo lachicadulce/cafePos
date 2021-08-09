@@ -34,9 +34,11 @@ public class ManagerMenu extends PosFrame {
 	private JTable tb;
 	private DefaultTableModel model;
 	private JButton selBtn = new JButton("조회");
+	private JButton addBtn = new JButton("추가");
 	private String header[] = {"NO", "이름", "가격", "분류", "노출순서"};
 	private String selStr;
 	private JTextField tf;
+	private MenuDialog addMenuDialog;
 	
 	public ManagerMenu() {
 		super();
@@ -73,6 +75,7 @@ public class ManagerMenu extends PosFrame {
 	
 	// 화면 구성
 	private void init() {
+		addMenuDialog = new MenuDialog(this, "Menu Add");
 		model = new DefaultTableModel(header, 0);
 
 		tb = new JTable(model);
@@ -104,8 +107,7 @@ public class ManagerMenu extends PosFrame {
 		p3.add(lb);
 		p3.add(tf);
 		p3.add(selBtn);
-		
-		
+		p3.add(addBtn);
 		
 		selBtn.addActionListener(new ActionListener() {
 			
@@ -114,6 +116,14 @@ public class ManagerMenu extends PosFrame {
 				selStr = tf.getText();
 				sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') ORDER BY display_order";
 				setTB();
+			}
+		});
+		
+		addBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addMenuDialog.setVisible(true);
 			}
 		});
 		

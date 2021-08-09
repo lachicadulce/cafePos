@@ -96,6 +96,7 @@ public class CashActionHandler implements ActionListener {
 		
 		label.setText("카드 결제 금액을 입력해주세요");
 		
+		
 		while(true) {
 			dialog = op.createDialog(null, "카드 결제");
 			dialog.setVisible(true);

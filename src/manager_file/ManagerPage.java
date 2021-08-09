@@ -34,8 +34,8 @@ public class ManagerPage extends PosFrame {
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
 	private String sql = "SELECT a_no, emp_no, name, emp_degree, "
-			+ "TO_CHAR(start_work, 'YYYY/MM/DD HH24:MI:SS') AS stime, "
-			+ "TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, "
+			+ "start_work, "
+			+ "fin_work, "
 			+ "round((fin_work - start_work) * 24) AS wtime, "
 			+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
 			+ "FROM absent_info INNER JOIN employees_info  USING (emp_no)";
@@ -69,8 +69,8 @@ public class ManagerPage extends PosFrame {
 				int emp_no = rs.getInt("emp_no");
 				String name = rs.getString("name");
 				String emp_degree = rs.getString("emp_degree");
-				String start_work = rs.getString("stime");
-				String fin_work = rs.getString("ftime");
+				String start_work = rs.getString("start_work");
+				String fin_work = rs.getString("fin_work");
 				int worked_time = rs.getInt("wtime");
 				String start_date = rs.getString("swork");
 				Object data[] = {a_no, emp_no, name, emp_degree, start_work, fin_work, worked_time, start_date};
@@ -134,8 +134,8 @@ public class ManagerPage extends PosFrame {
 				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
 				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
 				sql = "SELECT a_no, emp_no, name, emp_degree, "
-						+ "TO_CHAR(start_work, 'YYYY/MM/DD HH24:MI:SS') AS stime, "
-						+ "TO_CHAR(fin_work, 'YYYY/MM/DD HH24:MI:SS') AS ftime, "
+						+ "start_work, "
+						+ "fin_work, "
 						+ "round((fin_work - start_work) * 24) AS wtime, "
 						+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
 						+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";

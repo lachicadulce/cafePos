@@ -30,7 +30,7 @@ public class ManagerMenu extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
-	private String sql = "SELECT * FROM menu ORDER BY display_order";
+	private String sql = "SELECT * FROM menu ORDER BY type, display_order";
 	private JTable tb;
 	private DefaultTableModel model;
 	private JButton selBtn = new JButton("조회");
@@ -65,8 +65,9 @@ public class ManagerMenu extends PosFrame {
 				String name = rs.getString("mname");
 				int price = rs.getInt("price");
 				String type = rs.getString("type");
+				String display_order = rs.getString("display_order");
 //				String stock = rs.getString("stock_chk");
-				Object data[] = {no, name, price, type};
+				Object data[] = {no, name, price, type, display_order};
 				model.addRow(data);
 			}
 		} catch (SQLException e) {
@@ -87,7 +88,7 @@ public class ManagerMenu extends PosFrame {
 		colModel.getColumn(0).setPreferredWidth(40);
 		colModel.getColumn(1).setPreferredWidth(50);
 		colModel.getColumn(2).setPreferredWidth(50);
-		colModel.getColumn(3).setPreferredWidth(50);
+		colModel.getColumn(3).setPreferredWidth(30);
 	
 		scrollpane = new JScrollPane(tb);
 		
@@ -115,7 +116,7 @@ public class ManagerMenu extends PosFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				selStr = tf.getText();
-				sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') ORDER BY display_order";
+				sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') ORDER BY type, display_order";
 				setTB();
 			}
 		});

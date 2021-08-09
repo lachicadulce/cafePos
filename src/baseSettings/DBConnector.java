@@ -11,10 +11,6 @@ public class DBConnector {
 	private static String user = "cafe";
 	private static String password = "!!22Qorthdud";
 	
-	
-	
-	
-	
 	static {
 		try {
 			Class.forName(driverName);

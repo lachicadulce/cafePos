@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,10 +41,13 @@ public class Receipt extends PosFrame {
 	int total;
 	int vat;
 	int cash;
+	int point_used;
 	int point;
 	int credit;
+	String receipt_chk;
+	Date transaction_date;
 	
-	DecimalFormat formatter = new DecimalFormat("###,###");
+	DecimalFormat formatter = new DecimalFormat("##,###,###"); // 금액 출력 포멧터
 	
 	
 	public Receipt() {
@@ -101,6 +107,7 @@ public class Receipt extends PosFrame {
             ResultSet rs = pstmt.executeQuery();
             drink = new HashMap<>();
             while (rs.next()) {
+            	// HashMap에 음료수 내역 넣기
             	drink.putIfAbsent(rs.getString("MENU"), new ArrayList<>());
             	
             	drink.get(rs.getString("MENU")).add(rs.getInt("PRICE"));
@@ -108,16 +115,11 @@ public class Receipt extends PosFrame {
             	total = rs.getInt("TOTAL");
             	vat = rs.getInt("TOTAL") / 10;
             	cash = rs.getInt("CASH");
-            	point = rs.getInt("POINT_USED");
+            	point_used = rs.getInt("POINT_USED");
+            	point = rs.getInt("POINT");
             	credit = rs.getInt("CREDIT");
-            	
-            	
-            	System.out.println(rs.getString("MENU"));
-            	System.out.println(rs.getInt("PRICE"));
-            	System.out.println(rs.getString("TOTAL"));
-            	
-            	
-            	
+            	receipt_chk = rs.getString("RECEIPT_CHK");
+            	transaction_date = rs.getDate("DATETIME");
             }
 
             rs.close();
@@ -129,6 +131,8 @@ public class Receipt extends PosFrame {
         }
 		
 		setLayout(null);
+		
+		
 		
 		// 시간을 문자열로 변경하기
 		DateTimeFormatter my_date_format = 
@@ -164,6 +168,7 @@ public class Receipt extends PosFrame {
 					+ "</tr>";
 			product += print;
 		}
+//		----------------------사용한 결제금액 bill에 출력
 		String bill = "";
 		if (cash != 0) {
 			bill += "<table style='width:100%;'>"
@@ -185,21 +190,63 @@ public class Receipt extends PosFrame {
 					+ "</tr>"
 					+ "</table>";
 		}
-		if (point != 0) {
+		if (point_used != 0) {
 			bill += "<table style='width:100%;'>"
 					+ "<tr>"
-					+ "<td>포인트</td>"
+					+ "<td>사용 포인트</td>"
+					+ "<td style='text-align:right;'>"
+					+ formatter.format(point_used)
+					+ "점</td>"
+					+ "</tr>"
+					+ "</table>"
+					+ "<table style='width:100%;'>"
+					+ "<tr>"
+					+ "<td>남은 포인트</td>"
 					+ "<td style='text-align:right;'>"
 					+ formatter.format(point)
 					+ "점</td>"
 					+ "</tr>"
 					+ "</table>";
 		}
+		if (receipt_chk.equals("Y")) { // 현금 영수증 체크
+			bill += "<br>[현금영수증 발급]"
+					+ "<br>발급 용도: 소비자 소득공제";
+		} else if (receipt_chk.equals("N")) {
+			bill += "<br>[현금영수증 미발급]";
+		}
+		// 영수증 시간 LocalDate로 변환 후 String으로 변환
+		LocalDate localDate = new java.sql.Date(transaction_date.getTime()).toLocalDate();
+			
+		LocalDateTime localDateTime = new java.sql.Timestamp(transaction_date.getTime())
+				.toLocalDateTime();
+
+
+		LocalDateTime returnDay = localDateTime.plusDays(30);
+		
+		DateTimeFormatter my_date_format2 = 
+				DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
+		
+		DateTimeFormatter my_date_format3 = 
+				DateTimeFormatter.ofPattern("M월 d일");
+		
+
+		String transaction_date_string = my_date_format2.format(returnDay);	// 판매일자
+		String returnDayString = my_date_format3.format(returnDay); // 반품가능일자
 		
 		String string = // 영수증 전체 내용 
-				"<html><center>-------------------------------------------------------------------"
+				"<html><center><br>"
+				+ "매&emsp출&emsp전&emsp표"
+				+ "<br>"
+				+ "<table style='width:100%;'>"
+				+ "<tr>"
+				+ "<td>거래일시: </td>"
+				+ "<td style='text-align:right;'>"+ transaction_date_string + "</td>"
+				+ "</tr>"
+				+ "</table>"
+				+ "-------------------------------------------------------------------"
 				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
-				+ "<br>지참하셔야 하며, 카드결제는 30일(09월08일)"
+				+ "<br>지참하셔야 하며, 카드결제는 30일"
+				+ "(" + returnDayString + ")" // 데이터베이스에서 거래날짜 + 30 
 				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
 				+ "<br>-------------------------------------------------------------------"
 				+ "</center>"
@@ -241,6 +288,10 @@ public class Receipt extends PosFrame {
 				+ "</table>"
 				+ "-------------------------------------------------------------------"
 				+ bill
+				+ "<br>-------------------------------------------------------------------"
+				+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
+				+ "<br>-------------------------------------------------------------------"
+				+ "<center>감사합니다.<br><br> </center>"
 				+ "</html>";
 		
 		

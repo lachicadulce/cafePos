@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,32 +36,31 @@ public class ManagerSales extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
+	
+	private String sql = "SELECT receipt_no, "
+			+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
+			+ "total, credit, cash, cus_no, "
+			+ "point_used, point_saved, state, receipt_chk "
+			+ "FROM history_payment "
+			+ "WHERE state = 'complete' ORDER BY receipt_no " ;
+	private JTable tb;
+	private DefaultTableModel model;
+	private JButton selBtn = new JButton("조회");
+	private String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
+			"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
+	private String date_s, date_e;
 
 	public ManagerSales() {
 		super();
-		setTB();
 		init();
+		setTB();
 	}
 	
 	// table 생성 및 컬럼 사이즈 조정
 	private void setTB() {		
-		String sql = "SELECT receipt_no, "
-				+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
-				+ "total, "
-				+ "credit, "
-				+ "cash, "
-				+ "cus_no, "
-				+ "point_used, "
-				+ "point_saved, "
-				+ "state, "
-				+ "receipt_chk "
-				+ "FROM history_payment "
-				+ "WHERE state = 'complete' "
-				+ "ORDER BY receipt_no ";
-		
-		String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
-						"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
-		DefaultTableModel model = new DefaultTableModel(header, 0);
+		while(model.getRowCount() > 0) {
+			model.removeRow(0);
+		}
 	    try (
 	    	Connection conn = DBConnector.getConnection();
 	    	PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -87,8 +87,13 @@ public class ManagerSales extends PosFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// 화면 구성
+	private void init() {
+		model = new DefaultTableModel(header, 0);
 		
-		JTable tb = new JTable(model);
+		tb = new JTable(model);
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.BOLD, 15));
@@ -105,17 +110,7 @@ public class ManagerSales extends PosFrame {
 		colModel.getColumn(9).setPreferredWidth(100);
 	
 		scrollpane = new JScrollPane(tb);
-		
-		// JTable Column 가운데 정렬
-		DefaultTableCellRenderer cr = new DefaultTableCellRenderer();
-		cr.setHorizontalAlignment(SwingConstants.CENTER);
-		for (int i = 0; i < colModel.getColumnCount(); i++) {
-			colModel.getColumn(i).setCellRenderer(cr);
-		}
-	}
-	
-	// 화면 구성
-	private void init() {
+
 		//우측버튼 너비
 		jsp.setResizeWeight(0.9);
 		Container con = this.getContentPane();
@@ -151,11 +146,29 @@ public class ManagerSales extends PosFrame {
  		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
 
 		// p3에 달력 ~ 달력 조회버튼 추가
-		p3.add(datePicker);
+ 		p3.add(datePicker);
 		p3.add(new JLabel("~"));
 		p3.add(datePicker2);
-		p3.add(new JButton("조회"));
+		p3.add(selBtn);
 		
+		selBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+				sql = "SELECT receipt_no, "
+						+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
+						+ "total, credit, cash, cus_no, "
+						+ "point_used, point_saved, state, receipt_chk "
+						+ "FROM history_payment "
+						+ "WHERE state = 'complete' AND datetime BETWEEN "
+						+ date_s + " AND " + date_e + " + 1 "
+						+ "ORDER BY receipt_no ";
+				setTB();
+			}
+		});
+ 		
 		p1.add(p3, BorderLayout.NORTH);
 		p1.add(scrollpane, BorderLayout.CENTER);
 		p1.setBorder(null);

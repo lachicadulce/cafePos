@@ -224,6 +224,7 @@ public class Receipt extends PosFrame {
 		DateTimeFormatter my_date_format2 = 
 				DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
 		
+		
 		DateTimeFormatter my_date_format3 = 
 				DateTimeFormatter.ofPattern("M월 d일");
 		

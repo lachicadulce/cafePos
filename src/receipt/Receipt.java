@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -29,8 +31,10 @@ public class Receipt extends PosFrame {
 	
 	static ArrayList<ArrayList<String>> list_data = new ArrayList<ArrayList<String>>();
 	String[] columnNames = null;
-	String RECEIPT_NO = "1";
-	
+	String RECEIPT_NO = "24";
+	HashMap<String, ArrayList<Integer>> drink;
+	String total;
+	int vat;
 	public Receipt() {
 		super();
 		super.setTitle("영수증 관리");
@@ -86,13 +90,23 @@ public class Receipt extends PosFrame {
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             ResultSet rs = pstmt.executeQuery();
-
+            drink = new HashMap<>();
             while (rs.next()) {
-                rs.getString("MENU");
-                rs.getInt("PRICE");              
+            	drink.putIfAbsent(rs.getString("MENU"), new ArrayList<>());
+            	
+            	drink.get(rs.getString("MENU")).add(rs.getInt("PRICE"));
+            	
+            	total = rs.getString("TOTAL");
+            	vat = rs.getInt("TOTAL") / 10;
+            	
+            	System.out.println(rs.getString("MENU"));
+            	System.out.println(rs.getInt("PRICE"));
+            	System.out.println(rs.getString("TOTAL"));
+            	
+            	
+            	
             }
 
-            // 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
             rs.close();
             pstmt.close();
             conn.close();
@@ -114,6 +128,36 @@ public class Receipt extends PosFrame {
 		
 		String product = "";
 		
+		// 받아온 HashMap 음료 수량 가격 영수증에 출력
+		for (Entry<String, ArrayList<Integer>> entry : drink.entrySet()) {
+			String print = "";
+			int price = 0;
+			for (int number : entry.getValue()) {
+				price += number;
+			}
+			
+			print += "<tr>"
+					+ "<td>" 
+					+ entry.getKey() 
+					+ "</td>"
+					+ "<td style='text-align:left;'>" 
+					+ entry.getValue().get(0) 
+					+ "</td>"
+					+ "<td style='text-align:center;'>"
+					+ entry.getValue().size()
+					+ "</td>"
+					+ "<td style='text-align:right;'>"
+					+ Integer.toString(price)
+					+ "</td>"
+					+ "</tr>";
+			product += print;
+
+		}
+		
+		
+		
+		
+		
 		String string = // 영수증 전체 내용 
 				"<html><center>-------------------------------------------------------------------"
 				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
@@ -125,10 +169,14 @@ public class Receipt extends PosFrame {
 				+ "<table style='width:100%;'>"
 				+ "<tr>"
 				+ "<td>품명</td>"
-				+ "<td style='text-align:center;'>단가</td>"
-				+ "<td style='text-align:center;'>수량</td>"
+				+ "<td style='text-align:right;'>단가</td>"
+				+ "<td style='text-align:right;'>수량</td>"
 				+ "<td style='text-align:right;'>금액</td>"
 				+ "</tr>"
+				+ "</table>"
+				+ "-------------------------------------------------------------------"
+				+ "<table style='width:100%;'>"
+				+ product
 				+ "</table>"
 				+ "-------------------------------------------------------------------"
 				+ "<table style='width:100%;'>"
@@ -148,7 +196,9 @@ public class Receipt extends PosFrame {
 				+ "<table style='width:100%;'>"
 				+ "<tr>"
 				+ "<td>합&emsp계</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
+				+ "<td style='text-align:right;'>"
+				+ total 
+				+ "원</td>"
 				+ "</tr>"
 				+ "</table>"
 				
@@ -292,8 +342,12 @@ public class Receipt extends PosFrame {
 		selection.addListSelectionListener(new ListSelectionListener() {
 		
 			public void valueChanged(ListSelectionEvent e) {
-				RECEIPT_NO = String.valueOf(table.getValueAt(table.getSelectedRow(), 2));
-			}
+				RECEIPT_NO = String.valueOf(table.getValueAt(table.getSelectedRow(), 2));// 클릭한곳의 RECEIPT_NO 반환하는 로직
+				
+				
+				receipt.setText(string); // 영수증 바뀌게 하는 처리 해야한다.
+				
+			} 
 		
 				
 		});	

@@ -49,7 +49,7 @@ public class ManagerSales extends PosFrame {
 	private String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
 			"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
 	private String date_s, date_e;
-
+	TotalLabel tl;
 	public ManagerSales() {
 		super();
 		init();
@@ -126,7 +126,7 @@ public class ManagerSales extends PosFrame {
 		p4.setBackground(new Color(0xD7E7F7));
 		
 		// 매출 합계 라벨 추가 ※ 수정한 부분
-		TotalLabel tl = new TotalLabel();
+		tl = new TotalLabel();
 		for (JLabel labels : tl.getLabels()) {
 			p4.add(labels);
 		}    
@@ -166,6 +166,8 @@ public class ManagerSales extends PosFrame {
 						+ date_s + " AND " + date_e + " + 1 "
 						+ "ORDER BY receipt_no ";
 				setTB();
+				
+				tl.updateDB(date_s, date_e);
 			}
 		});
  		

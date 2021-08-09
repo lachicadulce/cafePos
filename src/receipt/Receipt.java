@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,8 +34,16 @@ public class Receipt extends PosFrame {
 	String[] columnNames = null;
 	String RECEIPT_NO = "24";
 	HashMap<String, ArrayList<Integer>> drink;
-	String total;
+	
+	int total;
 	int vat;
+	int cash;
+	int point;
+	int credit;
+	
+	DecimalFormat formatter = new DecimalFormat("###,###");
+	
+	
 	public Receipt() {
 		super();
 		super.setTitle("영수증 관리");
@@ -96,8 +105,12 @@ public class Receipt extends PosFrame {
             	
             	drink.get(rs.getString("MENU")).add(rs.getInt("PRICE"));
             	
-            	total = rs.getString("TOTAL");
+            	total = rs.getInt("TOTAL");
             	vat = rs.getInt("TOTAL") / 10;
+            	cash = rs.getInt("CASH");
+            	point = rs.getInt("POINT_USED");
+            	credit = rs.getInt("CREDIT");
+            	
             	
             	System.out.println(rs.getString("MENU"));
             	System.out.println(rs.getInt("PRICE"));
@@ -135,28 +148,53 @@ public class Receipt extends PosFrame {
 			for (int number : entry.getValue()) {
 				price += number;
 			}
-			
 			print += "<tr>"
 					+ "<td>" 
 					+ entry.getKey() 
 					+ "</td>"
 					+ "<td style='text-align:left;'>" 
-					+ entry.getValue().get(0) 
+					+ formatter.format(entry.getValue().get(0)) 
 					+ "</td>"
 					+ "<td style='text-align:center;'>"
 					+ entry.getValue().size()
 					+ "</td>"
 					+ "<td style='text-align:right;'>"
-					+ Integer.toString(price)
+					+ formatter.format(price)
 					+ "</td>"
 					+ "</tr>";
 			product += print;
-
 		}
-		
-		
-		
-		
+		String bill = "";
+		if (cash != 0) {
+			bill += "<table style='width:100%;'>"
+					+ "<tr>"
+					+ "<td>현&emsp금</td>"
+					+ "<td style='text-align:right;'>"
+					+ formatter.format(cash)
+					+ "원</td>"
+					+ "</tr>"
+					+ "</table>";
+		}
+		if (credit != 0) {
+			bill += "<table style='width:100%;'>"
+					+ "<tr>"
+					+ "<td>카&emsp드</td>"
+					+ "<td style='text-align:right;'>"
+					+ formatter.format(credit)
+					+ "원</td>"
+					+ "</tr>"
+					+ "</table>";
+		}
+		if (point != 0) {
+			bill += "<table style='width:100%;'>"
+					+ "<tr>"
+					+ "<td>포인트</td>"
+					+ "<td style='text-align:right;'>"
+					+ formatter.format(point)
+					+ "점</td>"
+					+ "</tr>"
+					+ "</table>";
+		}
 		
 		String string = // 영수증 전체 내용 
 				"<html><center>-------------------------------------------------------------------"
@@ -182,47 +220,27 @@ public class Receipt extends PosFrame {
 				+ "<table style='width:100%;'>"
 				+ "<tr>"
 				+ "<td>과세매출</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
+				+ "<td style='text-align:right;'>"
+				+ formatter.format(vat * 10 - vat)
+				+ "원</td>"
 				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
+
 				+ "<tr>"
 				+ "<td>부가세</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
+				+ "<td style='text-align:right;'>"
+				+ formatter.format(vat)
+				+ "원</td>"
 				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
+
 				+ "<tr>"
 				+ "<td>합&emsp계</td>"
 				+ "<td style='text-align:right;'>"
-				+ total 
+				+ formatter.format(total)
 				+ "원</td>"
 				+ "</tr>"
 				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
+				+ "-------------------------------------------------------------------"
+				+ bill
 				+ "</html>";
 		
 		

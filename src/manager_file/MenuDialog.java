@@ -21,6 +21,7 @@ public class MenuDialog extends JDialog {
 	JButton btn_add = new JButton("추가");
 	
 	public MenuDialog(JFrame frame, String title) {
+		
 		super(frame, title);
 		setLayout(new FlowLayout());
 		add(tf_name);

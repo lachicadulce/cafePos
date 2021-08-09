@@ -38,6 +38,7 @@ public class ManagerMenu extends PosFrame {
 	private String header[] = {"NO", "이름", "가격", "분류", "노출순서"};
 	private String selStr;
 	private JTextField tf;
+	
 	private MenuDialog addMenuDialog;
 	
 	public ManagerMenu() {

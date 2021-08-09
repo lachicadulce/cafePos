@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -47,6 +48,10 @@ public class Receipt_duck_2 extends PosFrame {
 	
 	static int select_receipt_no = -1;
 	static String select_receipt_no_string = "";
+	
+	static int w_size, h_size;
+	static int cash_w_size, cash_h_size;
+	static int credit_w_size, credit_h_size;
 	
 	
 	public void total() {
@@ -152,11 +157,20 @@ public class Receipt_duck_2 extends PosFrame {
             
             // ================================================================================================
         	// ================================================================================================
-            	
+            	System.out.println("w_size : " + w_size);
+            	System.out.println("cash_w_size : " + cash_w_size);
+            	System.out.println("credit_w_size : " + credit_w_size);
             	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
-            	int w_size = list_data_default.size(), h_size = list_data_default.get(0).size();
-            	int cash_w_size = list_data_cash.size(), cash_h_size = list_data_cash.get(0).size();
-            	int credit_w_size = list_data_credit.size(), credit_h_size = list_data_credit.get(0).size();
+            	w_size = list_data_default.size();
+            	h_size = list_data_default.get(0).size();
+            	cash_w_size = list_data_cash.size();
+            	cash_h_size = list_data_cash.get(0).size();
+            	credit_w_size = list_data_credit.size();
+            	credit_h_size = list_data_credit.get(0).size();
+            	
+            	System.out.println("w_size : " + w_size);
+            	System.out.println("cash_w_size : " + cash_w_size);
+            	System.out.println("credit_w_size : " + credit_w_size);
             	
             	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
              	data_default = new String[w_size][h_size];
@@ -167,7 +181,7 @@ public class Receipt_duck_2 extends PosFrame {
              	for (int i = 0; i < w_size; i++) {
             		for (int x = 0; x < h_size; x++) {
             			if (x == 0) {
-            				data_default[i][x] = "" + i;
+            				data_default[i][x] = "" + (i+1);
             			}else {
             				data_default[i][x] = list_data_default.get(i).get(x);
             			}
@@ -178,7 +192,7 @@ public class Receipt_duck_2 extends PosFrame {
              	for (int i = 0; i < cash_w_size; i++) {
             		for (int x = 0; x < cash_h_size; x++) {
             			if (x == 0) {
-            				data_cash[i][x] = "" + i;
+            				data_cash[i][x] = "" + (i+1);
             			}else {
             				data_cash[i][x] = list_data_cash.get(i).get(x);
             			}
@@ -189,7 +203,7 @@ public class Receipt_duck_2 extends PosFrame {
              	for (int i = 0; i < credit_w_size; i++) {
             		for (int x = 0; x < credit_h_size; x++) {
             			if (x == 0) {
-            				data_credit[i][x] = "" + i;
+            				data_credit[i][x] = "" + (i+1);
             			}else {
         	    			data_credit[i][x] = list_data_credit.get(i).get(x);
             			}
@@ -394,24 +408,32 @@ public class Receipt_duck_2 extends PosFrame {
      	receipt_panel.setLocation(20, 140);
      	receipt_panel.setSize(660, 500);
 
-     	JPanel a = new JPanel();
+//     	JPanel a = new JPanel();
+//     	a.setSize(20,20);
      	
      	
      	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
+//     	JTable table = new JTable(data_default, columnNames);
 		JTable table = new JTable(model);
      	
      	JScrollPane scrollPane1 = new JScrollPane(table);
+     	scrollPane1.setBorder(BorderFactory.createEmptyBorder());
+//     	scrollPane1.setBounds(20, 120, 6600, 4700);
      	
 //     	scrollPane1.setBackground(Color.pink);
      	
-     	table.setPreferredSize(new Dimension(660, 500));
-     	scrollPane1.setPreferredSize(new Dimension(660, 500));
+//     	table.setPreferredSize(new Dimension(660, 1500));
+//     	table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
      	
      	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
      	
+     	scrollPane1.setPreferredSize(new Dimension(658, 495));
+//     	scrollPane1.setPreferredSize(660, 1500);
+//     	scrollPane1.setSize(6600, 1500);
+     	
      	table.setRowSelectionAllowed(true);
      	table.setColumnSelectionAllowed(false);
-     	
+//     	System.out.println(scrollPane1.getSize(getPreferredSize()));
      	
 //     	table.setShowGrid(true);
      	
@@ -430,19 +452,57 @@ public class Receipt_duck_2 extends PosFrame {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				
-				if (e.getValueIsAdjusting()) { 
+				if (e.getValueIsAdjusting()) {
+					
+//					int tableRows = table.getRowCount();
+//					int selecrow = table.getSelectedRow();
+					
+//					System.out.println("==========================================");
+//					System.out.println("tableRows : " + table.getRowCount());
+//					System.out.println("w_size : " + w_size);
+//					
+//					System.out.println("tableRows : " + table.getRowCount());
+//					System.out.println("cash_w_size : " + cash_w_size);
+//					
+//					System.out.println("tableRows : " + table.getRowCount());
+//					System.out.println("credit_w_size : " + credit_w_size);
+//					System.out.println("==========================================");
+//					
+//					System.out.println("selecrow : " + table.getSelectedRow());
+//					System.out.println(list_data_default.size());
+					
+					System.out.println("w_size : " + w_size + "\tcash_w_size : " + cash_w_size + "\tcredit_w_size : " + credit_w_size);
+					System.out.println("model.getColumnCount() : " + model.getValueAt(table.getSelectedRow(), 2));
+					
+					if (table.getRowCount() == w_size) {
+						
+						System.out.println(data_default[table.getSelectedRow()][2]);
+					} 
+					if (table.getRowCount() == cash_w_size) {
+						
+						System.out.println(data_cash[table.getSelectedRow()][2]);
+					} 
+					if (table.getRowCount() == credit_w_size) {
+						
+						System.out.println(data_credit[table.getSelectedRow()][2]);
+					}
+					
 					
 //					select_receipt_no = (Integer)(table.getValueAt(table.getSelectedRow(), 2));
-        			select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
+//        			select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
         			
 //        			System.out.println("인트형 : \t" + select_receipt_no);
 //        			System.out.println("문자열 : \t" + select_receipt_no_string);
-        			select_receipt_no = Integer.parseInt(select_receipt_no_string);
+//        			select_receipt_no = Integer.parseInt(select_receipt_no_string);
         			
 //        			System.out.println(select_receipt_no);
 					
+//					System.out.println("선택된 row : " + table.getSelectedRow());
+//					System.out.println("선택된 col : " + table.getSelectedColumn());
+//					System.out.println();
+					
 				// 테이블의 어떤 행을 선택하면 그 행의 영수증 번호를 조회
-//				select_receipt_no = (int)(table.getValueAt(table.getSelectedRow(), 2));
+//				select_receipt_no = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 2));
 					
 //					System.out.println((Integer)(table.getValueAt(table.getSelectedRow(), 2)));
 				
@@ -467,20 +527,22 @@ public class Receipt_duck_2 extends PosFrame {
         	   
         		@Override
         		public void actionPerformed(ActionEvent e) {
-        			
-//        			int select_receipt_no = -1;
-//        			String select_receipt_no_string = "";
-        			
+//        			
+////        			int select_receipt_no = -1;
+////        			String select_receipt_no_string = "";
+//        			System.out.println("select_receipt_no 1 : " + select_receipt_no);
 //        			if (select_receipt_no == -1) {
-//        				System.out.println("11");
-//        				
-//        				System.out.println("22");
+//        				System.out.println("select_receipt_no 2 : " + select_receipt_no);
+////        				System.out.println("11");
+////        				
+////        				System.out.println("22");
 //        			} else if (select_receipt_no > 0) {
-//        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
-//        				select_receipt_no = Integer.parseInt(select_receipt_no_string);
-//        				
-//        				payment_change aa = new payment_change(select_receipt_no);
-//        				
+//        				System.out.println("select_receipt_no 3 : " + select_receipt_no);
+////        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
+////        				select_receipt_no = Integer.parseInt(select_receipt_no_string);
+////        				
+////        				payment_change aa = new payment_change();
+////        				
 //        			} 
         			
 //        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
@@ -506,7 +568,7 @@ public class Receipt_duck_2 extends PosFrame {
 
         			DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
         			table.setModel(model);
-        			JTable table = new JTable(model);
+//        			JTable table = new JTable(model);
 
         			model.fireTableDataChanged();
         		}
@@ -522,21 +584,11 @@ public class Receipt_duck_2 extends PosFrame {
         		public void actionPerformed(ActionEvent e) {
 
 //        			cash_list();
-        			
 
         			DefaultTableModel model = new DefaultTableModel(data_cash, columnNames);
         			
-        			System.out.println(data_cash.length);
-//        			
-//        			for (int a = 0; a < data_cash.length; a++) {
-//        				for (int b = 0; b < data_cash[a].length; b++) {
-//        					System.out.print(a + "\t");
-//        				}
-//        				System.out.println();
-//        			}
-        			
         			table.setModel(model);
-        			JTable table = new JTable(model);
+//        			JTable table = new JTable(model);
         			
         			model.fireTableDataChanged();
         			
@@ -556,7 +608,7 @@ public class Receipt_duck_2 extends PosFrame {
            	        
            			DefaultTableModel model = new DefaultTableModel(data_credit, columnNames);
            			table.setModel(model);
-           			JTable table = new JTable(model);
+//           		JTable table = new JTable(model);
            			
            			model.fireTableDataChanged();
            		}
@@ -566,7 +618,6 @@ public class Receipt_duck_2 extends PosFrame {
            
      // ================================================================================================
      // ================================================================================================
-     	
 
 	}
 	

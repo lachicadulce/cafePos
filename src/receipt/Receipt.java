@@ -215,13 +215,11 @@ public class Receipt extends PosFrame {
 			bill += "<br>[현금영수증 미발급]";
 		}
 		// 영수증 시간 LocalDate로 변환 후 String으로 변환
-		LocalDate localDate = new java.sql.Date(transaction_date.getTime()).toLocalDate();
 			
 		LocalDateTime localDateTime = new java.sql.Timestamp(transaction_date.getTime())
 				.toLocalDateTime();
 
 
-		LocalDateTime returnDay = localDateTime.plusDays(30);
 		
 		DateTimeFormatter my_date_format2 = 
 				DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
@@ -230,7 +228,8 @@ public class Receipt extends PosFrame {
 				DateTimeFormatter.ofPattern("M월 d일");
 		
 
-		String transaction_date_string = my_date_format2.format(returnDay);	// 판매일자
+		LocalDateTime returnDay = localDateTime.plusDays(30);
+		String transaction_date_string = my_date_format2.format(localDateTime);	// 판매일자
 		String returnDayString = my_date_format3.format(returnDay); // 반품가능일자
 		
 		String string = // 영수증 전체 내용 

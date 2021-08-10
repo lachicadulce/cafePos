@@ -68,23 +68,12 @@ public class Receipt extends PosFrame {
 		String message = my_date_format.format(LocalDate.now());
 
 		JButton date = new JButton(message);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		JPanel frame = new JPanel();
 		
 		JLabel receipt = new JLabel(string);
 		
-		
-		
+
 		ArrayList<JButton> buttons = new ArrayList<>();
 		
 		

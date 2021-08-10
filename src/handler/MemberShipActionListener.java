@@ -34,6 +34,7 @@ public class MemberShipActionListener implements ActionListener {
 		
 		String memTel = JOptionPane.showInputDialog(null, "전화번호를 입력하세요", "멤버쉽", 1);
 		String memFindsql = "select * FROM customer_info where tel LiKE ?" ;
+		String memPointDeductionSql = "UPDATE customer_info SET last_visit = sysdate,  point = point - ? WHERE tel LIKE ?" ;
 		String name;
 		String tel;
 		int point = 0;	
@@ -53,6 +54,7 @@ public class MemberShipActionListener implements ActionListener {
 		try (
 				Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe", "!!22Qorthdud");	
 				PreparedStatement memFindpstmt  = conn.prepareStatement(memFindsql);
+				PreparedStatement memPointpstmt  = conn.prepareStatement(memPointDeductionSql);
 				) {
 			
 		memFindpstmt.setString(1, "%"+memTel+"%");
@@ -73,10 +75,15 @@ public class MemberShipActionListener implements ActionListener {
 		}
 		
 		String usePointstr = JOptionPane.showInputDialog(null, panel, "멤버쉽", 1);
-		if( Integer.parseInt(usePointstr) > point) {
+		int usePoint = Integer.parseInt(usePointstr);
+		if( usePoint > point) {
 			JOptionPane.showMessageDialog(null, "포인트가 부족합니다.", "오류", 0);
 		} else {
 			calcTable.setValueAt(usePointstr, 1, 1);
+			memPointpstmt.setInt(1, usePoint);
+			memPointpstmt.setString(2, "%"+memTel+"%");
+			memPointpstmt.executeUpdate();
+			JOptionPane.showMessageDialog(null, "포인트사용이 완료되었습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		

@@ -1,8 +1,11 @@
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -204,24 +207,36 @@ public class main_test2 extends PosFrame {
 	      
 	      
 	      
+	      JPanel pages1 = new JPanel(new CardLayout()); // rightScreenN번을 넣을 '카드레이아웃'틀.
+	      JPanel pages2 = new JPanel(new CardLayout());
 	      
+	      JPanel rightScreen1 = new JPanel(new BorderLayout());// 가운데에서 왼쪽편에 속한 모든메뉴버튼을 넣을 JPanel
 	      
-	      
-	      JPanel rightScreen = new JPanel(new BorderLayout());
-	      
-//	      JPanel rightL = new JPanel(new BorderLayout(8,6));
-	      JPanel rightL = new JPanel(new GridLayout(3,1));
+	      JPanel rightL = new JPanel(new GridLayout(3,1));//rightScreen쪽에서 위아래 버튼을 제외한 왼쪽편에 속한 모든메뉴 담는 JPanel
 	      
 	      GridLayout gl = new GridLayout(2, 4);
-	      JPanel rightLUp = new JPanel(gl);
+	      JPanel rightLUp = new JPanel(gl); //rightL에서 제일 위
+	      JPanel rightLUp2 = new JPanel(gl);
+	      JPanel rightLUp3 = new JPanel(gl);
 	      
-	      JPanel rightLCenter = new JPanel(gl);
+	      JPanel rightLCenter = new JPanel(gl); //rightL에서 가운데
+	      JPanel rightLCenter2 = new JPanel(gl);
+	      JPanel rightLCenter3 = new JPanel(gl);
+	      
+	      
+	      pages1.add("upcard1",rightLUp);
+	      pages1.add("upcard2",rightLUp2);
+	      pages1.add("upcard3",rightLUp3);
+	      
+	      pages2.add("upcard1",rightLCenter);
+	      pages2.add("upcard2",rightLCenter2);
+	      pages2.add("upcard3",rightLCenter3);
 	      
 	      GridLayout gl2 = new GridLayout(1, 4);
-	      JPanel rightLDown = new JPanel(gl2);
+	      JPanel rightLDown = new JPanel(gl2); ////rightL에서 제일 아래
 	      
-	      rightL.add(rightLUp);
-	      rightL.add(rightLCenter);
+	      rightL.add(pages1);
+	      rightL.add(pages2);
 	      rightL.add(rightLDown);
 	      rightL.setBorder(BorderFactory.createEmptyBorder(10 , 10 , 10 , 10));
 
@@ -244,13 +259,18 @@ public class main_test2 extends PosFrame {
 	      rightR.add(up);
 	      rightR.add(down);
 	      
+	      JPanel rightL2 = new JPanel(new GridLayout(3,1));
+	      JPanel rightL3 = new JPanel(new GridLayout(3,1));
 	      
-	      rightScreen.add("West",rightL);
-	      rightScreen.add("East",rightR);
+	      
+
+	     
+	      rightScreen1.add("West",rightL);
+	      rightScreen1.add("East",rightR);
 
 		  jsp2.setLeftComponent(rightL);
 		  jsp2.setRightComponent(rightR);
-		  rightScreen.add("Center",jsp2);
+		  rightScreen1.add("Center",jsp2);
 		  
 		  JPanel rightDown = new JPanel(new BorderLayout());
 		  
@@ -268,13 +288,54 @@ public class main_test2 extends PosFrame {
 	      for(JButton btn:btns3.getMainbtns3()) {
 	    	  rightLDown.add(btn);
 	      }
-		  
+	
 	      
 	      jsp1.setLeftComponent(leftScreen);
-	      jsp1.setRightComponent(rightScreen);
+	      jsp1.setRightComponent(rightScreen1);
 	      con.add("Center", jsp1);
-	   }
+	      
+
+	      actionPrevAdd(up, pages1, pages2);
+	      actionNextAdd(down, pages1, pages2);
+	      
+	      
+	      
+	   }//mainScreenInit함수 끝.
 	   
+	   
+	   
+	   private void actionNextAdd(JButton a, JPanel p1, JPanel p2) {
+		   
+		   a.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				
+					CardLayout card_layout1 = ((CardLayout)p1.getLayout());
+					CardLayout card_layout2 = ((CardLayout)p2.getLayout());
+					card_layout1.next(p1);
+					card_layout2.next(p2);
+				}
+			});
+		      
+	   }// 다음 페이지 넘기게 하는 액션리스너추가
+	
+	   private void actionPrevAdd(JButton a, JPanel p1, JPanel p2) {
+		   
+		   a.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				
+					CardLayout card_layout1 = ((CardLayout)p1.getLayout());
+					CardLayout card_layout2 = ((CardLayout)p2.getLayout());
+					card_layout1.previous(p1);
+					card_layout2.previous(p2);
+				}
+			});
+		      
+	   }// 이전 페이지 넘기게 하는 액션리스너추가
+	 
 	   
 	   
 	   public static void main(String[] args) {

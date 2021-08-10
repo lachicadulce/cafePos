@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,20 +17,20 @@ import main_component.MainBtns;
 import main_component.OrderButton;
 
 public class MenuPanel extends JPanel {
-	
+
 	JSplitPane jsp2;
-	
+
 	public MenuPanel(JSplitPane jsp2) {
-		
+
 		this.jsp2 = jsp2;
-		
+
 		JPanel pages1 = new JPanel(new CardLayout()); // rightScreenN번을 넣을 '카드레이아웃'틀.
 		JPanel pages2 = new JPanel(new CardLayout());
-		
+
 		setLayout(new BorderLayout());
-		
+
 		JPanel rightL = new JPanel(new GridLayout(3,1));//rightScreen쪽에서 위아래 버튼을 제외한 왼쪽편에 속한 모든메뉴 담는 JPanel
-		
+
 		GridLayout gl = new GridLayout(2, 4);
 		JPanel rightLUp = new JPanel(gl); //rightL에서 제일 위
 		JPanel rightLUp2 = new JPanel(gl);
@@ -38,7 +39,7 @@ public class MenuPanel extends JPanel {
 		JPanel rightLCenter = new JPanel(gl); //rightL에서 가운데
 		JPanel rightLCenter2 = new JPanel(gl);
 		JPanel rightLCenter3 = new JPanel(gl);
-		
+
 		pages1.add("upcard1",rightLUp);
 		pages1.add("upcard2",rightLUp2);
 		pages1.add("upcard3",rightLUp3);
@@ -48,7 +49,9 @@ public class MenuPanel extends JPanel {
 		pages2.add("upcard3",rightLCenter3);
 
 		GridLayout gl2 = new GridLayout(1, 4);
-		JPanel rightLDown = new JPanel(gl2); ////rightL에서 제일 아래
+//		JPanel rightLDown = new JPanel(gl2); ////rightL에서 제일 아래
+		GridLayout gl3 = new GridLayout(1, 3);
+		JPanel rightLDown = new JPanel(gl3); 
 
 		rightL.add(pages1);
 		rightL.add(pages2);
@@ -57,18 +60,17 @@ public class MenuPanel extends JPanel {
 
 		rightLUp.setBorder(BorderFactory.createEmptyBorder(20 , 0 , 20 , 0));
 		rightLCenter.setBorder(BorderFactory.createEmptyBorder(20 , 0 , 20 , 0));
-		
-		
-		GridBagLayout gbl = new GridBagLayout();
-		GridBagConstraints gblc = new GridBagConstraints();
-		rightLDown.setLayout(gbl);
-		rightLDown.setBorder(BorderFactory.createEmptyBorder(50 , 0 , 50 , 0));
+		rightLDown.setBorder(BorderFactory.createEmptyBorder(50 , 10 , 50 , 10));
 
 		gl.setVgap(40);
 		gl.setHgap(40);
 
 		gl2.setVgap(40);
 		gl2.setHgap(40);
+		
+		gl3.setVgap(40);
+		gl3.setHgap(40);
+		
 		JPanel rightR = new JPanel();
 		//"MD",1065,10,160,100,0xb0e8f7,20
 		rightR.setLayout(new GridLayout(2,1));
@@ -79,8 +81,8 @@ public class MenuPanel extends JPanel {
 		rightR.add(up);
 		rightR.add(down);
 
-//		JPanel rightL2 = new JPanel(new GridLayout(3,1));
-//		JPanel rightL3 = new JPanel(new GridLayout(3,1));
+		//		JPanel rightL2 = new JPanel(new GridLayout(3,1));
+		//		JPanel rightL3 = new JPanel(new GridLayout(3,1));
 
 
 
@@ -92,7 +94,7 @@ public class MenuPanel extends JPanel {
 		jsp2.setRightComponent(rightR);
 		add("Center",jsp2);
 
-		JPanel rightDown = new JPanel(new BorderLayout());
+//		JPanel rightDown = new JPanel(new BorderLayout());
 
 
 		MainBtns btns1 = new MainBtns();
@@ -108,14 +110,14 @@ public class MenuPanel extends JPanel {
 		for(JButton btn:btns3.getMainbtns3()) {
 			rightLDown.add(btn);
 		}
-
+		
 
 		actionPrevAdd(up, pages1, pages2);
 		actionNextAdd(down, pages1, pages2);
-		
-		
+
+
 	}
-	
+
 	private void actionNextAdd(JButton a, JPanel p1, JPanel p2) {
 
 		a.addActionListener(new ActionListener() {

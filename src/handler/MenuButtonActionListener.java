@@ -1,6 +1,5 @@
 package handler;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,9 +14,10 @@ public class MenuButtonActionListener implements ActionListener {
 	int count;
 
 	public MenuButtonActionListener(JTable calcTable,DefaultTableModel orderTableModel, JTable orderTable) {
+		this.calcTable = calcTable;
 		this.orderTable = orderTable;
 		this.orderTableModel = orderTableModel;
-		this.calcTable = calcTable;
+		
 	}
 
 	@Override
@@ -64,8 +64,6 @@ public class MenuButtonActionListener implements ActionListener {
 		}
 		
 		new CalcTableTotal(calcTable, orderTableModel, orderTable);
-		
-		
 
 
 	}

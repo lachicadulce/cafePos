@@ -10,12 +10,12 @@ public class QuantityIncreaseActionListener implements ActionListener {
 
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
-	JTable calcTable;
+	JTable calcTable; 
 
-	public QuantityIncreaseActionListener(JTable calcTable, DefaultTableModel orderTableModel, JTable orderTable) {
+	public QuantityIncreaseActionListener(JTable calcTable,DefaultTableModel orderTableModel, JTable orderTable) {
+		this.calcTable = calcTable;
 		this.orderTable = orderTable;
 		this.orderTableModel = orderTableModel;
-		this.calcTable = calcTable;
 	}
 
 
@@ -26,10 +26,8 @@ public class QuantityIncreaseActionListener implements ActionListener {
 		//		String quantityStr = Integer.toString(++quantity);
 		//		orderTable.setValueAt(quantityStr, orderTable.getSelectedRow(), 1);
 		int quantity;
-		String quantitystr = null;
+		String quantitystr = null; 
 		int selected = orderTable.getSelectedRow();
-
-		
 
 		try {
 			quantity = (int) orderTableModel.getValueAt(selected, 1);

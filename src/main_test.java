@@ -1,5 +1,6 @@
 
 
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -168,15 +169,6 @@ public class main_test extends PosFrame {
 
 
 		MenuPanel m1 = new MenuPanel(jsp2);
-		
-
-
-		
-		
-		
-		
-		
-		
 
 		jsp1.setLeftComponent(leftScreen);
 		jsp1.setRightComponent(m1);

@@ -10,12 +10,12 @@ public class QuantityDecreaseActionListener implements ActionListener {
 
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
-	JTable calcTable;
-
+	JTable calcTable; 
+	
 	public QuantityDecreaseActionListener(JTable calcTable, DefaultTableModel orderTableModel, JTable orderTable) {
+		this.calcTable = calcTable;
 		this.orderTableModel = orderTableModel;
 		this.orderTable = orderTable;
-		this.calcTable = calcTable;
 	}
 
 

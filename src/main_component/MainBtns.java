@@ -71,11 +71,9 @@ public class MainBtns extends JButton{
 	      OrderButton a18 = new OrderButton("<HTML><body style='text-align:center'>맴버쉽</body></HTML>",715,355,160,100,0xe3aada,25);
 	      btns3.add(a18);
 	      
-	      OrderButton a19 = new OrderButton("<HTML><body style='text-align:center'>신용카드</body></HTML>",890,355,160,100,0xb5f5c8,25);
+	      OrderButton a19 = new OrderButton("<HTML><body style='text-align:center'>결제</body></HTML>",890,355,160,100,0xb5f5c8,25);
 	      btns3.add(a19);
 	      
-	      OrderButton a20 = new OrderButton("<HTML><body style='text-align:center'>현금</body></HTML>",1065,355,160,100,0xfff7e0,25);
-	      btns3.add(a20);
 	      
 	      
 	      for (int i = 0; i < btns1.size(); i++) {

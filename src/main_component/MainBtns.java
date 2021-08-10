@@ -1,8 +1,11 @@
 package main_component;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 public class MainBtns extends JButton{
 
@@ -74,7 +77,51 @@ public class MainBtns extends JButton{
 	      OrderButton a20 = new OrderButton("<HTML><body style='text-align:center'>현금</body></HTML>",1065,355,160,100,0xfff7e0,25);
 	      btns3.add(a20);
 	      
+	      
+	      for (int i = 0; i < btns1.size(); i++) {
+	    	  
+			btns1.get(i).addActionListener(new ActionListener() {
+				
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					JButton la = (JButton)e.getSource();
+					String str = la.getText();
+					System.out.println(str);
+				}
+			});
+		}
+	      //////////////////////////////////////////////////////
+	      for (int i = 0; i < btns2.size(); i++) {
+			btns2.get(i).addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					JButton la = (JButton)e.getSource();
+					String str = la.getText();
+					System.out.println(str);
+				}
+			});
+		}
+	      ///////////////////////////////////////////////////////
+	      for (int i = 0; i < btns3.size(); i++) {
+			btns3.get(i).addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					JButton la = (JButton)e.getSource();
+					String str = la.getText();
+					System.out.println(str);
+				}
+			});
+		}
+	      
 	   }//생성자
+	   
+	   
 	   
 	   public ArrayList<JButton> getMainbtns1(){
 	      return btns1;
@@ -83,7 +130,11 @@ public class MainBtns extends JButton{
 	   public ArrayList<JButton> getMainbtns2(){
 		      return btns2;
 		   }//get ArrayList
+	   
 	   public ArrayList<JButton> getMainbtns3(){
 		      return btns3;
 		   }//get ArrayList
+	   
+	   
+
 }

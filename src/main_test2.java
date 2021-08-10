@@ -210,7 +210,7 @@ public class main_test2 extends PosFrame {
 	      JPanel pages1 = new JPanel(new CardLayout()); // rightScreenN번을 넣을 '카드레이아웃'틀.
 	      JPanel pages2 = new JPanel(new CardLayout());
 	      
-	      JPanel rightScreen1 = new JPanel(new BorderLayout());// 가운데에서 왼쪽편에 속한 모든메뉴버튼을 넣을 JPanel
+	      JPanel rightScreen = new JPanel(new BorderLayout());// 가운데에서 왼쪽편에 속한 모든메뉴버튼을 넣을 JPanel
 	      
 	      JPanel rightL = new JPanel(new GridLayout(3,1));//rightScreen쪽에서 위아래 버튼을 제외한 왼쪽편에 속한 모든메뉴 담는 JPanel
 	      
@@ -265,12 +265,12 @@ public class main_test2 extends PosFrame {
 	      
 
 	     
-	      rightScreen1.add("West",rightL);
-	      rightScreen1.add("East",rightR);
+	      rightScreen.add("West",rightL);
+	      rightScreen.add("East",rightR);
 
 		  jsp2.setLeftComponent(rightL);
 		  jsp2.setRightComponent(rightR);
-		  rightScreen1.add("Center",jsp2);
+		  rightScreen.add("Center",jsp2);
 		  
 		  JPanel rightDown = new JPanel(new BorderLayout());
 		  

@@ -291,7 +291,7 @@ public class main_test2 extends PosFrame {
 	
 	      
 	      jsp1.setLeftComponent(leftScreen);
-	      jsp1.setRightComponent(rightScreen1);
+	      jsp1.setRightComponent(rightScreen);
 	      con.add("Center", jsp1);
 	      
 

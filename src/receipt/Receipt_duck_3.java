@@ -1,5 +1,6 @@
 package receipt;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -29,8 +30,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import baseSettings.PosFrame;
+import gui.mypanel.ImagePanel;
 
-public class Receipt_duck_2 extends PosFrame {
+public class Receipt_duck_3 extends PosFrame {
 	
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
@@ -42,10 +44,6 @@ public class Receipt_duck_2 extends PosFrame {
 	static String Receipt_list_cash = "select * from payment_view_1 where cash > 0";
 	static String Receipt_list_credit = "select * from payment_view_1 where credit > 0";
 	
-	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
-	
-	
-	
 	static String[][] data_default = null;
 	static String[][] data_cash = null;
 	static String[][] data_credit = null;
@@ -56,9 +54,6 @@ public class Receipt_duck_2 extends PosFrame {
 	static int w_size, h_size;
 	static int cash_w_size, cash_h_size;
 	static int credit_w_size, credit_h_size;
-	
-	static int no;
-	static String state_chk;
 	
 	
 	public void total() {
@@ -164,9 +159,9 @@ public class Receipt_duck_2 extends PosFrame {
             
             // ================================================================================================
         	// ================================================================================================
-//            	System.out.println("w_size : " + w_size);
-//            	System.out.println("cash_w_size : " + cash_w_size);
-//            	System.out.println("credit_w_size : " + credit_w_size);
+            	System.out.println("w_size : " + w_size);
+            	System.out.println("cash_w_size : " + cash_w_size);
+            	System.out.println("credit_w_size : " + credit_w_size);
             	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
             	w_size = list_data_default.size();
             	h_size = list_data_default.get(0).size();
@@ -174,11 +169,11 @@ public class Receipt_duck_2 extends PosFrame {
             	cash_h_size = list_data_cash.get(0).size();
             	credit_w_size = list_data_credit.size();
             	credit_h_size = list_data_credit.get(0).size();
-//            	
-//            	System.out.println("w_size : " + w_size);
-//            	System.out.println("cash_w_size : " + cash_w_size);
-//            	System.out.println("credit_w_size : " + credit_w_size);
-//            	
+            	
+            	System.out.println("w_size : " + w_size);
+            	System.out.println("cash_w_size : " + cash_w_size);
+            	System.out.println("credit_w_size : " + credit_w_size);
+            	
             	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
              	data_default = new String[w_size][h_size];
              	data_cash = new String[cash_w_size][cash_h_size];
@@ -224,38 +219,7 @@ public class Receipt_duck_2 extends PosFrame {
 		
 	}
 	
-	public void refund(int receipt_no) {
-		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
-            refund_sql += ("" + receipt_no);
-            System.out.println(refund_sql);
-            
-            PreparedStatement pstmt_Receipt_list = conn.prepareStatement(refund_sql);
-            
-			int row = pstmt_Receipt_list.executeUpdate();
-			
-			System.out.println(row + "row(s) changed.");
-			
-			pstmt_Receipt_list.close();
-			total();
-            
-		} catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	public Receipt_duck_2() {
+	public Receipt_duck_3() {
 		super();
 		super.setTitle("영수증 관리");
 		try {
@@ -299,68 +263,7 @@ public class Receipt_duck_2 extends PosFrame {
 		
 		String string = // 영수증 전체 내용 
 				"<html><center>-------------------------------------------------------------------"
-				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
-				+ "<br>지참하셔야 하며, 카드결제는 30일(09월08일)"
-				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
-				+ "<br>-------------------------------------------------------------------"
-				+ "</center>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>품명</td>"
-				+ "<td style='text-align:center;'>단가</td>"
-				+ "<td style='text-align:center;'>수량</td>"
-				+ "<td style='text-align:right;'>금액</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>과세매출</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>부가세</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>합&emsp계</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>현&emsp금</td>"
-				+ "<td style='text-align:right;'>3000원</td>"
-				+ "</tr>"
-				+ "</table>"
-				
 				+ "</html>";
-		
-		
-		
-		
 		
 		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
 		// <html> +  + <br> + + <p>  + + </html> 줄 바꾸는 법
@@ -369,16 +272,11 @@ public class Receipt_duck_2 extends PosFrame {
 		
 		JLabel receipt = new JLabel(string);
 		
-		
-		
 		ArrayList<JButton> buttons = new ArrayList<>();
-		
-		
 		
 		buttons.add(new JButton("전표반품")); // 0 
 		buttons.add(new JButton("재인쇄"));
 		buttons.add(new JButton("현금영수증"));
-		
 		
 		buttons.add(new JButton("결제변경"));
 		buttons.add(new JButton("전체"));
@@ -440,22 +338,31 @@ public class Receipt_duck_2 extends PosFrame {
 //        cash_list();
 //        credit_list();
 
-        JPanel receipt_panel = new JPanel();        
+        JPanel receipt_panel_list = new JPanel(new CardLayout(10, 10));        
         
-     	receipt_panel.setBackground(Color.black);
-     	receipt_panel.setLocation(20, 140);
-     	receipt_panel.setSize(660, 500);
+        receipt_panel_list.setBackground(Color.black);
+        receipt_panel_list.setLocation(20, 140);
+        receipt_panel_list.setSize(660, 500);
 
 //     	JPanel a = new JPanel();
 //     	a.setSize(20,20);
      	
+//     	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
+     	JTable table_default = new JTable(data_default, columnNames);
+     	JTable table_cash = new JTable(data_cash, columnNames);
+     	JTable table_credit = new JTable(data_credit, columnNames);
      	
-     	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
-//     	JTable table = new JTable(data_default, columnNames);
-		JTable table = new JTable(model);
+     	JPanel panel1 = new JPanel();
+		JPanel panel2 = new JPanel();
+		JPanel panel3 = new JPanel();
      	
-     	JScrollPane scrollPane1 = new JScrollPane(table);
-     	scrollPane1.setBorder(BorderFactory.createEmptyBorder());
+//		JTable table = new JTable(model);
+     	
+     	JScrollPane scrollPane_default = new JScrollPane(table_default);
+     	JScrollPane scrollPane_cash = new JScrollPane(table_cash);
+     	JScrollPane scrollPane_credit = new JScrollPane(table_credit);
+     	
+     	scrollPane_default.setBorder(BorderFactory.createEmptyBorder());
 //     	scrollPane1.setBounds(20, 120, 6600, 4700);
      	
 //     	scrollPane1.setBackground(Color.pink);
@@ -463,27 +370,27 @@ public class Receipt_duck_2 extends PosFrame {
 //     	table.setPreferredSize(new Dimension(660, 1500));
 //     	table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
      	
-     	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
+     	table_default.getTableHeader().setPreferredSize(new Dimension(scrollPane_default.getWidth(), 50));
      	
-     	scrollPane1.setPreferredSize(new Dimension(658, 495));
+     	scrollPane_default.setPreferredSize(new Dimension(658, 495));
 //     	scrollPane1.setPreferredSize(660, 1500);
 //     	scrollPane1.setSize(6600, 1500);
      	
-     	table.setRowSelectionAllowed(true);
-     	table.setColumnSelectionAllowed(false);
+     	table_default.setRowSelectionAllowed(true);
+     	table_default.setColumnSelectionAllowed(false);
 //     	System.out.println(scrollPane1.getSize(getPreferredSize()));
      	
 //     	table.setShowGrid(true);
      	
 //     	a.add(scrollPane1);
-     	receipt_panel.add(scrollPane1);
+     	receipt_panel.add(scrollPane_default);
      	add(receipt_panel);
      	
 		// ================================================================================================
      	// 테이블 내에 어떤 행을 선택했을때 그 데이터의 영수증 번호를 가져오기 위한 액션 
 		// ================================================================================================
      	
-     	ListSelectionModel selection = table.getSelectionModel();
+     	ListSelectionModel selection = table_default.getSelectionModel();
      	
      	selection.addListSelectionListener(new ListSelectionListener() {
 			
@@ -492,43 +399,56 @@ public class Receipt_duck_2 extends PosFrame {
 				
 				if (e.getValueIsAdjusting()) {
 					
-					try {
-//						System.out.println("w_size : " + w_size + "\tcash_w_size : " + cash_w_size + "\tcredit_w_size : " + credit_w_size);
-//						System.out.println("model.getColumnCount() : " + model.getValueAt(table.getSelectedRow(), 2));
-						
-						no = table.getSelectedRow();
-						select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
-						
-						state_chk = "" + table.getValueAt(table.getSelectedRow(), 1);
-						System.out.println("ddf : " + state_chk);
-						
-						select_receipt_no = Integer.parseInt(select_receipt_no_string);
-						
-					} catch (Exception a) {
-						a.printStackTrace();
-					}
+//					int tableRows = table.getRowCount();
+//					int selecrow = table.getSelectedRow();
 					
+//					System.out.println("w_size : " + w_size + "\tcash_w_size : " + cash_w_size + "\tcredit_w_size : " + credit_w_size);
+//					System.out.println("model.getColumnCount() : " + model.getValueAt(table.getSelectedRow(), 2));
+//					
+//					if (table.getRowCount() == w_size) {
+//						
+//						System.out.println(data_default[table.getSelectedRow()][2]);
+//					} 
+//					
+//					if (table.getRowCount() == cash_w_size) {
+//						
+//						System.out.println(data_cash[table.getSelectedRow()][2]);
+//					} 
+//					if (table.getRowCount() == credit_w_size) {
+//						
+//						System.out.println(data_credit[table.getSelectedRow()][2]);
+//					}
+					
+					
+//					select_receipt_no = (Integer)(table.getValueAt(table.getSelectedRow(), 2));
+//        			select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
+        			
+//        			System.out.println("인트형 : \t" + select_receipt_no);
+//        			System.out.println("문자열 : \t" + select_receipt_no_string);
+//        			select_receipt_no = Integer.parseInt(select_receipt_no_string);
+        			
+//        			System.out.println(select_receipt_no);
+					
+//					System.out.println("선택된 row : " + table.getSelectedRow());
+//					System.out.println("선택된 col : " + table.getSelectedColumn());
+//					System.out.println();
+					
+				// 테이블의 어떤 행을 선택하면 그 행의 영수증 번호를 조회
+//				select_receipt_no = Integer.parseInt((String) table.getValueAt(table.getSelectedRow(), 2));
+					
+//					System.out.println((Integer)(table.getValueAt(table.getSelectedRow(), 2)));
+				
+//					System.out.println(
+//						table.getSelectedColumn() + "열 / " + 
+//						table.getSelectedRow() + "행이 선택되었습니다."
+//					);
+//					
+//					System.out.println("선택 된 값 : " +
+//						table.getValueAt(table.getSelectedRow(), 2)
+//					);
 				}
 			}
 		});
-     	
-     	// ================================================================================================
-        // '전표반품' 버튼을 눌렀을때의 액션
-		// ================================================================================================
-     	
-     	buttons.get(0).addActionListener(new ActionListener() {
-     		
-     		@Override
-     		public void actionPerformed(ActionEvent e) {
-     			
-//     			System.out.println(state_chk);
-     			if (state_chk.equals("complete")) {     				
-     				refund(select_receipt_no);
-     			}
-     			
-     			
-     		}
-     	});
      	
      	// ================================================================================================
         // '결제변경' 버튼을 눌렀을때의 액션
@@ -560,9 +480,8 @@ public class Receipt_duck_2 extends PosFrame {
         			
 //        				select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
 //        				select_receipt_no = Integer.parseInt(select_receipt_no_string);
-        				if (select_receipt_no > 0) {
-        					payment_change aa = new payment_change(select_receipt_no);
-        				}
+        			
+        				payment_change aa = new payment_change(select_receipt_no);
         			
 
         		}
@@ -578,8 +497,6 @@ public class Receipt_duck_2 extends PosFrame {
         		@Override
         		public void actionPerformed(ActionEvent e) {
         			
-//        			total();
-
         			DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
         			table.setModel(model);
 //        			JTable table = new JTable(model);
@@ -596,8 +513,6 @@ public class Receipt_duck_2 extends PosFrame {
         	   
         		@Override
         		public void actionPerformed(ActionEvent e) {
-
-//        			cash_list();
 
         			DefaultTableModel model = new DefaultTableModel(data_cash, columnNames);
         			
@@ -651,24 +566,22 @@ class payment_change extends JDialog{
 	JButton btn2 = new JButton();
 	JPanel new_s1 = new JPanel(); 
 	JPanel new_s2 = new JPanel();
-	JPanel new_text = new JPanel();
     
     public payment_change(int receipt_no){
 //      getContentPane().add(label);
         
 	setLayout(null);
 	
-	new_s1.setBounds(10, 230, 210, 210);
-	new_s2.setBounds(240, 230, 220, 210);
-	new_text.setBounds(10, 10, 490, 350);
+	new_s1.setBounds(10, 30, 210, 210);
+	new_s2.setBounds(240, 30, 220, 210);
 	
-	System.out.println(receipt_no);
 //	new_s1.setBackground(Color.black);
 //	new_s2.setBackground(Color.black);
-
-	label.setBounds(280, 350, 490, 452);
+	
+	label.setLocation(150, 300);
+//	label.setSize(new Dimension(200, 50));
+	label.setBounds(280, 350, 452, 452);
 	label.setBackground(Color.red);
-	label.setText("<html><body><font size=6>현재 결제 정보는 xxxxxx 입니다<font></body></html>");
 	
 //	label.setIcon(new ImageIcon("image/cash.png"));
 	
@@ -680,29 +593,27 @@ class payment_change extends JDialog{
 //      btn1.setSize(300, 300);
       btn1.setBackground(Color.black);
       
-//      System.out.println(btn1.getSize(getSize()));
+      System.out.println(btn1.getSize(getSize()));
       
       
 //      btn2.setText("신용카드결제");
-      
       btn2.setIcon(new ImageIcon("image/credit.png"));
       btn2.setLocation(150, 150);
 //      btn2.setSize(300, 300);
       btn2.setBackground(Color.black);
+
       new_s1.add(btn1);
       new_s2.add(btn2);
-      new_text.add(label);
       
       add(new_s1);
       add(new_s2);
-      add(new_text);
       
 //      jlb.setText(receipt_no.toString());
 //      label.add(btn);
 //      add(btn);
 //      this.setSize(600,800);
-      this.setBounds(250, 300, 500, 500);
-      this.setModal(true);
+      this.setBounds(250, 300, 500, 300);
+		this.setModal(true);
       this.setVisible(true);
       this.setResizable(false);
       this.setBackground(Color.black);

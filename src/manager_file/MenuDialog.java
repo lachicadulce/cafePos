@@ -48,7 +48,10 @@ public class MenuDialog extends JDialog {
 				if(cb_type.getSelectedIndex() == 0) type_name = "coffee";
 				else type_name = "drink";
 				InsertDB insert = new InsertDB();
-				insert.dbinsert("INSERT INTO menu(menu_no, mname, price, type, stock_chk) VALUES((SELECT MAX(menu_no) + 1 FROM menu), '" + tf_name.getText() + "', " + tf_price.getText() + ", '" + type_name + "', 'Y')");
+				insert.dbinsert("INSERT INTO menu VALUES((SELECT MAX(menu_no) + 1 FROM menu), '" + tf_name.getText() + "', " + tf_price.getText() + ", '" + type_name + "', (SELECT MAX(display_order) + 1 FROM menu WHERE type = '" + type_name + "'), 'Y')");
+				tf_name.setText("");
+				tf_price.setText("");
+				cb_type.setSelectedIndex(0);
 			}
 		});
 	}

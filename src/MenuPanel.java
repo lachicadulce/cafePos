@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,6 +57,11 @@ public class MenuPanel extends JPanel {
 
 		rightLUp.setBorder(BorderFactory.createEmptyBorder(20 , 0 , 20 , 0));
 		rightLCenter.setBorder(BorderFactory.createEmptyBorder(20 , 0 , 20 , 0));
+		
+		
+		GridBagLayout gbl = new GridBagLayout();
+		GridBagConstraints gblc = new GridBagConstraints();
+		rightLDown.setLayout(gbl);
 		rightLDown.setBorder(BorderFactory.createEmptyBorder(50 , 0 , 50 , 0));
 
 		gl.setVgap(40);

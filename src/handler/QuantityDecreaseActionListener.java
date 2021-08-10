@@ -19,17 +19,41 @@ public class QuantityDecreaseActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		String quantityStr = (String) orderTable.getValueAt(orderTable.getSelectedRow(), 1);
-		int quantity = Integer.parseInt(quantityStr);
-		quantityStr = Integer.toString(--quantity);
-		if (quantity <= 0) {
-			orderTableModel.removeRow(orderTable.getSelectedRow());
-		} else {
-			orderTable.setValueAt(quantityStr, orderTable.getSelectedRow(), 1);
+
+		int quantity;
+		String quantitystr = null;
+		int selected = orderTable.getSelectedRow();
+
+		try {
+			quantity = (int) orderTableModel.getValueAt(selected, 1);
+
+						
+		} catch (Exception e2) {
+			
+			quantitystr = (String) orderTableModel.getValueAt(selected, 1);
+			quantity = Integer.parseInt(quantitystr);
+
 		}
 		
+		quantityCheck(quantity, quantitystr, selected);
 
+	}
+	
+	private void quantityCheck(int quantity, String quantitystr, int selected) {
+		
+		int price = Integer.parseInt((String)orderTableModel.getValueAt(selected, 2)) / quantity;
+		quantitystr = Integer.toString(--quantity);
+		
+		if (quantity <= 0) {
+			orderTableModel.removeRow(selected);
+		} else {
+			orderTableModel.setValueAt(quantitystr, selected, 1);
+			
+			int total = quantity * price;
+			String totalstr = Integer.toString(total);
+			orderTableModel.setValueAt(totalstr, selected, 2);
+			
+		}
 	}
 
 }

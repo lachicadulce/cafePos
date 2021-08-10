@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -43,8 +44,9 @@ public class Receipt_duck_2 extends PosFrame {
 	static String Receipt_list_credit = "select * from payment_view_1 where credit > 0";
 	
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
-	
-	
+	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
+	static String cash_receipt = "UPDATE history_payment SET receipt_chk = 'Y' WHERE receipt_no = ";
+	static String cash_receipt_cancel = "UPDATE history_payment SET receipt_chk = 'N' WHERE receipt_no = ";
 	
 	static String[][] data_default = null;
 	static String[][] data_cash = null;
@@ -57,8 +59,10 @@ public class Receipt_duck_2 extends PosFrame {
 	static int cash_w_size, cash_h_size;
 	static int credit_w_size, credit_h_size;
 	
-	static int no;
-	static String state_chk;
+	static int no;				// 
+	static String state_chk;	// 현재의 결제상태
+	
+	static String[] cash_receipt_result;
 	
 	
 	public void total() {
@@ -224,6 +228,7 @@ public class Receipt_duck_2 extends PosFrame {
 		
 	}
 	
+	// 반품 처리
 	public void refund(int receipt_no) {
 		try {
             Connection conn = DriverManager.getConnection(
@@ -233,24 +238,89 @@ public class Receipt_duck_2 extends PosFrame {
             refund_sql += ("" + receipt_no);
             System.out.println(refund_sql);
             
-            PreparedStatement pstmt_Receipt_list = conn.prepareStatement(refund_sql);
+            PreparedStatement refund = conn.prepareStatement(refund_sql);
             
-			int row = pstmt_Receipt_list.executeUpdate();
+			int row = refund.executeUpdate();
 			
-			System.out.println(row + "row(s) changed.");
+//			System.out.println(row + "row(s) changed.");
 			
-			pstmt_Receipt_list.close();
+			refund.close();
+			conn.close();
 			total();
             
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
         }
-		
-		
-		
-		
-		
 	}
+	
+	// 현금영수증 현재의 유무 확인
+		public String[] cash_receipt(int receipt_no) {
+			try {
+	            Connection conn = DriverManager.getConnection(
+	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
+	            		"cafe",
+	            		"!!22Qorthdud");
+	            cash_receipt_chk += ("" + receipt_no);
+	            System.out.println(cash_receipt_chk);
+	            
+	            PreparedStatement cash_receipt_yn = conn.prepareStatement(cash_receipt_chk);
+	            ResultSet rs_cash_receipt_yn = cash_receipt_yn.executeQuery();
+	            
+	            cash_receipt_result = new String[3];
+	            
+	            while (rs_cash_receipt_yn.next()) {
+//	            	System.out.println(rs_cash_receipt_yn.getString("receipt_chk"));
+	            	cash_receipt_result[0] = rs_cash_receipt_yn.getString("cash");
+	            	cash_receipt_result[1] = rs_cash_receipt_yn.getString("credit");
+	            	cash_receipt_result[2] = rs_cash_receipt_yn.getString("receipt_chk");
+            	}
+	            
+				cash_receipt_yn.close();
+				conn.close();
+				total();
+	            
+			} catch (SQLException e) {
+	            System.out.println("getConnection 하다가 문제 생김");
+	        }
+			
+			return cash_receipt_result;
+		}
+		
+		// 현금영수증 처리 실행
+		public void cash_receipt_executive(int receipt_no, String receipt_chk) {
+			try {
+	            Connection conn = DriverManager.getConnection(
+	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
+	            		"cafe",
+	            		"!!22Qorthdud");
+	            
+		            
+	            if (receipt_chk.equals("N")) {
+	            	
+	            	cash_receipt += ("" + receipt_no);
+	            	PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt);
+	            	cash_receipt_executive.executeUpdate();
+	            	cash_receipt_executive.close();
+	            	
+	            } else if (receipt_chk.equals("Y")) {
+	            	
+	            	cash_receipt_cancel += ("" + receipt_no);
+	            	PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt_cancel);
+	            	cash_receipt_executive.executeUpdate();
+	            	cash_receipt_executive.close();
+	            	
+	            }
+	            
+	            
+				conn.close();
+				total();
+	            
+			} catch (SQLException e) {
+	            System.out.println("getConnection 하다가 문제 생김");
+	        }
+			
+			
+		}
 	
 	
 	
@@ -500,7 +570,7 @@ public class Receipt_duck_2 extends PosFrame {
 						select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
 						
 						state_chk = "" + table.getValueAt(table.getSelectedRow(), 1);
-						System.out.println("ddf : " + state_chk);
+//						System.out.println("ddf : " + state_chk);
 						
 						select_receipt_no = Integer.parseInt(select_receipt_no_string);
 						
@@ -521,9 +591,113 @@ public class Receipt_duck_2 extends PosFrame {
      		@Override
      		public void actionPerformed(ActionEvent e) {
      			
-//     			System.out.println(state_chk);
-     			if (state_chk.equals("complete")) {     				
-     				refund(select_receipt_no);
+     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+     			
+     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+     			// X 표를 눌러 닫은 경우 = -1
+     			// 예 = 0
+     			// 아니오 = 1
+     			int yes_or_no = JOptionPane.showConfirmDialog(null, a + "원 결제하셨습니다. 반품 하시겠습니까?", "반품", JOptionPane.YES_NO_OPTION);
+     			
+     			if (state_chk.equals("complete")) {
+     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+     				// 예 아니오 선택없이 창 닫은경우
+     					System.out.println(yes_or_no);
+     					System.out.println("그냥 닫았네?");
+     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
+     				// 사용자가 예를 선택한경우
+//     					refund(select_receipt_no);
+     					System.out.println(yes_or_no);
+     					System.out.println("반품이라니..");
+     				} else {
+     				// 사용자가 아니오를 선택한경우
+     					System.out.println(yes_or_no);
+     					System.out.println("돈 안줘도 된다~!~!");
+     				}	
+     			}
+     			
+     		}
+     	});
+     	
+     	// ================================================================================================
+        // '현금영수증' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+     	
+     	buttons.get(2).addActionListener(new ActionListener() {
+     		
+     		@Override
+     		public void actionPerformed(ActionEvent e) {
+     			
+     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+     			
+     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+     			// X 표를 눌러 닫은 경우 = -1
+     			// 예 = 0
+     			// 아니오 = 1
+     			
+     			String[] check;
+     			
+     			// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기 
+     			check = cash_receipt(select_receipt_no);
+     			
+//     			for (int i = 0; i < check.length; i++) {
+//     				System.out.print(check[i]);
+//     			}
+     			// check[0] = 현금결제금액		
+     			// check[1] = 카드결제금액		
+     			// check[2] = 현금영수증처리 유무
+     			
+     			int yes_or_no;
+     			
+     			if (check[2].equals("Y")) {
+     				
+     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
+     				
+     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {	// 예 아니오 선택없이 창 닫은경우
+     				
+     					System.out.println(yes_or_no);
+     					System.out.println("그냥 닫았네?");
+     					
+     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 예를 선택한경우
+     				
+     					cash_receipt_executive(select_receipt_no, "Y");
+     					System.out.println(yes_or_no); 
+//     					System.out.println("현금영수증취소");
+     					JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
+     					
+     				} else {	// 사용자가 아니오를 선택한경우
+     				
+     					System.out.println(yes_or_no);
+     					System.out.println("현금영수증 취소 안함");
+     				}
+     				
+     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
+     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
+     				JOptionPane.showMessageDialog(null, "카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+     				
+     			} else if (check[2].equals("N") && !check[1].equals("0")) {
+     				
+     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
+     				
+     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
+     				
+     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+     				// 예 아니오 선택없이 창 닫은경우
+     					System.out.println(yes_or_no);
+     					System.out.println("그냥 닫았네?");
+     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
+     				// 사용자가 예를 선택한경우
+     					cash_receipt_executive(select_receipt_no, "N");
+     					System.out.println(yes_or_no);
+     					System.out.println("현금영수증처리");
+     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+     				} else {
+     				// 사용자가 아니오를 선택한경우
+     					System.out.println(yes_or_no);
+     					System.out.println("현금영수증 처리 안함");
+     				}	
+         			
+     				
      			}
      			
      			

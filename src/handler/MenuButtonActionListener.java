@@ -1,5 +1,6 @@
 package handler;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,12 +11,13 @@ public class MenuButtonActionListener implements ActionListener {
 
 	JTable orderTable;
 	DefaultTableModel orderTableModel;
+	JTable calcTable;
 	int count;
 
-	public MenuButtonActionListener(JTable orderTable, DefaultTableModel orderTableModel) {
+	public MenuButtonActionListener(JTable calcTable,DefaultTableModel orderTableModel, JTable orderTable) {
 		this.orderTable = orderTable;
 		this.orderTableModel = orderTableModel;
-		
+		this.calcTable = calcTable;
 	}
 
 	@Override
@@ -46,7 +48,6 @@ public class MenuButtonActionListener implements ActionListener {
 				quantity = (int) orderTableModel.getValueAt(row, 1);
 				quantityStr = Integer.toString(++quantity);
 				orderTableModel.setValueAt(quantityStr, row, 1);
-				orderTableModel.setValueAt(quantityStr, row, 2);
 				
 			} catch (Exception e2) {
 				
@@ -61,6 +62,10 @@ public class MenuButtonActionListener implements ActionListener {
 			orderTableModel.setValueAt(totalstr, row, 2);
 			
 		}
+		
+		new CalcTableTotal(calcTable, orderTableModel, orderTable);
+		
+		
 
 
 	}

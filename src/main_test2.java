@@ -228,9 +228,9 @@ public class main_test2 extends PosFrame {
 	      pages1.add("upcard2",rightLUp2);
 	      pages1.add("upcard3",rightLUp3);
 	      
-	      pages2.add("upcard1",rightLCenter);
-	      pages2.add("upcard2",rightLCenter2);
-	      pages2.add("upcard3",rightLCenter3);
+	      pages2.add("downcard1",rightLCenter);
+	      pages2.add("downcard2",rightLCenter2);
+	      pages2.add("downcard3",rightLCenter3);
 	      
 	      GridLayout gl2 = new GridLayout(1, 4);
 	      JPanel rightLDown = new JPanel(gl2); ////rightL에서 제일 아래

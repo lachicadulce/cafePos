@@ -646,7 +646,7 @@ class payment_change extends JDialog{
 	new_s1.setBounds(10, 30, 210, 210);
 	new_s2.setBounds(240, 30, 220, 210);
 	
-//	new_s1.setBackground(Color.CYAN);
+//	new_s1.setBackground(Color.black);
 //	new_s2.setBackground(Color.black);
 	
 	label.setLocation(150, 300);
@@ -661,8 +661,8 @@ class payment_change extends JDialog{
       btn1.setFont(new Font("돋움", Font.PLAIN, 20));
       btn1.setIcon(new ImageIcon("image/cash.png"));
       btn1.setLocation(150, 150);
-      btn1.setSize(300, 300);
-      btn1.setBackground(Color.white);
+//      btn1.setSize(300, 300);
+      btn1.setBackground(Color.black);
       
       System.out.println(btn1.getSize(getSize()));
       
@@ -670,8 +670,8 @@ class payment_change extends JDialog{
 //      btn2.setText("신용카드결제");
       btn2.setIcon(new ImageIcon("image/credit.png"));
       btn2.setLocation(150, 150);
-      btn2.setSize(300, 300);
-      btn2.setBackground(Color.white);
+//      btn2.setSize(300, 300);
+      btn2.setBackground(Color.black);
 
       new_s1.add(btn1);
       new_s2.add(btn2);

@@ -4,24 +4,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+// 전체취소 버튼 액션리스너
+// 버튼을 누르면 주문서에 있는 모든 항목 삭제
 
 public class AllCancelActionListener implements ActionListener {
 
-	JTable orderTable;
-	
-	public AllCancelActionListener(JTable orderTable) {
-		this.orderTable = orderTable;
+	DefaultTableModel orderTableModel;
+	JTable calcTable;
+
+	public AllCancelActionListener(DefaultTableModel orderTableModel, JTable calcTable) {
+		this.orderTableModel = orderTableModel;
+		this.calcTable = calcTable;  
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		for(int i= 0; i < orderTable.getRowCount(); i++) {
-			for(int j =0 ; j < orderTable.getColumnCount(); j++) {
-				orderTable.setValueAt("", i, j);
-			}
+
+		for(int i= 0; i < orderTableModel.getRowCount(); i++) {
+			orderTableModel.removeRow(i);
 		}
 
+		calcTable.setValueAt("", 0, 1);
 	}
 
 }

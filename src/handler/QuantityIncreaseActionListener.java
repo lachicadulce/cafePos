@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+// 수량+ 액션 리스너
+// 주문서에서 선택하고 누르면 수량 증가
+
 public class QuantityIncreaseActionListener implements ActionListener {
 
 	DefaultTableModel orderTableModel;

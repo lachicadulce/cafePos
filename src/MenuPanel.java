@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import main_component.BasicButton;
 import main_component.MainBtns;
 import main_component.OrderButton;
 
@@ -48,7 +49,7 @@ public class MenuPanel extends JPanel {
 		pages2.add("upcard2",rightLCenter2);
 		pages2.add("upcard3",rightLCenter3);
 
-		GridLayout gl2 = new GridLayout(1, 4);
+		GridLayout gl2 = new GridLayout(2, 4);
 //		JPanel rightLDown = new JPanel(gl2); ////rightL에서 제일 아래
 		GridLayout gl3 = new GridLayout(1, 3);
 		JPanel rightLDown = new JPanel(gl3); 
@@ -74,8 +75,8 @@ public class MenuPanel extends JPanel {
 		JPanel rightR = new JPanel();
 		//"MD",1065,10,160,100,0xb0e8f7,20
 		rightR.setLayout(new GridLayout(2,1));
-		JButton up = new OrderButton("△",1240,125,10,100,0xb0e8f7,15);
-		JButton down = new OrderButton("▽",1240,240,10,100,0xb0e8f7,15);
+		JButton up = new BasicButton("△",1240,125,10,100,0xb0e8f7,15);
+		JButton down = new BasicButton("▽",1240,240,10,100,0xb0e8f7,15);
 
 		rightR.setBorder(BorderFactory.createEmptyBorder(200 , 5 , 400 , 15));
 		rightR.add(up);

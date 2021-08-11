@@ -8,25 +8,38 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-public class OrderButton extends JButton{
+import handler.MenuButtonActionListener;
 
-	   public OrderButton() {
-		      super();
-		   }
-		   
-		   public OrderButton(String exp,int cur_x,int cur_y,int wid,int height,int color,int size) {
-		      
-		      super(exp);
-		      
-		      super.setBounds(cur_x, cur_y, wid, height);
-		      super.setFont(new Font("System",Font.BOLD,size));
-		      super.setBackground(new Color(color));
-		      
-		   }
-
+public class OrderButton extends JButton {
+	
+	int seq;
+	String sort;
+//	JTable calcTable;
+//	DefaultTableModel orderTableModel;
+//	JTable orderTable;
 	
 
-	
+	public OrderButton(int seq, String sort, MenuButtonActionListener mbal) {
+		super();
+		this.seq = seq;
+		this.sort = sort;
+//		this.calcTable = calcTable;
+//		this.orderTableModel = orderTableModel;
+//		this.orderTable = orderTable;
+
 		
+		setFont(new Font("System",Font.BOLD, 15));
+		setBackground(new Color(0xfafeff));
+		addActionListener(mbal);
+		
+	}
+	
+	
+	
+
+
+
 }

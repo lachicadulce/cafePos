@@ -2,6 +2,8 @@ package handler;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+// 총금액 계산 (메뉴 버튼눌렀을떄나 수량 증감할때 바로 금액이 변경되게 하기 위해)
+
 public class CalcTableTotal {
 
 	JTable calcTable;

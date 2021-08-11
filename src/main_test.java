@@ -1,7 +1,5 @@
-
-
-
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -26,13 +24,15 @@ import handler.CashActionHandler;
 import handler.ChangeActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
-import handler.OrderTableListSelectionListener;
 import handler.QuantityDecreaseActionListener;
 import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 import main_component.MainBtns;
 import main_component.OrderButton;
+
+//////////////////////////////////////////////////////////// 지금 수정중
+
 
 public class main_test extends PosFrame {
 
@@ -92,8 +92,6 @@ public class main_test extends PosFrame {
 
 		ListSelectionModel orderTableSelection =  orderTable.getSelectionModel();
 		orderTableSelection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		OrderTableListSelectionListener OTLSL =  new OrderTableListSelectionListener(orderTable);
-		orderTableSelection.addListSelectionListener(OTLSL);
 
 		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
 		JScrollPane orderScrollPanel = new JScrollPane(orderTable);
@@ -108,7 +106,7 @@ public class main_test extends PosFrame {
 
 		allCancel.setLocation(10, 430);
 		allCancel.setSize(85, 30);
-		allCancel.addActionListener(new AllCancelActionListener(orderTable));
+		allCancel.addActionListener(new AllCancelActionListener(orderTableModel, calcTable));
 		add(allCancel);
 
 		selectCancel.setLocation(95, 430);

@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
 
+// 환전계산 버튼 액션 리스너
+// 주문서의 총금액과 금액계산 후 누르면 거스름돈 계산해줌
+
 public class ChangeActionListener implements ActionListener {
 
 	JTable calcTable;

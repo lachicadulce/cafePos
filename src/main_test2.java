@@ -1,6 +1,6 @@
 
-
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -22,16 +22,19 @@ import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
 import handler.AllCancelActionListener;
 import handler.CashActionHandler;
+import handler.ChangeActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
-import handler.OrderTableListSelectionListener;
 import handler.QuantityDecreaseActionListener;
 import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
+import main_component.BasicButton;
 import main_component.MainBtns;
 import main_component.OrderButton;
 
+
+////////////////////////////////////////////////// 일단 실행되는 것
 public class main_test2 extends PosFrame {
 
 	private JSplitPane jsp1 = new JSplitPane();
@@ -59,6 +62,21 @@ public class main_test2 extends PosFrame {
 		// 왼쪽 화면
 		JPanel leftScreen = new JPanel();
 		leftScreen.setLayout(null);
+		
+		// 금액계산 변수
+		String[] calcColumn = { "", "" };
+		String lumpSum = "";
+		String discount = "";
+		String received = "";
+		String change = "";
+
+		String[][] calcdata = { 
+				{"총금액", lumpSum},
+				{"할인금액", discount},
+				{"받은금액", received},
+				{"거스름돈", change},
+		};
+		JTable calcTable = new JTable(calcdata, calcColumn);
 
 		// 주문LIST
 		DefaultTableModel orderTableModel = new DefaultTableModel(); 
@@ -75,9 +93,7 @@ public class main_test2 extends PosFrame {
 
 		ListSelectionModel orderTableSelection =  orderTable.getSelectionModel();
 		orderTableSelection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		OrderTableListSelectionListener OTLSL =  new OrderTableListSelectionListener(orderTable);
-		orderTableSelection.addListSelectionListener(OTLSL);
-
+		
 		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
 		JScrollPane orderScrollPanel = new JScrollPane(orderTable);
 		orderScrollPanel.setBounds(5, 10, 350, 400);
@@ -91,7 +107,7 @@ public class main_test2 extends PosFrame {
 
 		allCancel.setLocation(10, 430);
 		allCancel.setSize(85, 30);
-		allCancel.addActionListener(new AllCancelActionListener(orderTable));
+		allCancel.addActionListener(new AllCancelActionListener(orderTableModel, calcTable));
 		add(allCancel);
 
 		selectCancel.setLocation(95, 430);
@@ -101,28 +117,15 @@ public class main_test2 extends PosFrame {
 
 		quantityPlus.setLocation(180, 430);
 		quantityPlus.setSize(85, 30);
-		quantityPlus.addActionListener(new QuantityIncreaseActionListener(orderTable, orderTableModel));
+		quantityPlus.addActionListener(new QuantityIncreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityPlus);
 
 		quantityMinus.setLocation(265, 430);
 		quantityMinus.setSize(85, 30);
-		quantityMinus.addActionListener(new QuantityDecreaseActionListener(orderTableModel, orderTable));
+		quantityMinus.addActionListener(new QuantityDecreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityMinus);
 
-		// 금액계산 변수
-		String[] calcColumn = { "", "" };
-		String lumpSum = "";
-		String discount = "";
-		String received = "";
-		String change = "";
 
-		String[][] calcdata = { 
-				{"총금액", lumpSum},
-				{"할인금액", discount},
-				{"받은금액", received},
-				{"거스름돈", change},
-		};
-		JTable calcTable = new JTable(calcdata, calcColumn);
 
 		// 금액계산
 		calcTable.setBounds(5, 480, 250, 250);
@@ -153,12 +156,19 @@ public class main_test2 extends PosFrame {
 		add(exchange);
 		
 		// 결제
-		JButton payment = new JButton("결제");
+		JButton payment = new JButton("<html>환전<br/>계산</html>");
 		payment.setLocation(280, 680);
 		payment.setSize(75,70);
-		payment.addActionListener(new CashActionHandler(calcTable));
+		payment.addActionListener(new ChangeActionListener(calcTable));
 		add(payment);
 
+		
+		JButton test = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
+		test.setLocation(220, 680);
+		test.setSize(75,70);
+		test.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
+		add(test);
+				
 
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
@@ -209,8 +219,8 @@ public class main_test2 extends PosFrame {
 		JPanel rightR = new JPanel();
 		//"MD",1065,10,160,100,0xb0e8f7,20
 		rightR.setLayout(new GridLayout(2,1));
-		JButton up = new OrderButton("△",1240,125,10,100,0xb0e8f7,15);
-		JButton down = new OrderButton("▽",1240,240,10,100,0xb0e8f7,15);
+		JButton up = new BasicButton("△",1240,125,10,100,0xb0e8f7,15);
+		JButton down = new BasicButton("▽",1240,240,10,100,0xb0e8f7,15);
 
 		rightR.setBorder(BorderFactory.createEmptyBorder(200 , 5 , 400 , 15));
 		rightR.add(up);

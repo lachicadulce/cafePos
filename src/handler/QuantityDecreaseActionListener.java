@@ -6,11 +6,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+// 수량- 버튼 액션 리스너
+// 주문서에 있는 것을 선택해서 누르면 수량 감소
+
 public class QuantityDecreaseActionListener implements ActionListener {
 
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
 	JTable calcTable; 
+	
+	
 	
 	public QuantityDecreaseActionListener(JTable calcTable, DefaultTableModel orderTableModel, JTable orderTable) {
 		this.calcTable = calcTable;

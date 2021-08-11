@@ -4,6 +4,9 @@ package handler;
  *
  */
 
+ 
+
+
 import java.awt.Component;
 import java.awt.Container;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +27,9 @@ import javax.swing.UIManager;
  *
  * @author Darryl Burke
  */
+
+///////////////////////////////// 금액계산할때 필요한 것 (외부에서 가져옴)
+
 public final class SwingUtils {
 
    private SwingUtils() {

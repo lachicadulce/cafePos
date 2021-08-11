@@ -6,8 +6,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+// 메뉴 버튼 액션 리스너
+// 메뉴 버튼이 눌리면 왼쪽 주문서에 추가됨
+// 아직 DB연동 안되서 수정해야함
+
 public class MenuButtonActionListener implements ActionListener {
 
+	
+	
+	//메뉴 버튼 눌렀을떄 액션 
+	
 	JTable orderTable;
 	DefaultTableModel orderTableModel;
 	JTable calcTable;

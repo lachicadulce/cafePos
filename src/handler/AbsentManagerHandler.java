@@ -21,7 +21,8 @@ import javax.swing.JTable;
 
 public class AbsentManagerHandler implements ActionListener {
 	
-
+	// 근태 관리(출퇴근관리)
+	// 팝업창을 사번을 입력하면 그 대상자에 대한 출퇴근 가능
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

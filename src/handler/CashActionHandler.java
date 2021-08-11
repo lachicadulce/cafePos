@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+// 금액 계산 버튼 (현금 + 카드 합침, 현금 먼저 입력)
 
 public class CashActionHandler implements ActionListener {
 
@@ -27,6 +28,7 @@ public class CashActionHandler implements ActionListener {
 	JTable calcTable;
 
 
+	
 	public CashActionHandler(JTable calcTable) {
 		super();
 		this.calcTable = calcTable;

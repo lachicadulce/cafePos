@@ -21,8 +21,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+// 멤버쉽 버튼 액션 리스너
+// 번호를 조회해서 포인트 확인 후 사용가능
+
 public class MemberShipActionListener implements ActionListener {
 
+	
+	
 	JTable calcTable;
 	
 	public MemberShipActionListener(JTable calcTable) {

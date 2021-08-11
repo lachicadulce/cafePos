@@ -28,8 +28,12 @@ import handler.QuantityIncreaseActionListener;
 import handler.RevalidateActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
-import main_component.MainBtn;
+import handler.SortMenuActionListener;
+import main_component.BasicButton;
+import main_component.ButtonSetting;
+import main_component.MenuPanel;
 import main_component.OrderButton;
+import main_component.RightPanelBasic;
 
 
 //////////////////////////////////////////////////////////// 지금 수정중
@@ -40,10 +44,11 @@ public class main_test extends PosFrame {
 	private JSplitPane jsp1 = new JSplitPane();
 	private JSplitPane jsp2 = new JSplitPane();
 
+	RightPanelBasic rpb;
+
 	public main_test() {
 		super();
 		mainScreenInit();
-
 
 	}
 
@@ -56,8 +61,6 @@ public class main_test extends PosFrame {
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
-
-		// 왼쪽 화면
 		// 왼쪽 화면
 		JPanel leftScreen = new JPanel();
 		leftScreen.setLayout(null);
@@ -124,14 +127,11 @@ public class main_test extends PosFrame {
 		quantityMinus.addActionListener(new QuantityDecreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityMinus);
 
-
-
 		// 금액계산
 		calcTable.setBounds(5, 480, 250, 250);
 		calcTable.setRowHeight(65);
 		calcTable.setEnabled(false);	// 수정 불가, 클릭표시 안나옴	
 		add(calcTable);
-
 
 		// 관리자 메뉴, 근태관리, 환전 메뉴 변수
 		JButton managerMenu = new JButton("<html>관리자<br />&nbsp메뉴</html>");
@@ -172,11 +172,6 @@ public class main_test extends PosFrame {
 		test.setSize(75,70);
 		test.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
 		add(test);
-		
-		
-		
-		
-
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		
@@ -184,19 +179,17 @@ public class main_test extends PosFrame {
 		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
 		CashActionHandler cah = new CashActionHandler(calcTable);
 		
-		MenuPanel coffee = new MenuPanel(jsp2, "coffee", mbal, msal, cah);
-		MenuPanel Drink = new MenuPanel(jsp2, "Drink", mbal, msal, cah);
-
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
+		
+		MenuPanel coffee = new MenuPanel("coffee", rpb, mbal);
+		
+//		MenuPanel drink = new MenuPanel("drink", rpb, mbal);
+		
 		jsp1.setLeftComponent(leftScreen);
-		jsp1.setRightComponent(coffee);
+		jsp1.setRightComponent(rpb);
 		con.add("Center", jsp1);
 
-
-
-
 	}//mainScreenInit함수 끝.
-
-
 
 	public static void main(String[] args) {
 

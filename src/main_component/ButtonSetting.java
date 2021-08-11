@@ -15,4 +15,8 @@ public class ButtonSetting extends JButton {
 		setBackground(new Color(color));
 		addActionListener(al);
 	}
+	
+	public void setActionListener(ActionListener al) {
+		addActionListener(al);
+	}
 }

@@ -116,7 +116,6 @@ public class AbsentManagerHandler implements ActionListener {
 					}
 				}
 			}
-			
 				rs.close();
 				workrs.close();
 			} catch (SQLException e1) {

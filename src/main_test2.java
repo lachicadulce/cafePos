@@ -127,14 +127,14 @@ public class main_test2 extends PosFrame {
 		add(quantityMinus);
 
 
-
+		
 		// 금액계산
 		calcTable.setBounds(5, 480, 250, 250);
 		calcTable.setRowHeight(65);
 		calcTable.setEnabled(false);	// 수정 불가, 클릭표시 안나옴	
 		add(calcTable);
 
-
+		
 		// 관리자 메뉴, 근태관리, 환전 메뉴 변수
 		JButton managerMenu = new JButton("<html>관리자<br />&nbsp메뉴</html>");
 		JButton absentManager = new JButton("<html>근태<br />관리</html>");
@@ -162,7 +162,7 @@ public class main_test2 extends PosFrame {
 		payment.setSize(75,70);
 		payment.addActionListener(new ChangeActionListener(calcTable));
 		add(payment);
-
+		
 		
 
 				

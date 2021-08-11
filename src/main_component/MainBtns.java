@@ -17,61 +17,61 @@ public class MainBtns extends JButton{
 	      btns2 = new ArrayList<>();
 	      btns3 = new ArrayList<>();
 	      
-	      OrderButton a1 = new OrderButton("커피",540,10,160,100,0xb0e8f7,20);
+	      BasicButton a1 = new BasicButton("커피",540,10,160,100,0xb0e8f7,20);
 	      btns1.add(a1);
 	      
-	      OrderButton a2 = new OrderButton("음료",715,10,160,100,0xb0e8f7,20);
+	      BasicButton a2 = new BasicButton("음료",715,10,160,100,0xb0e8f7,20);
 	      btns1.add(a2);
 	      
-	      OrderButton a3 = new OrderButton("블랜디드",890,160,100,100,0xb0e8f7,20);
+	      BasicButton a3 = new BasicButton("블랜디드",890,160,100,100,0xb0e8f7,20);
 	      btns1.add(a3);
 	      
-	      OrderButton a4 = new OrderButton("MD",1065,10,160,100,0xb0e8f7,20);
+	      BasicButton a4 = new BasicButton("MD",1065,10,160,100,0xb0e8f7,20);
 	      btns1.add(a4);
 	      
-	      OrderButton a5 = new OrderButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>",540,125,160,100,0xfafeff,15);
+	      BasicButton a5 = new BasicButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>",540,125,160,100,0xfafeff,15);
 	      btns1.add(a5);
 	      
-	      OrderButton a6 = new OrderButton("<HTML><body style='text-align:center'>바닐라라떼(R)<br>4500</body></HTML>",715,125,160,100,0xfafeff,15);
+	      BasicButton a6 = new BasicButton("<HTML><body style='text-align:center'>바닐라라떼(R)<br>4500</body></HTML>",715,125,160,100,0xfafeff,15);
 	      btns1.add(a6);
 	      
-	      OrderButton a7 = new OrderButton("<HTML><body style='text-align:center'>카페라떼(R)<br>4000</body></HTML>",890,125,160,100,0xfafeff,15);
+	      BasicButton a7 = new BasicButton("<HTML><body style='text-align:center'>카페라떼(R)<br>4000</body></HTML>",890,125,160,100,0xfafeff,15);
 	      btns1.add(a7);
 	      
-	      OrderButton a8 = new OrderButton("<HTML><body style='text-align:center'>카페모카(R)<br>4300</body></HTML>",1065,125,160,100,0xfafeff,15);
+	      BasicButton a8 = new BasicButton("<HTML><body style='text-align:center'>카페모카(R)<br>4300</body></HTML>",1065,125,160,100,0xfafeff,15);
 	      btns1.add(a8);
 
-	      OrderButton a9 = new OrderButton("<HTML><body style='text-align:center'>아이스<br>아메리카노(R)<br>3500</body></HTML>",540,240,160,100,0xfafeff,17);
+	      BasicButton a9 = new BasicButton("<HTML><body style='text-align:center'>아이스<br>아메리카노(R)<br>3500</body></HTML>",540,240,160,100,0xfafeff,17);
 	      btns2.add(a9);
 	      
-	      OrderButton a10 = new OrderButton("<HTML><body style='text-align:center'>아이스<br>바닐라라떼(R)<br>4500</body></HTML>",715,240,160,100,0xfafeff,17);
+	      BasicButton a10 = new BasicButton("<HTML><body style='text-align:center'>아이스<br>바닐라라떼(R)<br>4500</body></HTML>",715,240,160,100,0xfafeff,17);
 	      btns2.add(a10);
 	      
-	      OrderButton a11 = new OrderButton("<HTML><body style='text-align:center'>카페라떼(L)<br>4500</body></HTML>",890,240,160,100,0xfafeff,17);
+	      BasicButton a11 = new BasicButton("<HTML><body style='text-align:center'>카페라떼(L)<br>4500</body></HTML>",890,240,160,100,0xfafeff,17);
 	      btns2.add(a11);
 	      
-	      OrderButton a12 = new OrderButton("<HTML><body style='text-align:center'>카페모카(L)<br>4300</body></HTML>",1065,240,160,100,0xfafeff,17);
+	      BasicButton a12 = new BasicButton("<HTML><body style='text-align:center'>카페모카(L)<br>4300</body></HTML>",1065,240,160,100,0xfafeff,17);
 	      btns2.add(a12);
 	      
-	      OrderButton a13 = new OrderButton("<HTML><body style='text-align:center'>콜드브루<br>4000</body></HTML>",540,355,160,100,0xfafeff,17);
+	      BasicButton a13 = new BasicButton("<HTML><body style='text-align:center'>콜드브루<br>4000</body></HTML>",540,355,160,100,0xfafeff,17);
 	      btns2.add(a13);
 	      
-	      OrderButton a14 = new OrderButton("<HTML><body style='text-align:center'>콜드브루라떼(R)<br>4500</body></HTML>",715,355,160,100,0xfafeff,17);
+	      BasicButton a14 = new BasicButton("<HTML><body style='text-align:center'>콜드브루라떼(R)<br>4500</body></HTML>",715,355,160,100,0xfafeff,17);
 	      btns2.add(a14);
 	      
-	      OrderButton a15 = new OrderButton("<HTML><body style='text-align:center'>시럽추가<br>500</body></HTML>",890,355,160,100,0xfafeff,17);
+	      BasicButton a15 = new BasicButton("<HTML><body style='text-align:center'>시럽추가<br>500</body></HTML>",890,355,160,100,0xfafeff,17);
 	      btns2.add(a15);
 	      
-	      OrderButton a16 = new OrderButton("<HTML><body style='text-align:center'>개인컵<br>-300</body></HTML>",1065,355,160,100,0xfafeff,17);
+	      BasicButton a16 = new BasicButton("<HTML><body style='text-align:center'>개인컵<br>-300</body></HTML>",1065,355,160,100,0xfafeff,17);
 	      btns2.add(a16);
 	      
-	      OrderButton a17 = new OrderButton("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",540,355,160,100,0xe2d4fc,25);
+	      BasicButton a17 = new BasicButton("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",540,355,160,100,0xe2d4fc,25);
 	      btns3.add(a17);
 	      
-	      OrderButton a18 = new OrderButton("<HTML><body style='text-align:center'>맴버쉽</body></HTML>",715,355,160,100,0xe3aada,25);
+	      BasicButton a18 = new BasicButton("<HTML><body style='text-align:center'>맴버쉽</body></HTML>",715,355,160,100,0xe3aada,25);
 	      btns3.add(a18);
 	      
-	      OrderButton a19 = new OrderButton("<HTML><body style='text-align:center'>결제</body></HTML>",890,355,160,100,0xb5f5c8,25);
+	      BasicButton a19 = new BasicButton("<HTML><body style='text-align:center'>결제</body></HTML>",890,355,160,100,0xb5f5c8,25);
 	      btns3.add(a19);
 	      
 	      

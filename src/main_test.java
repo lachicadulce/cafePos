@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -26,10 +25,12 @@ import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
 import handler.QuantityIncreaseActionListener;
+import handler.RevalidateActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
-import main_component.MainBtns;
+import main_component.MainBtn;
 import main_component.OrderButton;
+
 
 //////////////////////////////////////////////////////////// 지금 수정중
 
@@ -51,11 +52,10 @@ public class main_test extends PosFrame {
 
 		jsp1.setResizeWeight(0.9);
 		jsp2.setResizeWeight(0.8);
-
+		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
-		MainBtns btns = new MainBtns();
 
 		// 왼쪽 화면
 		// 왼쪽 화면
@@ -155,21 +155,40 @@ public class main_test extends PosFrame {
 		add(exchange);
 		
 		// 결제
-		JButton payment = new JButton("환전계산");
+		JButton payment = new JButton("<html>환전<br />계산</html>");
 		payment.setLocation(280, 680);
 		payment.setSize(75,70);
 		payment.addActionListener(new ChangeActionListener(calcTable));
 		add(payment);
 		
+		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
+		test2.setLocation(220, 610);
+		test2.setSize(75,70);
+		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
+		add(test2);
+		
+		JButton test = new JButton("test");
+		test.setLocation(220, 680);
+		test.setSize(75,70);
+		test.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
+		add(test);
+		
+		
+		
+		
 
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
-
-
-		MenuPanel m1 = new MenuPanel(jsp2);
+		
+		MenuButtonActionListener mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
+		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
+		CashActionHandler cah = new CashActionHandler(calcTable);
+		
+		MenuPanel coffee = new MenuPanel(jsp2, "coffee", mbal, msal, cah);
+		MenuPanel Drink = new MenuPanel(jsp2, "Drink", mbal, msal, cah);
 
 		jsp1.setLeftComponent(leftScreen);
-		jsp1.setRightComponent(m1);
+		jsp1.setRightComponent(coffee);
 		con.add("Center", jsp1);
 
 

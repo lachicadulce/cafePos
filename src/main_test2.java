@@ -30,6 +30,7 @@ import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 import main_component.BasicButton;
+import main_component.MainBtn;
 import main_component.MainBtns;
 import main_component.OrderButton;
 
@@ -163,11 +164,7 @@ public class main_test2 extends PosFrame {
 		add(payment);
 
 		
-		JButton test = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
-		test.setLocation(220, 680);
-		test.setSize(75,70);
-		test.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
-		add(test);
+
 				
 
 

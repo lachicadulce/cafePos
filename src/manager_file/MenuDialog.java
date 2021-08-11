@@ -101,6 +101,7 @@ public class MenuDialog extends JDialog {
 				tf_price.setText("");
 				tf_type.setText("");
 				cb_type.setSelectedIndex(0);
+				
 			}
 		});
 		

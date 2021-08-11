@@ -14,6 +14,7 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -24,6 +25,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import baseSettings.DBConnector;
+import baseSettings.InsertDB;
 import baseSettings.PosFrame;
 
 public class ManagerMenu extends PosFrame {
@@ -35,6 +37,8 @@ public class ManagerMenu extends PosFrame {
 	private DefaultTableModel model;
 	private JButton selBtn = new JButton("조회");
 	private JButton addBtn = new JButton("추가");
+	private JButton modBtn = new JButton("수정");
+	private JButton delBtn = new JButton("삭제");
 	private String header[] = {"NO", "이름", "가격", "분류", "노출순서"};
 	private String selStr;
 	private JTextField tf;
@@ -105,12 +109,15 @@ public class ManagerMenu extends PosFrame {
 		
 		lb.setSize(WIDTH, HEIGHT);
 		
-		// p3에 검색 라인, 조회버튼 추가
+		// p3에 검색 라인, 조회, 추가, 수정, 삭제 버튼 추가
 		p3.add(lb);
 		p3.add(tf);
 		p3.add(selBtn);
 		p3.add(addBtn);
+		p3.add(modBtn);
+		p3.add(delBtn);
 		
+		// 조회버튼 이벤트
 		selBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -121,11 +128,49 @@ public class ManagerMenu extends PosFrame {
 			}
 		});
 		
+		// 추가버튼 이벤트
 		addBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addMenuDialog.setVisible(true);
+			}
+		});
+		
+		// 수정버튼 이벤트
+		modBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int cnt = tb.getSelectedRowCount();
+				if(cnt == 0) {
+					JOptionPane.showMessageDialog(p1, "선택된 컬럼이 없습니다.");
+				} else if(cnt == 1) {
+					String menu_no = String.valueOf(model.getValueAt(tb.getSelectedRow(), 0));
+					String menu_name = String.valueOf(model.getValueAt(tb.getSelectedRow(), 1));
+					String menu_price = String.valueOf(model.getValueAt(tb.getSelectedRow(), 2));
+				} else {
+					JOptionPane.showMessageDialog(p1, "하나의 컬럼만 선택해주세요.");					
+				}
+			}
+		});
+		
+		// 삭제버튼 이벤트
+		delBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(tb.getSelectedRowCount() > 0) {
+					if(JOptionPane.showConfirmDialog(p1, "선택된 열들을 삭제하시겠습니까?", "삭제", 0) == 0) {
+						InsertDB db = new InsertDB();
+						for(int i : tb.getSelectedRows())
+						{
+							db.dbinsert("DELETE FROM menu WHERE menu_no = " + String.valueOf(model.getValueAt(i, 0)));
+						}
+						// 조회
+						selBtn.doClick();
+					}
+				}
 			}
 		});
 		

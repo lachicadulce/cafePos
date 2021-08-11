@@ -19,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -31,7 +29,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import baseSettings.DBConnector;
 import baseSettings.PosFrame;
-
+// 매출현황
 public class ManagerSales extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();

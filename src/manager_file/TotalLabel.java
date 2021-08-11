@@ -8,7 +8,7 @@ import java.util.*;
 import javax.swing.*;
 
 import baseSettings.*;
-
+// 매출 현황 => 하단 매출 합계 프레임 노출 영역
 public class TotalLabel extends JLabel {
 	
 	private ArrayList<JLabel> labels;

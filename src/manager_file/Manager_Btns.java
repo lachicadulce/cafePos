@@ -29,7 +29,9 @@ public class Manager_Btns extends JButton {
 		btns.get(3).setText("출퇴근 기록 열람");
 		btns.get(4).setText("메뉴 관리");
 		
+		// get(1) : 마감용지출력, get(2) : 직원등록
 		btns.get(1).addActionListener(new ClosingBtn());
+		btns.get(2).addActionListener(new EmpBtn());
 
 	}
 	

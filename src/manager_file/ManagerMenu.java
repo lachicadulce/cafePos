@@ -149,6 +149,13 @@ public class ManagerMenu extends PosFrame {
 					String menu_no = String.valueOf(model.getValueAt(tb.getSelectedRow(), 0));
 					String menu_name = String.valueOf(model.getValueAt(tb.getSelectedRow(), 1));
 					String menu_price = String.valueOf(model.getValueAt(tb.getSelectedRow(), 2));
+					String menu_type = String.valueOf(model.getValueAt(tb.getSelectedRow(), 3));
+					String menu_display_order = String.valueOf(model.getValueAt(tb.getSelectedRow(), 4));
+					
+					// 수정 화면 띄우기.
+					MenuDialog mmd = new MenuDialog(menu_no, menu_name, menu_price, menu_type, menu_display_order);
+					mmd.setModal(true);
+					mmd.setVisible(true);
 				} else {
 					JOptionPane.showMessageDialog(p1, "하나의 컬럼만 선택해주세요.");					
 				}

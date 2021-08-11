@@ -30,17 +30,18 @@ import handler.QuantityIncreaseActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 import main_component.BasicButton;
+import main_component.MainBtn;
 import main_component.MainBtns;
 import main_component.OrderButton;
 
 
 ////////////////////////////////////////////////// 일단 실행되는 것
-public class main_test2 extends PosFrame {
+public class main_test3 extends PosFrame {
 
 	private JSplitPane jsp1 = new JSplitPane();
 	private JSplitPane jsp2 = new JSplitPane();
 
-	public main_test2() {
+	public main_test3() {
 		super();
 		mainScreenInit();
 
@@ -65,6 +66,7 @@ public class main_test2 extends PosFrame {
 		
 		// 금액계산 변수
 		String[] calcColumn = { "", "" };
+		
 		String lumpSum = "";
 		String discount = "";
 		String received = "";
@@ -76,6 +78,12 @@ public class main_test2 extends PosFrame {
 				{"받은금액", received},
 				{"거스름돈", change},
 		};
+		
+
+		
+		
+//		String[] calcdata = {"총금액","할인금액","받은금액","거스름돈"};
+		
 		JTable calcTable = new JTable(calcdata, calcColumn);
 
 		// 주문LIST
@@ -162,9 +170,12 @@ public class main_test2 extends PosFrame {
 		payment.addActionListener(new ChangeActionListener(calcTable));
 		add(payment);
 		
+		JButton test = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
+		test.setLocation(220, 680);
+		test.setSize(75, 70);
+		test.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
 		
-
-				
+		add(test);		
 
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
@@ -303,7 +314,7 @@ public class main_test2 extends PosFrame {
 
 	public static void main(String[] args) {
 
-		main_test2 m = new main_test2();
+		main_test3 m = new main_test3();
 		m.setDefaultOptions();
 	}
 

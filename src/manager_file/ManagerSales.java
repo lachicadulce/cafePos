@@ -13,12 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -119,7 +114,7 @@ public class ManagerSales extends PosFrame {
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		// 매출 합계 구성패널 추가
-		JPanel p4 = new JPanel();
+		JPanel p4 = new JPanel(new GridLayout(3, 2));
 		p4.setPreferredSize(new Dimension(0, 140));
 		p4.setBackground(new Color(0xD7E7F7));
 		

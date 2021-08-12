@@ -70,7 +70,7 @@ public class main_test extends PosFrame {
 		String discount = "";
 		String received = "";
 		String change = "";
- 
+
 		String[][] calcdata = { 
 				{"총금액", lumpSum},
 				{"할인금액", discount},

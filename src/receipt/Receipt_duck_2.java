@@ -239,7 +239,7 @@ public class Receipt_duck_2 extends PosFrame {
             		"cafe",
             		"!!22Qorthdud");
             refund_sql += ("" + receipt_no);
-            System.out.println(refund_sql);
+//            System.out.println(refund_sql);
             
             PreparedStatement refund = conn.prepareStatement(refund_sql);
             

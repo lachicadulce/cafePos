@@ -41,12 +41,14 @@ public class MenuButtonActionListener implements ActionListener {
 		
 		
 		int row = getRowByValue(menu);
+		
 		if (row == -1) {
 			count = 0;
 		}
 		if(count <= 0) {
 			count = 0;
 			orderTableModel.addRow(new Object[] {menu, ++count, money}); //행추가
+			
 		} else {
 			
 			int quantity;

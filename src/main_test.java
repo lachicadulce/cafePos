@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -18,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 
 import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
-import handler.AllCancelActionListener;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
 import handler.MemberShipActionListener;
@@ -51,7 +51,6 @@ public class main_test extends PosFrame {
 		mainScreenInit();
 
 	}
-
 
 	private void mainScreenInit() {
 
@@ -109,7 +108,7 @@ public class main_test extends PosFrame {
 
 		allCancel.setLocation(10, 430);
 		allCancel.setSize(85, 30);
-		allCancel.addActionListener(new AllCancelActionListener(orderTableModel, calcTable));
+		allCancel.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
 		add(allCancel);
 
 		selectCancel.setLocation(95, 430);
@@ -166,12 +165,7 @@ public class main_test extends PosFrame {
 		test2.setSize(75,70);
 		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
 		add(test2);
-		
-		JButton test = new JButton("test");
-		test.setLocation(220, 680);
-		test.setSize(75,70);
-		test.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
-		add(test);
+
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		
@@ -181,7 +175,7 @@ public class main_test extends PosFrame {
 		
 		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
 		
-		MenuPanel coffee = new MenuPanel("coffee", rpb, mbal);
+		
 		
 //		MenuPanel drink = new MenuPanel("drink", rpb, mbal);
 		

@@ -8,7 +8,8 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-// 주문서와 주문금액 초기화 버튼 
+// 주문서와 주문금액 초기화 버튼
+// 전제취소 버튼 액션
 
 public class RevalidateActionListener implements ActionListener {
 	

@@ -13,34 +13,36 @@ import javax.swing.JSplitPane;
 import handler.SortMenuActionListener;
 import main_component.BasicButton;
 
+
 public class RightPanelBasic extends JPanel {
 	
 	JPanel rightLUp;
 	JPanel rightLCenter;
 	JPanel rightLDown; 
 	JPanel rightL;
+	JPanel rightR;
+	
 	ButtonSetting sortCoffee;
 	ButtonSetting sortDrink;
 	ButtonSetting sortBlended;
 	ButtonSetting sortMD;
-	ButtonSetting up;
-	ButtonSetting down;
+	MenuPanel coffee;
 	
 	public RightPanelBasic(JSplitPane jsp2, ActionListener ...als) {
-
+		// als[0] = mbal, als[1] = msal, als[2] = cah
 		SortMenuActionListener smal = new SortMenuActionListener(this, als[0]);
 		
 		setLayout(new BorderLayout());
 		
 		GridLayout gl1 = new GridLayout(1, 4);
-		GridLayout gl2 = new GridLayout(3, 4);
+//		GridLayout gl2 = new GridLayout(3, 4);
 		GridLayout gl3 = new GridLayout(1, 3);
 		
 		gl1.setVgap(40);
 		gl1.setHgap(40);
 		
-		gl2.setVgap(40);
-		gl2.setHgap(40);
+//		gl2.setVgap(40);
+//		gl2.setHgap(40);
 		
 		gl3.setVgap(40);
 		gl3.setHgap(40);
@@ -49,7 +51,7 @@ public class RightPanelBasic extends JPanel {
 //		JPanel pages2 = new JPanel(new CardLayout());
 				
 		rightLUp = new JPanel(gl1);
-		rightLCenter = new JPanel(gl2);
+		rightLCenter = new JPanel();
 		rightLDown = new JPanel(gl3); 
 		rightL = new JPanel(new BorderLayout());
 				
@@ -93,15 +95,17 @@ public class RightPanelBasic extends JPanel {
 		
 		// 오른쪽 판넬의 위아래 버튼 있는쪽
 		
-		JPanel rightR = new JPanel();
+		rightR = new JPanel();
 		rightR.setLayout(new GridLayout(3,1));
 		
-		up = new ButtonSetting("△", 25 ,0xb0e8f7, null);
-		down = new ButtonSetting("▽", 25 ,0xb0e8f7, null);
+//		up = new ButtonSetting("△", 25 ,0xb0e8f7, null);
+//		down = new ButtonSetting("▽", 25 ,0xb0e8f7, null);
 
 		rightR.setBorder(BorderFactory.createEmptyBorder(200 , 5 , 400 , 15));
-		rightR.add(up);
-		rightR.add(down);
+//		rightR.add(up);
+//		rightR.add(down);
+		
+		coffee = new MenuPanel("coffee", this, als[0]);
 		
 		// 오른쪽 판넬
 		
@@ -148,6 +152,10 @@ public class RightPanelBasic extends JPanel {
 	
 	public JPanel getRightLCenter() {
 		return rightLCenter;
+	}
+
+	public JPanel getRightR() {
+		return rightR;
 	}
 
 	public void setRightLCenter(JPanel rightLCenter) {

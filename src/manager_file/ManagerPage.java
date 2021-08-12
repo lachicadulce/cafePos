@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -146,6 +147,16 @@ public class ManagerPage extends PosFrame {
 		p1.add(p3, BorderLayout.NORTH);
 		p1.add(scrollpane, BorderLayout.CENTER);
 		p1.setBorder(null);
+		
+		JPanel south = new JPanel(new GridLayout(1,2));
+		
+		Employees_List el = new Employees_List();
+		ImageIcon image = new ImageIcon("image/coffee.png");
+		JLabel south_left = new JLabel(image);
+		
+		south.add(south_left);
+		south.add(el);
+		p1.add(south, "South");
 		
 		// 왼쪽 구성요소 추가
 		jsp.setLeftComponent(p1);

@@ -137,6 +137,7 @@ public class main_test extends PosFrame {
 		// 관리자 메뉴
 		managerMenu.setLocation(280, 470);
 		managerMenu.setSize(75,70);
+		managerMenu.addActionListener(new ManagerButtonActionListener(this.getFrames()[0]));
 		add(managerMenu);
 		// 근태 관리
 		absentManager.setLocation(280, 540);
@@ -168,10 +169,10 @@ public class main_test extends PosFrame {
 		
 		MenuButtonActionListener mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
 		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
-		ManagerButtonActionListener mabutal = new ManagerButtonActionListener(this.getFrames()[0]);
+		
 		CashActionHandler cah = new CashActionHandler(calcTable);
 		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, mabutal);
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
 		
 		
 		

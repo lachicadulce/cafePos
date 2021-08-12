@@ -78,7 +78,7 @@ public class RightPanelBasic extends JPanel {
 		
 		
 		// 맨 아래 버튼(영수증관리, 멤버쉽, 결제 버튼)
-		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xe2d4fc, als[3]);
+		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xe2d4fc, null);
 		rightLDown.add(ManageReceipts);
 		
 		ButtonSetting MemberShip = new ButtonSetting("<HTML><body style='text-align:center'>멤버쉽</body></HTML>",25,0xe3aada, als[1] );

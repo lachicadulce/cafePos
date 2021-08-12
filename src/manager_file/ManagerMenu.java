@@ -208,7 +208,7 @@ public class ManagerMenu extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns();
+		Manager_Btns mb = new Manager_Btns(this);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}
@@ -218,8 +218,8 @@ public class ManagerMenu extends PosFrame {
 		con.add("Center", jsp);
 	}
 	
-	public static void main(String[] args) {
-		ManagerMenu mp = new ManagerMenu();
-		mp.setDefaultOptions();
-	}
+//	public static void main(String[] args) {
+//		ManagerMenu mp = new ManagerMenu();
+//		mp.setDefaultOptions();
+//	}
 }

@@ -16,9 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,17 +32,10 @@ import baseSettings.PosFrame;
 public class Receipt_duck_2 extends PosFrame {
 	
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
-	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
-	static ArrayList<ArrayList<String>> list_data_credit = new ArrayList<ArrayList<String>>();
 	
 	static String[] columnNames = null;
 	
 	static String Receipt_list = "select * from payment_view_2";
-	static String Receipt_list_cash = Receipt_list + " where cash > 0";
-	static String Receipt_list_credit = Receipt_list + " where credit > 0";
-	
-//	static String Receipt_list_cash = "select * from payment_view_1 where cash > 0";
-//	static String Receipt_list_credit = "select * from payment_view_1 where credit > 0";
 	
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
 	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
@@ -52,7 +43,6 @@ public class Receipt_duck_2 extends PosFrame {
 	static String cash_receipt_cancel = "UPDATE history_payment SET receipt_chk = 'N' WHERE receipt_no = ";
 	
 	static String[][] data_default = null;
-	static String[][] data_cash = null;
 	static String[][] data_credit = null;
 	
 	static int select_receipt_no = -1;
@@ -67,169 +57,93 @@ public class Receipt_duck_2 extends PosFrame {
 	
 	static String[] cash_receipt_result;
 	
+	static String where_date = "20210807";
 	
-	public void total() {
-		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
-            
-        // ================================================================================================
-        // ================================================================================================
-            	
-            	// 기본 디폴트 리스트 
-            	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
-            	PreparedStatement pstmt_Receipt_list_cash = conn.prepareStatement(Receipt_list_cash);
-            	PreparedStatement pstmt_Receipt_list_credit = conn.prepareStatement(Receipt_list_credit);
-            	
-            	ResultSet rs_list = pstmt_Receipt_list.executeQuery();
-            	ResultSet rs_list_cash = pstmt_Receipt_list_cash.executeQuery();
-            	ResultSet rs_list_credit = pstmt_Receipt_list_credit.executeQuery();
-            	
-            	// 컬럼 명을 불러오기 위한 데이터 처리
-            	ResultSetMetaData md = rs_list.getMetaData();
-            	
-            	// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
-            	int column_size = md.getColumnCount();
-            	
-            	// 구한 컬럼 숫자+1의 이유는 컬럼 이외에 첫번째 col 에는 데이터의 수를 나타내기위한 No 을 추가하기 위함
-            	columnNames = new String[column_size+1];
-            	
-            	// 컬럼명을 배열에 문자열로 저장
-            	for(int i = 0; i < columnNames.length; i++) {
-            		if (i == 0) {
-            			columnNames[i] = "No";
-            		} else {
-            			columnNames[i] = md.getColumnName(i);
-            		}
-                }
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_default.clear();
-            	
-            	
-            	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
-            	while (rs_list.next()) {
-            		ArrayList<String> data_total = new ArrayList<>();
-            		data_total.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data_total.add("" + i);
-            			} else {
-            				data_total.add(rs_list.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_default.add(data_total);
-            	}
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_cash.clear();
-            	
-            	// 가져온 데이터를 list_data_cash(ArrayList) 에 저장
-            	while (rs_list_cash.next()) {
-            		
-            		ArrayList<String> data_cash = new ArrayList<>();
-            		data_cash.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data_cash.add("" + i);
-            			} else {
-            				data_cash.add(rs_list_cash.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_cash.add(data_cash);
-            	}
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_credit.clear();
-            	
-            	// 가져온 데이터를 list_data_credit(ArrayList) 에 저장
-            	while (rs_list_credit.next()) {
-            		ArrayList<String> data = new ArrayList<>();
-            		data.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data.add("" + i);
-            			} else {
-            				data.add(rs_list_credit.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_credit.add(data);
-            	}
-            	
-            	// 오픈 했던 각 리소스들 종료 
-            	rs_list.close();
-            	rs_list_cash.close();
-            	rs_list_credit.close();
-            	
-            	pstmt_Receipt_list.close();
-            	pstmt_Receipt_list_cash.close();
-            	pstmt_Receipt_list_credit.close();
-            	
-            	conn.close();
-            
-            // ================================================================================================
-        	// ================================================================================================
-//            	System.out.println("w_size : " + w_size);
-//            	System.out.println("cash_w_size : " + cash_w_size);
-//            	System.out.println("credit_w_size : " + credit_w_size);
-            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
-            	w_size = list_data_default.size();
-            	h_size = list_data_default.get(0).size();
-            	cash_w_size = list_data_cash.size();
-            	cash_h_size = list_data_cash.get(0).size();
-            	credit_w_size = list_data_credit.size();
-            	credit_h_size = list_data_credit.get(0).size();
+	
+//	public void total() {
+//		try {
+//            Connection conn = DriverManager.getConnection(
+//            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
+//            		"cafe",
+//            		"!!22Qorthdud");
+//            
+//        // ================================================================================================
+//        // ================================================================================================
 //            	
-//            	System.out.println("w_size : " + w_size);
-//            	System.out.println("cash_w_size : " + cash_w_size);
-//            	System.out.println("credit_w_size : " + credit_w_size);
+//            	// 기본 디폴트 리스트 
+//            	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
 //            	
-            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
-             	data_default = new String[w_size][h_size];
-             	data_cash = new String[cash_w_size][cash_h_size];
-             	data_credit = new String[credit_w_size][credit_h_size];
-             	
-             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < w_size; i++) {
-            		for (int x = 0; x < h_size; x++) {
-            			if (x == 0) {
-            				data_default[i][x] = "" + (i+1);
-            			}else {
-            				data_default[i][x] = list_data_default.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-             	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < cash_w_size; i++) {
-            		for (int x = 0; x < cash_h_size; x++) {
-            			if (x == 0) {
-            				data_cash[i][x] = "" + (i+1);
-            			}else {
-            				data_cash[i][x] = list_data_cash.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-             	// 카드(Credit) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < credit_w_size; i++) {
-            		for (int x = 0; x < credit_h_size; x++) {
-            			if (x == 0) {
-            				data_credit[i][x] = "" + (i+1);
-            			}else {
-        	    			data_credit[i][x] = list_data_credit.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-            
-		} catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
-		
-	}
+//            	ResultSet rs_list = pstmt_Receipt_list.executeQuery();
+//            	
+//            	// 컬럼 명을 불러오기 위한 데이터 처리
+//            	ResultSetMetaData md = rs_list.getMetaData();
+//            	
+//            	// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
+//            	int column_size = md.getColumnCount();
+//            	
+//            	// 구한 컬럼 숫자+1의 이유는 컬럼 이외에 첫번째 col 에는 데이터의 수를 나타내기위한 No 을 추가하기 위함
+//            	columnNames = new String[column_size+1];
+//            	
+//            	// 컬럼명을 배열에 문자열로 저장
+//            	for(int i = 0; i < columnNames.length; i++) {
+//            		if (i == 0) {
+//            			columnNames[i] = "No";
+//            		} else {
+//            			columnNames[i] = md.getColumnName(i);
+//            		}
+//                }
+//            	
+//            	// 기존에 담겨있던 데이터를 비움
+//            	list_data_default.clear();
+//            	
+//            	
+//            	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
+//            	while (rs_list.next()) {
+//            		ArrayList<String> data_total = new ArrayList<>();
+//            		data_total.clear();
+//            		for (int i = 0; i < columnNames.length; i++) {
+//            			if (i == 0) {
+//            				data_total.add("" + i);
+//            			} else {
+//            				data_total.add(rs_list.getString(columnNames[i]));
+//            			}
+//            		}
+//            		list_data_default.add(data_total);
+//            	}
+//            	
+//            	// 오픈 했던 각 리소스들 종료 
+//            	rs_list.close();
+//            	
+//            	pstmt_Receipt_list.close();
+//            	
+//            	conn.close();
+//            
+//            // ================================================================================================
+//        	// ================================================================================================
+//            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
+//            	w_size = list_data_default.size();
+//            	h_size = list_data_default.get(0).size();
+//            	
+//            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
+//             	data_default = new String[w_size][h_size];
+//             	
+//             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
+//             	for (int i = 0; i < w_size; i++) {
+//            		for (int x = 0; x < h_size; x++) {
+//            			if (x == 0) {
+//            				data_default[i][x] = "" + (i+1);
+//            			}else {
+//            				data_default[i][x] = list_data_default.get(i).get(x);
+//            			}
+//            		}
+//            	}
+//             	
+//            
+//		} catch (SQLException e) {
+//            System.out.println("getConnection 하다가 문제 생김");
+//        }
+//		
+//	}
 	
 	// 반품 처리
 	public void refund(int receipt_no) {
@@ -249,7 +163,7 @@ public class Receipt_duck_2 extends PosFrame {
 			
 			refund.close();
 			conn.close();
-			total();
+//			total();
             
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
@@ -280,7 +194,7 @@ public class Receipt_duck_2 extends PosFrame {
 	            
 				cash_receipt_yn.close();
 				conn.close();
-				total();
+//				total();
 	            
 			} catch (SQLException e) {
 	            System.out.println("getConnection 하다가 문제 생김");
@@ -316,7 +230,7 @@ public class Receipt_duck_2 extends PosFrame {
 	            
 	            
 				conn.close();
-				total();
+//				total();
 	            
 			} catch (SQLException e) {
 	            System.out.println("getConnection 하다가 문제 생김");
@@ -508,47 +422,29 @@ public class Receipt_duck_2 extends PosFrame {
 
      // ================================================================================================
      // ================================================================================================
-        
-        total();
-//        cash_list();
-//        credit_list();
 
         JPanel receipt_panel = new JPanel();        
         
      	receipt_panel.setBackground(Color.black);
      	receipt_panel.setLocation(20, 140);
      	receipt_panel.setSize(660, 500);
+     	
+     	total_data data = new total_data();
 
-//     	JPanel a = new JPanel();
-//     	a.setSize(20,20);
-     	
-     	
-     	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
-//     	JTable table = new JTable(data_default, columnNames);
+     	DefaultTableModel model = new DefaultTableModel(data.table_total_data(where_date), columnNames);
+
 		JTable table = new JTable(model);
      	
      	JScrollPane scrollPane1 = new JScrollPane(table);
      	scrollPane1.setBorder(BorderFactory.createEmptyBorder());
-//     	scrollPane1.setBounds(20, 120, 6600, 4700);
-     	
-//     	scrollPane1.setBackground(Color.pink);
-     	
-//     	table.setPreferredSize(new Dimension(660, 1500));
-//     	table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
      	
      	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
      	
      	scrollPane1.setPreferredSize(new Dimension(658, 495));
-//     	scrollPane1.setPreferredSize(660, 1500);
-//     	scrollPane1.setSize(6600, 1500);
-     	
+
      	table.setRowSelectionAllowed(true);
      	table.setColumnSelectionAllowed(false);
-//     	System.out.println(scrollPane1.getSize(getPreferredSize()));
-     	
-//     	table.setShowGrid(true);
-     	
-//     	a.add(scrollPane1);
+
      	receipt_panel.add(scrollPane1);
      	add(receipt_panel);
      	
@@ -733,11 +629,13 @@ public class Receipt_duck_2 extends PosFrame {
         		@Override
         		public void actionPerformed(ActionEvent e) {
         			
-//        			total();
-
-        			DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
+//        			String where_date = "20210807";
+        			
+        			total_data data = new total_data();
+        			
+        			DefaultTableModel model = new DefaultTableModel(data.table_total_data(where_date), columnNames);
+        			
         			table.setModel(model);
-//        			JTable table = new JTable(model);
 
         			model.fireTableDataChanged();
         		}
@@ -751,16 +649,16 @@ public class Receipt_duck_2 extends PosFrame {
         	   
         		@Override
         		public void actionPerformed(ActionEvent e) {
-
-//        			cash_list();
-
-        			DefaultTableModel model = new DefaultTableModel(data_cash, columnNames);
+        			
+//        			String where_date = "20210807";
+        			
+        			cash_data data = new cash_data();
+        			
+        			DefaultTableModel model = new DefaultTableModel(data.table_cash_data(where_date), columnNames);
         			
         			table.setModel(model);
-//        			JTable table = new JTable(model);
-        			
+
         			model.fireTableDataChanged();
-        			
         		}
         		
         	});
@@ -773,9 +671,12 @@ public class Receipt_duck_2 extends PosFrame {
            		@Override
            		public void actionPerformed(ActionEvent e) {
            			
-//           	        credit_list();
+//           			String where_date = "20210807";
+           			
+           			credit_data data = new credit_data();
+           			
            	        
-           			DefaultTableModel model = new DefaultTableModel(data_credit, columnNames);
+           			DefaultTableModel model = new DefaultTableModel(data.table_credit_data(where_date), columnNames);
            			table.setModel(model);
 //           		JTable table = new JTable(model);
            			

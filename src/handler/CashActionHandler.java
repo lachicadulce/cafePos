@@ -65,23 +65,30 @@ public class CashActionHandler implements ActionListener {
 		parent.setLayout( new GridLayout(4, 0, 5, 5) );
 		dialog = op.createDialog(null, "");
 
+		// 현금 결제 입력 받기
 		while(true) {
 			dialog = op.createDialog(null, "현금 결제");
 			dialog.setVisible(true);
-			System.out.println(op.getValue());
 
 
+			// 닫기 버튼 눌렸을때
 			if(op.getValue() == null) {
 				dialog.dispose();
 				break;
+				
+			// E 버튼 눌렸을때
 			} else if (op.getValue() == "E" ) {
 				calcTable.setValueAt(textField.getText(), 2, 1);
 				input = "";
 				dialog.dispose();
 				break;
+				
+			// 숫자 인지 확인후 추가
 			} else if (isNumeric((String)op.getValue())) {
 				input += op.getValue();
 				textField.setText(input);
+				
+			// 취소버튼 눌렀을때 한자리수 지우기
 			} else if (op.getValue() == ">") {
 				int len = textField.getText().length();
 				String num = textField.getText();
@@ -96,13 +103,12 @@ public class CashActionHandler implements ActionListener {
 
 		}
 		
+		// 카드 결제 입력 받기
 		label.setText("카드 결제 금액을 입력해주세요");
-		
-		
 		while(true) {
 			dialog = op.createDialog(null, "카드 결제");
 			dialog.setVisible(true);
-			System.out.println(op.getValue());
+
 
 			if(op.getValue() == null) {
 				dialog.dispose();

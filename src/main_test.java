@@ -36,7 +36,7 @@ import main_component.OrderButton;
 import main_component.RightPanelBasic;
 
 
-//////////////////////////////////////////////////////////// 지금 수정중
+
 
 
 public class main_test extends PosFrame {

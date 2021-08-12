@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.sql.*;
+import java.text.*;
+import java.util.Date;
 
 import javax.swing.*;
 
@@ -17,8 +19,6 @@ public class ClosingBtn implements ActionListener {
 			+ "SUM(cash) AS cash, SUM(total) AS total "
 			+ "FROM history_payment WHERE state = 'complete' "
 			+ "AND datetime > (select to_char(sysdate +1,'yyyy-mm-dd') from dual) ";
-	//저장되는 txt 파일설정
-	private File f = new File("sales_Slip.txt"); 
 	
 	public ClosingBtn() {
 		super();
@@ -27,16 +27,34 @@ public class ClosingBtn implements ActionListener {
 	// 마감용지출력 버튼 클릭 시 [출력 완료] 팝업 출력 설정
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date showdate = new Date();
+		dateFormat2.format(showdate);
 		JOptionPane end = new JOptionPane();				
 		Font f1 = new Font("", Font.BOLD, 15);
 		UIManager.put("OptionPane.messageFont", f1);
-		UIManager.put("OptionPane.minimumSize",new Dimension(200,100)); 
+		UIManager.put("OptionPane.minimumSize",new Dimension(220,100)); 
 		sumDB();
-		end.showMessageDialog(null, "마감 용지 출력이 완료되었습니다.", "마감 용지 출력", JOptionPane.PLAIN_MESSAGE);
+		end.showMessageDialog(null, "[ " + dateFormat2.format(showdate)+ " ]" 
+					+ "\n마감 용지 출력이 완료되었습니다.", "마감 용지 출력", JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	// 매출 합계 DB 불러오기 후 txt 파일에 저장
 	public void sumDB() {
+		SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date savedate = new Date();
+		Date showdate = new Date();
+		
+		File dir = new File("sales");
+		// sales폴더가 없으면 해당 디렉토리를 생성
+		if (!dir.exists()) { 
+			dir.mkdir();
+		}
+		
+		// sales 폴더안에 출력한 로컬 날짜로 파일을 저장
+		File f = new File("sales/"+ dateFormat1.format(savedate) + ".txt");
+		
 		try (
 	    	Connection conn = DBConnector.getConnection();
 	    	PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -53,15 +71,17 @@ public class ClosingBtn implements ActionListener {
 						+ "◇ 카드 매출 합계 ◇ " + card + " 원\n" 
 						+ "▶ cafe 매출 총 합계 ◀ " + total + " 원\n");
 				
-				out.write("◇ 현금 매출 합계 ◇");
-				out.write(""+ cash);
-				out.write("\n◇ 카드 매출 합계 ◇");
-				out.write(""+ card);
-				out.write("\n▶ cafe 매출 총 합계 ◀");
-				out.write(""+ total);
+				// 출력할 마감용지에 저장될 내용을 txt 파일에 저장
+				out.write("[ 출력 일시: "+ dateFormat2.format(showdate) + " ]\n");
+				out.write("◇ 현금 매출 합계 ◇ ");
+				out.write(""+ cash + " 원\n");
+				out.write("◇ 카드 매출 합계 ◇ ");
+				out.write(""+ card + " 원\n");
+				out.write("▶ cafe 매출 총 합계 ◀ ");
+				out.write(""+ total + " 원");
 				out.close();
 			}
-			System.out.println("매출 전표 저장 완료");
+			System.out.println("매출 전표 저장 완료 " + dateFormat2.format(showdate));
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();

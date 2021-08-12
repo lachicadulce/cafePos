@@ -116,7 +116,7 @@ public class RightPanelBasic extends JPanel {
 		add("Center",jsp2);
 		
 		
-	}
+	}// RightPanelBasic생성자 끝.
 	
 //	private void actionNextAdd(JButton a, JPanel p1) {
 //

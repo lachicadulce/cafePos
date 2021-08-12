@@ -21,6 +21,7 @@ import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
+import handler.ManagerButtonActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
@@ -34,10 +35,6 @@ import main_component.ButtonSetting;
 import main_component.MenuPanel;
 import main_component.OrderButton;
 import main_component.RightPanelBasic;
-
-
-
-
 
 public class main_test extends PosFrame {
 
@@ -160,20 +157,21 @@ public class main_test extends PosFrame {
 		payment.addActionListener(new ChangeActionListener(calcTable));
 		add(payment);
 		
-		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
-		test2.setLocation(220, 610);
-		test2.setSize(75,70);
-		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
-		add(test2);
+//		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
+//		test2.setLocation(220, 610);
+//		test2.setSize(75,70);
+//		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
+//		add(test2);
 
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		
 		MenuButtonActionListener mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
 		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
+		ManagerButtonActionListener mabutal = new ManagerButtonActionListener(this.getFrames()[0]);
 		CashActionHandler cah = new CashActionHandler(calcTable);
 		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, mabutal);
 		
 		
 		

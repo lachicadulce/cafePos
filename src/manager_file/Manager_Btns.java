@@ -1,13 +1,12 @@
 package manager_file;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
 
 // 관리자메뉴 버튼 5개 설정
-public class Manager_Btns extends JButton {
+public class Manager_Btns {
 
 	private ArrayList<JButton> btns;
 	

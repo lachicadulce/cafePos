@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,7 +42,9 @@ public class ManagerMenu extends PosFrame {
 	private JButton delBtn = new JButton("삭제");
 	private String header[] = {"NO", "이름", "가격", "분류", "노출순서"};
 	private String selStr;
-	private JTextField tf;
+	private JTextField tf_name;
+	
+	JComboBox<String> cb_type;
 	
 	private MenuDialog addMenuDialog;
 	
@@ -105,13 +108,18 @@ public class ManagerMenu extends PosFrame {
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		JLabel lb = new JLabel("메뉴 이름");
-		tf = new JTextField(20);
-		
-		lb.setSize(WIDTH, HEIGHT);
+		tf_name = new JTextField(20);
+		cb_type = new JComboBox(addMenuDialog.types.toArray(new String[addMenuDialog.types.size()]));
+		cb_type.removeItemAt(cb_type.getItemCount() - 1);
+		cb_type.addItem("전체");
+		cb_type.setSelectedIndex(cb_type.getItemCount() - 1);
+//		lb.setSize(WIDTH, HEIGHT);
 		
 		// p3에 검색 라인, 조회, 추가, 수정, 삭제 버튼 추가
 		p3.add(lb);
-		p3.add(tf);
+		p3.add(tf_name);
+		p3.add(new JLabel("분류"));
+		p3.add(cb_type);
 		p3.add(selBtn);
 		p3.add(addBtn);
 		p3.add(modBtn);
@@ -122,8 +130,14 @@ public class ManagerMenu extends PosFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selStr = tf.getText();
-				sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') ORDER BY type, display_order";
+				selStr = tf_name.getText();
+				int index = cb_type.getSelectedIndex();
+
+				if(index != cb_type.getItemCount() - 1) {
+					sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') AND type = '" + addMenuDialog.types.get(cb_type.getSelectedIndex()) + "' ORDER BY type, display_order";
+				} else {
+					sql = "SELECT * FROM menu WHERE LOWER(mname) LIKE LOWER('%" + selStr + "%') ORDER BY type, display_order";
+				}
 				setTB();
 			}
 		});
@@ -194,7 +208,7 @@ public class ManagerMenu extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns();
+		Manager_Btns mb = new Manager_Btns(this);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}
@@ -204,8 +218,8 @@ public class ManagerMenu extends PosFrame {
 		con.add("Center", jsp);
 	}
 	
-	public static void main(String[] args) {
-		ManagerMenu mp = new ManagerMenu();
-		mp.setDefaultOptions();
-	}
+//	public static void main(String[] args) {
+//		ManagerMenu mp = new ManagerMenu();
+//		mp.setDefaultOptions();
+//	}
 }

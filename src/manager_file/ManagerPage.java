@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -147,6 +148,16 @@ public class ManagerPage extends PosFrame {
 		p1.add(scrollpane, BorderLayout.CENTER);
 		p1.setBorder(null);
 		
+		JPanel south = new JPanel(new GridLayout(1,2));
+		
+		Employees_List el = new Employees_List();
+		ImageIcon image = new ImageIcon("image/coffee.png");
+		JLabel south_left = new JLabel(image);
+		
+		south.add(south_left);
+		south.add(el);
+		p1.add(south, "South");
+		
 		// 왼쪽 구성요소 추가
 		jsp.setLeftComponent(p1);
 		
@@ -156,7 +167,7 @@ public class ManagerPage extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns();
+		Manager_Btns mb = new Manager_Btns(this);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}
@@ -166,8 +177,8 @@ public class ManagerPage extends PosFrame {
 		con.add("Center", jsp);
 	}
 	
-	public static void main(String[] args) {
-		ManagerPage mp = new ManagerPage();
-		mp.setDefaultOptions();
-	}
+//	public static void main(String[] args) {
+//		ManagerPage mp = new ManagerPage();
+//		mp.setDefaultOptions();
+//	}
 }

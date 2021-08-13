@@ -12,12 +12,17 @@ import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import baseSettings.DBConnector;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
 import handler.ChangeMenuDownActionListener;
@@ -34,6 +39,9 @@ public class MenuPanel extends JPanel {
 	String sort;
 	CardLayout card;
 	int count;
+	
+	static String sql1 = "select menu_no, mname, price,type, display_order, stock_chk from menu";
+	
 	
 	public MenuPanel(String sort, RightPanelBasic rpb, ActionListener al) {
 		this.sort = sort;
@@ -57,16 +65,40 @@ public class MenuPanel extends JPanel {
 		rightR.removeAll();
 		rightCenter.removeAll();
 		
-		for(int i = 0; i < 36; i++) {
-			++count;
-			if(i > 23) {
-				panel3.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
-			} else if (i > 11) {
-				panel2.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
-			} else {
-				panel1.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
-			}
+
+		try {
+			Connection conn = DBConnector.getConnection();
+			PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+			ResultSet rs = pstmt1.executeQuery();
+			
+			while(rs.next()) {
+				String menuName = rs.getString("mname");
+				if(count > 23) {
+					panel3.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+				} else if (count > 11) {
+					panel2.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+				} else {
+					panel1.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+				}
+				count++;
+			}//while
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
 		}
+		
+		
+//		for(int i = 0; i < 36; i++) {
+//			++count;
+//			if(i > 23) {
+//				panel3.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
+//			} else if (i > 11) {
+//				panel2.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
+//			} else {
+//				panel1.add(new ButtonSetting(sort+count, 15, 0xfafeff, al));
+//			}
+//		}
 		
 		up.addActionListener(new ChangeMenuUpActionListener(rightCenter));
 		down.addActionListener(new ChangeMenuDownActionListener(rightCenter));
@@ -80,4 +112,11 @@ public class MenuPanel extends JPanel {
 				
 	}
 
+	
+	public void dbConnectContents() {
+		
+		
+		
+	}
+	
 }

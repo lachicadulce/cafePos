@@ -32,7 +32,7 @@ public class total_data {
             	String Receipt_list = "select * from payment_view_2 where datetime > TO_DATE('" +  date + "')"; ;
             	
             	
-//            	System.out.println(Receipt_list);
+            	System.out.println(Receipt_list);
             
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);

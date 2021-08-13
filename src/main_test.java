@@ -21,7 +21,6 @@ import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
-import handler.ManagerButtonActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
@@ -35,6 +34,10 @@ import main_component.ButtonSetting;
 import main_component.MenuPanel;
 import main_component.OrderButton;
 import main_component.RightPanelBasic;
+
+
+
+
 
 public class main_test extends PosFrame {
 
@@ -51,6 +54,8 @@ public class main_test extends PosFrame {
 
 	private void mainScreenInit() {
 
+		
+		
 		jsp1.setResizeWeight(0.9);
 		jsp2.setResizeWeight(0.8);
 		
@@ -75,7 +80,12 @@ public class main_test extends PosFrame {
 				{"거스름돈", change},
 		};
 		JTable calcTable = new JTable(calcdata, calcColumn);
-
+		
+		//
+		CashActionHandler cah = new CashActionHandler(calcTable);
+		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
+		
+		
 		// 주문LIST
 		DefaultTableModel orderTableModel = new DefaultTableModel(); 
 		JTable orderTable = new JTable(orderTableModel);
@@ -150,12 +160,14 @@ public class main_test extends PosFrame {
 		exchange.addActionListener(new SafeOpenActionListener());
 		add(exchange);
 		
-		// 결제
+		// 환전계산
 		JButton payment = new JButton("<html>환전<br />계산</html>");
 		payment.setLocation(280, 680);
 		payment.setSize(75,70);
-		payment.addActionListener(new ChangeActionListener(calcTable));
+		payment.addActionListener(new ChangeActionListener(calcTable, cah, msal));
 		add(payment);
+		
+		
 		
 //		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
 //		test2.setLocation(220, 610);
@@ -167,11 +179,11 @@ public class main_test extends PosFrame {
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		
 		MenuButtonActionListener mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
-		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
-		ManagerButtonActionListener mabutal = new ManagerButtonActionListener(this.getFrames()[0]);
-		CashActionHandler cah = new CashActionHandler(calcTable);
 		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, mabutal);
+		
+		
+		
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
 		
 		
 		
@@ -180,7 +192,6 @@ public class main_test extends PosFrame {
 		jsp1.setLeftComponent(leftScreen);
 		jsp1.setRightComponent(rpb);
 		con.add("Center", jsp1);
-		
 
 	}//mainScreenInit함수 끝.
 

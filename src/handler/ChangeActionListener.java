@@ -11,8 +11,13 @@ import javax.swing.JTable;
 public class ChangeActionListener implements ActionListener {
 
 	JTable calcTable;
-	public ChangeActionListener(JTable calcTable) {
+	CashActionHandler cah;
+	MemberShipActionListener msal;
+	
+	public ChangeActionListener(JTable calcTable, CashActionHandler cah, MemberShipActionListener msal) {
 		this.calcTable = calcTable;
+		this.cah = cah;
+		this.msal = msal;
 	}
 	
 	@Override
@@ -39,7 +44,10 @@ public class ChangeActionListener implements ActionListener {
 		String changestr = Integer.toString(change);
 		calcTable.setValueAt(changestr, 3, 1);
 		
-
+		
+		
+		
+		
 	}
 
 }

@@ -26,7 +26,10 @@ public class CashActionHandler implements ActionListener {
 
 	JTextField textField;
 	JTable calcTable;
-
+	int cashMoney;
+	int cardMoney;
+	boolean cashReceipt;
+	int cashReceiptCheck;
 
 	
 	public CashActionHandler(JTable calcTable) {
@@ -49,6 +52,8 @@ public class CashActionHandler implements ActionListener {
 		panel.add(label);
 		textField = new JTextField(10);
 		panel.add(textField);
+		
+	
 
 		JOptionPane op = new JOptionPane
 				(
@@ -78,9 +83,22 @@ public class CashActionHandler implements ActionListener {
 				
 			// E 버튼 눌렸을때
 			} else if (op.getValue() == "E" ) {
+				
 				calcTable.setValueAt(textField.getText(), 2, 1);
+				cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+				
 				input = "";
 				dialog.dispose();
+				
+				if(cashMoney > 0 ) {					
+					cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "근태관리", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
+					if(cashReceiptCheck == 0) {
+						cashReceipt = true;
+					} else {
+						cashReceipt = false;
+					}
+				}
+
 				break;
 				
 			// 숫자 인지 확인후 추가
@@ -115,9 +133,9 @@ public class CashActionHandler implements ActionListener {
 				break;
 			} else if (op.getValue() == "E" ) {
 				
-				int cash = Integer.parseInt((String) calcTable.getValueAt(2, 1));
-				int card = Integer.parseInt((String)textField.getText());
-				calcTable.setValueAt(""+(card+cash), 2, 1);
+				cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+				cardMoney = Integer.parseInt((String)textField.getText());
+				calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
 				dialog.dispose();
 				break;
 			} else if (isNumeric((String)op.getValue())) {
@@ -139,8 +157,7 @@ public class CashActionHandler implements ActionListener {
 		}
 
 
-
-	}
+	} // end AL
 	public static boolean isNumeric(String s) {
 		try {
 			Double.parseDouble(s);

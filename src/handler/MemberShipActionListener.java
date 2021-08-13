@@ -29,7 +29,10 @@ public class MemberShipActionListener implements ActionListener {
 
 
 	JTable calcTable;
-
+	
+	int usePoint;
+	int cus_no;
+	
 	public MemberShipActionListener(JTable calcTable) {
 		this.calcTable = calcTable;
 	}
@@ -75,12 +78,13 @@ public class MemberShipActionListener implements ActionListener {
 					name = rs.getString("name");
 					tel = rs.getString("tel");
 					point = rs.getInt("point");
+					cus_no = rs.getInt(cus_no);
 
 					memshipTableModel.addRow(new Object[] {name, tel, point}); //행추가
 				}
 
 				String usePointstr = JOptionPane.showInputDialog(null, panel, "멤버쉽", 1);
-				int usePoint = Integer.parseInt(usePointstr);
+				usePoint = Integer.parseInt(usePointstr);
 				if( usePoint > point) {
 					JOptionPane.showMessageDialog(null, "포인트가 부족합니다.", "오류", 0);
 				} else {

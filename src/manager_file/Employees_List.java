@@ -24,7 +24,7 @@ import baseSettings.DBConnector;
 public class Employees_List extends JPanel {
 
 	private JScrollPane scrollpane;
-	private String sql = "SELECT * FROM employees_info";
+	private String sql = "SELECT emp_no, name, tel, TO_CHAR(start_date, 'YYYY-MM-DD') AS sdate, emp_degree FROM employees_info";
 	private JTable tb;
 	private DefaultTableModel model;
 	private String header[] = {"사번", "이름", "연락처", "입사일자", "직급"};
@@ -48,7 +48,7 @@ public class Employees_List extends JPanel {
 				int emp_no = rs.getInt("emp_no");
 				String name = rs.getString("name");
 				String tel = rs.getString("tel");
-				String start_date = rs.getString("start_date");
+				String start_date = rs.getString("sdate");
 				String emp_degree = rs.getString("emp_degree");
 				Object data[] = {emp_no, name, tel, start_date, emp_degree};
 				model.addRow(data);

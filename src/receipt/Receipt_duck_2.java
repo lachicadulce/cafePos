@@ -44,8 +44,6 @@ import baseSettings.PosFrame;
 public class Receipt_duck_2 extends PosFrame {
 
 	static Container main;
-	static ArrayList<ArrayList<String>> list_data; // = new ArrayList<ArrayList<String>>();
-//	static String[] columnNames = null;
 	static String RECEIPT_NO = "24";
 	static HashMap<String, ArrayList<Integer>> drink;
 	static JPanel frame = new JPanel();

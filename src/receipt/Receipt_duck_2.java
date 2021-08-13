@@ -70,12 +70,6 @@ public class Receipt_duck_2 extends PosFrame {
 	private JButton selBtn = new JButton("조회");
 	private static String date_s, date_e;
 
-	// 덕중님 connection()에 있던 SQL 여기에 옮겼습니다
-//	static String Receipt_list;// = "select * from payment_view_1 ORDER BY DATETIME"; 
-//	static String Receipt_list = "SELECT * FROM payment_view_1"
-//			+ " WHERE DATETIME BETWEEN " + "TO_DATE('2021/07/26', 'YYYY/MM/DD')" + " AND " + "TO_DATE('2021/07/26', 'YYYY/MM/DD')" + " + 1"
-//			+ " ORDER BY DATETIME";
-
 //  ----------------------------------------------------------------------------------------------
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
 //	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
@@ -396,8 +390,8 @@ public class Receipt_duck_2 extends PosFrame {
 				Receipt_list = "SELECT * FROM payment_view_2" + " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e
 						+ " + 1" + " ORDER BY DATETIME";
 				
-				connection();
-//				dbList(); 수정해야 할 부분
+				total();
+				
 
 			}
 		});
@@ -548,6 +542,20 @@ public class Receipt_duck_2 extends PosFrame {
 						state_chk = "" + table.getValueAt(table.getSelectedRow(), 1);
 						
 						select_receipt_no = Integer.parseInt(select_receipt_no_string);
+						
+						RECEIPT_NO = select_receipt_no_string;
+						
+						connection();
+						
+						receipt_print();
+						
+						if (state.equals("complete")) {
+							receipt.setText(receipt_string); 
+						} else {
+							receipt.setText(return_string); 
+						}
+						
+						main.add(frame);
 						
 					} catch (Exception a) {
 						a.printStackTrace();

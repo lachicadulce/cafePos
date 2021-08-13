@@ -398,33 +398,7 @@ public class Receipt_duck_2 extends PosFrame {
 	public Receipt_duck_2() {
 		super();
 		super.setTitle("영수증 관리");
-		try {
-			Connection conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
-					"!!22Qorthdud");
-
-			String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = 24" + "";
-//            
-//            
-//            PreparedStatement pstmt = conn.prepareStatement(sql);
-//
-//            ResultSet rs = pstmt.executeQuery();
-
-//            while (rs.next()) {
-//                System.out.print(rs.getString("MENU"));
-//                System.out.print(rs.getInt("PRICE"));
-//                System.out.println();
-//            }
-
-			// 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
-//            rs.close();
-//            pstmt.close();
-			conn.close();
-
-		} catch (SQLException e) {
-			System.out.println("getConnection 하다가 문제 생김");
-		}
-
+		
 		setLayout(null);
 
 		connection(); // 영수증 정보 커넥션
@@ -473,7 +447,7 @@ public class Receipt_duck_2 extends PosFrame {
 						+ " + 1" + " ORDER BY DATETIME";
 
 				connection();
-//						dbList(); 수정해야 할 부분
+//				dbList(); 수정해야 할 부분
 
 			}
 		});
@@ -481,10 +455,10 @@ public class Receipt_duck_2 extends PosFrame {
 		p1.add(p3);
 
 		// 영수증 아래 박스
-		String[] columnNames = { "결제구분", "금액" };
-		String[][] data = { { info, formatter.format(pay) }, };
+		String[] columnNames_yoo = { "결제구분", "금액" };
+		String[][] data_yoo = {{ info, formatter.format(pay) }};
 
-		JTable table_yoo = new JTable(data, columnNames);
+		JTable table_yoo = new JTable(data_yoo, columnNames_yoo);
 		JScrollPane scrollPane_yoo = new JScrollPane(table_yoo);
 
 		table_yoo.getTableHeader().setPreferredSize(new Dimension(scrollPane_yoo.getWidth(), 30));

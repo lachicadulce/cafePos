@@ -180,6 +180,7 @@ public class main_test extends PosFrame {
 		jsp1.setLeftComponent(leftScreen);
 		jsp1.setRightComponent(rpb);
 		con.add("Center", jsp1);
+		
 
 	}//mainScreenInit함수 끝.
 

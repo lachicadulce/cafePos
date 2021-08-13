@@ -94,7 +94,12 @@ public class MemberShipActionListener implements ActionListener {
 					memPointpstmt.executeUpdate();
 					JOptionPane.showMessageDialog(null, "포인트사용이 완료되었습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
 				}
-
+				
+				if(cus_no == 0) {
+					cus_no = 1000;
+				}
+				
+				
 				rs.close();
 
 

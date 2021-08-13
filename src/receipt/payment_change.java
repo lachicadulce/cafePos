@@ -81,13 +81,9 @@ public class payment_change extends JDialog {
 		  
 		return_payment_change = dbcheck(receipt_no);
 		
+		// 현제 가져온 영수증 정보의 뿌려줄 내용구성
 		payment_check(return_payment_change);
 		
-//		System.out.println(payment_check(return_payment_change));
-//		for (int i = 0; i < return_payment_change.length; i++) {
-//			System.out.println(i + " 번째 값 : " + return_payment_change[i]);
-//		}
-	      
 		setLayout(null);
 		
 		new_s1.setBounds(10, 220, 210, 210);
@@ -128,27 +124,15 @@ public class payment_change extends JDialog {
 		new_text_left.setBackground(Color.black);
 		new_text_right.setBackground(Color.black);
 		
-		
-//		label.setText("<html><body><font size=6>현재 결제 정보는 xxxxxx 입니다<font></body></html>");
-		
-//		label.setIcon(new ImageIcon("image/cash.png"));
-		
-		
 //	    btn1.setText("현금결제");
 	    btn1.setFont(new Font("돋움", Font.PLAIN, 20));
 	    btn1.setIcon(new ImageIcon("image/cash.png"));
 	    btn1.setLocation(150, 150);
-//	    btn1.setSize(300, 300);
 	    btn1.setBackground(Color.black);
 	    
-//	    System.out.println(btn1.getSize(getSize()));
-	    
-	    
 //	    btn2.setText("신용카드결제");
-	    
 	    btn2.setIcon(new ImageIcon("image/credit.png"));
 	    btn2.setLocation(150, 150);
-//	    btn2.setSize(300, 300);
 	    btn2.setBackground(Color.black);
 	    
 	    new_s1.add(btn1);
@@ -177,10 +161,10 @@ public class payment_change extends JDialog {
 	    add(new_s1);
 	    add(new_s2);
 	    
-	    add(new_text_left);
+	    add(new_text_left);	
 	    add(new_text_right);
-	    add(new_text_top);	// 추가하는 순서가 나중일수록 겹치는 순위에서 아래쪽에 배치된다. 무엇보다도 윗쪽에 배치하고 싶다면 가장 먼저 add 할 것
-	    add(new_text_bottom); 
+	    add(new_text_top);		// 추가하는 순서가 나중일수록 겹치는 순위에서 아래쪽에 배치된다. 무엇보다도 윗쪽에 배치하고 싶다면 가장 먼저 add 할 것
+	    add(new_text_bottom); 	
 	    
 	    
 	    int cash = Integer.parseInt(return_payment_change[4]);
@@ -205,19 +189,14 @@ public class payment_change extends JDialog {
 					
 					int yes_or_no = JOptionPane.showConfirmDialog(null, "너 현금 " + cash + " 이만큼 냈는데 이거 카드 계산할거야??. ", "카드수수료 나간다.........", JOptionPane.YES_NO_OPTION);
 					
-					
-					if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-	     				// 예 아니오 선택없이 창 닫은경우 yes_or_no = 2
+					if (yes_or_no == JOptionPane.CLOSED_OPTION) {			// "예", "아니오" 선택없이 창 닫은경우 yes_or_no = 2
 	     					System.out.println("그냥 닫았네?");
-	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-	     				// 사용자가 예를 선택한경우 yes_or_no = 0
+	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 "예"를 선택한경우 yes_or_no = 0
+	     				
 	     					data_update(sql);
-//	     					System.out.println("현금영수증처리");
 	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
-	     				} else {
-	     				// 사용자가 아니오를 선택한경우 yes_or_no = 1
+	     				} else {							   				// 사용자가 "아니오"를 선택한경우 yes_or_no = 1
 	     					JOptionPane.showMessageDialog(null, "그래그래~~ 잘 생각했어 ~ ");
-//	     					System.out.println("현금영수증 처리 안함");
 	     				}
 				}
 			}
@@ -240,29 +219,18 @@ public class payment_change extends JDialog {
 					int yes_or_no = JOptionPane.showConfirmDialog(null, "너 카드로 " + credit + " 이만큼 계산했어", "현금영수증 해줘야하네.....", JOptionPane.YES_NO_OPTION);
 					
 					
-					if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-	     				// 예 아니오 선택없이 창 닫은경우 yes_or_no = 2
+					if (yes_or_no == JOptionPane.CLOSED_OPTION) {			// "예", "아니오" 선택없이 창 닫은경우 yes_or_no = 2
 	     					System.out.println("그냥 닫았네?");
-	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-	     				// 사용자가 예를 선택한경우 yes_or_no = 0
+	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 "예"를 선택한경우 yes_or_no = 0
 	     					data_update(sql);
-//	     					System.out.println("현금영수증처리");
 	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
-	     				} else {
-	     				// 사용자가 아니오를 선택한경우 yes_or_no = 1
+	     				} else {							   				// 사용자가 "아니오"를 선택한경우 yes_or_no = 1
 	     					JOptionPane.showMessageDialog(null, "그래그래~~ 잘 생각했어 ~ ");
-//	     					System.out.println("현금영수증 처리 안함");
 	     				}
 				}
 				
 			}
 		});
-		
-	    
-//	    jlb.setText(receipt_no.toString());
-//	    label.add(btn);
-//	    add(btn);
-//	    this.setSize(600,800);
 	    this.setBounds(250, 300, 500, 480);
 	    this.setModal(true);
 	    this.setVisible(true);
@@ -270,13 +238,8 @@ public class payment_change extends JDialog {
 	    this.setBackground(Color.black);
 	    this.setForeground(Color.black);
 	}
-	
-	  // 
+
 	public void payment_check(String[] data_list) {
-		
-//		for (int i = 0; i < data_list.length; i++) {
-//			System.out.println(i + " 번째 값 : " + data_list[i]);
-//		}
 		
 		/*
 				return_payment_change[0]	// 영수증번호
@@ -374,15 +337,12 @@ public class payment_change extends JDialog {
 	            
 	            for(int i = 0; i < columnNames.length; i++) {
 	            	columnNames[i] = md.getColumnName(i+1);
-//            		System.out.print(columnNames[i] + "\t\t");
                 };
-//                System.out.println("\n========================================================================================================================================================================================");
                 
                 while (rs_list.next()) {
             		
             		for (int i = 0; i < columnNames.length; i++) {
         				columnData[i] = rs_list.getString(columnNames[i]);
-//        				System.out.print(columnData[i] + "\t\t");
             		}
             		
             	}

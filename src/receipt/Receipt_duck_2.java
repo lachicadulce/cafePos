@@ -16,9 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,6 +31,7 @@ import baseSettings.PosFrame;
 
 public class Receipt_duck_2 extends PosFrame {
 	
+
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_credit = new ArrayList<ArrayList<String>>();
@@ -42,9 +41,6 @@ public class Receipt_duck_2 extends PosFrame {
 	static String Receipt_list = "select * from payment_view_2";
 	static String Receipt_list_cash = Receipt_list + " where cash > 0";
 	static String Receipt_list_credit = Receipt_list + " where credit > 0";
-	
-//	static String Receipt_list_cash = "select * from payment_view_1 where cash > 0";
-//	static String Receipt_list_credit = "select * from payment_view_1 where credit > 0";
 	
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
 	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
@@ -67,6 +63,18 @@ public class Receipt_duck_2 extends PosFrame {
 	
 	static String[] cash_receipt_result;
 	
+	private DefaultTableModel model;
+	
+	static String where_date = "20210807";
+	
+	private String sql = "SELECT receipt_no, "
+			+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
+			+ "total, credit, cash, cus_no, "
+			+ "point_used, point_saved, state, receipt_chk "
+			+ "FROM history_payment "
+			+ "WHERE state = 'complete' ORDER BY receipt_no " ;
+	
+//	private String Receipt_list = "select * from payment_view_2 where datetime > TO_DATE('" +  where_date + "')";
 	
 	public void total() {
 		try {
@@ -231,6 +239,41 @@ public class Receipt_duck_2 extends PosFrame {
 		
 	}
 	
+	private void setTB() {
+		
+		while(model.getRowCount() > 0) {
+			model.removeRow(0);
+		}
+		
+	    try (
+	    	Connection conn = DBCONN.DBConnector.getConnection();
+	    	PreparedStatement pstmt = conn.prepareStatement(Receipt_list);
+	    	ResultSet rs = pstmt.executeQuery();
+	    	){
+	    	
+			while(rs.next()) {
+				int receipt_no = rs.getInt("receipt_no");
+				String dtime = rs.getString("dtime");
+				int total = rs.getInt("total");
+				int credit = rs.getInt("credit");
+				int cash = rs.getInt("cash");
+				int cus_no = rs.getInt("cus_no");
+				int point_used = rs.getInt("point_used");
+				int point_saved = rs.getInt("point_saved");
+				String state = rs.getString("state");
+				String receipt_chk = rs.getString("receipt_chk");
+				
+				Object data[] = {receipt_no, dtime, total, credit, cash, cus_no, 
+							point_used, point_saved, state, receipt_chk};
+				model.addRow(data);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	// 반품 처리
 	public void refund(int receipt_no) {
 		try {
@@ -239,17 +282,14 @@ public class Receipt_duck_2 extends PosFrame {
             		"cafe",
             		"!!22Qorthdud");
             refund_sql += ("" + receipt_no);
-//            System.out.println(refund_sql);
-            
+
             PreparedStatement refund = conn.prepareStatement(refund_sql);
             
 			int row = refund.executeUpdate();
 			
-//			System.out.println(row + "row(s) changed.");
-			
 			refund.close();
 			conn.close();
-			total();
+
             
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
@@ -280,7 +320,6 @@ public class Receipt_duck_2 extends PosFrame {
 	            
 				cash_receipt_yn.close();
 				conn.close();
-				total();
 	            
 			} catch (SQLException e) {
 	            System.out.println("getConnection 하다가 문제 생김");
@@ -316,7 +355,7 @@ public class Receipt_duck_2 extends PosFrame {
 	            
 	            
 				conn.close();
-				total();
+//				total();
 	            
 			} catch (SQLException e) {
 	            System.out.println("getConnection 하다가 문제 생김");
@@ -510,45 +549,28 @@ public class Receipt_duck_2 extends PosFrame {
      // ================================================================================================
         
         total();
-//        cash_list();
-//        credit_list();
 
         JPanel receipt_panel = new JPanel();        
         
      	receipt_panel.setBackground(Color.black);
      	receipt_panel.setLocation(20, 140);
      	receipt_panel.setSize(660, 500);
-
-//     	JPanel a = new JPanel();
-//     	a.setSize(20,20);
      	
      	
      	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
-//     	JTable table = new JTable(data_default, columnNames);
+
 		JTable table = new JTable(model);
      	
      	JScrollPane scrollPane1 = new JScrollPane(table);
      	scrollPane1.setBorder(BorderFactory.createEmptyBorder());
-//     	scrollPane1.setBounds(20, 120, 6600, 4700);
-     	
-//     	scrollPane1.setBackground(Color.pink);
-     	
-//     	table.setPreferredSize(new Dimension(660, 1500));
-//     	table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
      	
      	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
      	
      	scrollPane1.setPreferredSize(new Dimension(658, 495));
-//     	scrollPane1.setPreferredSize(660, 1500);
-//     	scrollPane1.setSize(6600, 1500);
-     	
+
      	table.setRowSelectionAllowed(true);
      	table.setColumnSelectionAllowed(false);
-//     	System.out.println(scrollPane1.getSize(getPreferredSize()));
-     	
-//     	table.setShowGrid(true);
-     	
-//     	a.add(scrollPane1);
+
      	receipt_panel.add(scrollPane1);
      	add(receipt_panel);
      	
@@ -713,9 +735,7 @@ public class Receipt_duck_2 extends PosFrame {
            
            buttons.get(3).addActionListener(new ActionListener() {
         	    
-        	   
-        	   
-        		@Override
+        	   @Override
         		public void actionPerformed(ActionEvent e) {
         			
         			payment_change a = new payment_change(select_receipt_no);
@@ -733,11 +753,13 @@ public class Receipt_duck_2 extends PosFrame {
         		@Override
         		public void actionPerformed(ActionEvent e) {
         			
-//        			total();
-
-        			DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
+//        			String where_date = "20210807";
+        			
+        			total_data data = new total_data();
+        			
+        			DefaultTableModel model = new DefaultTableModel(data.table_total_data(where_date), columnNames);
+        			
         			table.setModel(model);
-//        			JTable table = new JTable(model);
 
         			model.fireTableDataChanged();
         		}
@@ -751,16 +773,25 @@ public class Receipt_duck_2 extends PosFrame {
         	   
         		@Override
         		public void actionPerformed(ActionEvent e) {
-
-//        			cash_list();
-
-        			DefaultTableModel model = new DefaultTableModel(data_cash, columnNames);
         			
-        			table.setModel(model);
-//        			JTable table = new JTable(model);
+//        			String where_date = "20210807";
         			
-        			model.fireTableDataChanged();
+        			while(model.getRowCount() > 0) {
+        				model.removeRow(0);
+        			}
         			
+//        			cash_data data = new cash_data();
+//        			data_cash = data.table_cash_data(where_date);
+        			
+//        			DefaultTableModel model = new DefaultTableModel(data.table_cash_data(where_date), columnNames);
+        			for (int i = 0; i < data_cash.length; i++) {
+        				model.addRow(data_cash[i]);
+        			}
+        			
+        			
+//        			table.setModel(model);
+//
+//        			model.fireTableDataChanged();
         		}
         		
         	});
@@ -773,9 +804,12 @@ public class Receipt_duck_2 extends PosFrame {
            		@Override
            		public void actionPerformed(ActionEvent e) {
            			
-//           	        credit_list();
+//           			String where_date = "20210807";
+           			
+           			credit_data data = new credit_data();
+           			
            	        
-           			DefaultTableModel model = new DefaultTableModel(data_credit, columnNames);
+           			DefaultTableModel model = new DefaultTableModel(data.table_credit_data(where_date), columnNames);
            			table.setModel(model);
 //           		JTable table = new JTable(model);
            			

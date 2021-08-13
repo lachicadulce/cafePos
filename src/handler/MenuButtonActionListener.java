@@ -2,6 +2,7 @@ package handler;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +21,7 @@ public class MenuButtonActionListener implements ActionListener {
 	DefaultTableModel orderTableModel;
 	JTable calcTable;
 	int count;
-
+	String menu;
 	public MenuButtonActionListener(JTable calcTable,DefaultTableModel orderTableModel, JTable orderTable) {
 		this.calcTable = calcTable;
 		this.orderTable = orderTable;
@@ -31,14 +32,18 @@ public class MenuButtonActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+
 		String str = e.getActionCommand();
-
-		String menu = str.substring(str.indexOf("'>")+2, str.indexOf("<br>"));
-
-		String money = str.substring(str.indexOf("<br>")+4, str.indexOf("</body>"));
 		
-		System.out.println(count);
+		String menuSub = str.substring(str.indexOf("'>")+2, str.indexOf("</body>") );
 		
+		String[] menulist = menuSub.split("<br>");
+		menu = "";
+		for(int i = 0; i < menulist.length -1; i++) {
+			menu += menulist[i] + " ";
+		}
+		
+		String money = menulist[menulist.length-1];
 		
 		int row = getRowByValue(menu);
 		

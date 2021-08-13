@@ -13,7 +13,7 @@ public class total_data {
 	public total_data() {
 		
 	}
-	
+	 
 	public String[][] table_total_data(String date) {
 		try {
             Connection conn = DriverManager.getConnection(

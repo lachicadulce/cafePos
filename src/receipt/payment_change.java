@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class payment_change extends JDialog {
-	
+	 
 	// =================================== 여기부터 패널 생성 ===================================
 	JPanel new_s1 = new JPanel(); 
 	JPanel new_s2 = new JPanel();

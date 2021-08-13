@@ -92,10 +92,11 @@ public class ManagerMenu extends PosFrame {
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.PLAIN, 15));
 		TableColumnModel colModel = tb.getColumnModel();
-		colModel.getColumn(0).setPreferredWidth(40);
-		colModel.getColumn(1).setPreferredWidth(50);
-		colModel.getColumn(2).setPreferredWidth(50);
+		colModel.getColumn(0).setPreferredWidth(20);
+		colModel.getColumn(1).setPreferredWidth(60);
+		colModel.getColumn(2).setPreferredWidth(30);
 		colModel.getColumn(3).setPreferredWidth(30);
+		colModel.getColumn(4).setPreferredWidth(20);
 	
 		scrollpane = new JScrollPane(tb);
 		

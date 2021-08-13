@@ -42,21 +42,21 @@ import org.jdatepicker.impl.UtilDateModel;
 import baseSettings.PosFrame;
 
 public class Receipt_duck_2 extends PosFrame {
-	
+
 	static Container main;
-	static ArrayList<ArrayList<String>> list_data; //= new ArrayList<ArrayList<String>>();
+	static ArrayList<ArrayList<String>> list_data; // = new ArrayList<ArrayList<String>>();
 //	static String[] columnNames = null;
 	static String RECEIPT_NO = "24";
 	static HashMap<String, ArrayList<Integer>> drink;
 	static JPanel frame = new JPanel();
-	
+
 	static JPanel receipt_panel;
 	static JLabel receipt;
-	static String receipt_string;// 판매 영수증 
+	static String receipt_string;// 판매 영수증
 	static String return_string;// 환불 영수증
 	static String info = "";
 	static int pay;
-	
+
 	static int total;
 	static int vat;
 	static int cash;
@@ -67,239 +67,230 @@ public class Receipt_duck_2 extends PosFrame {
 	static Date transaction_date;
 	static String state;
 	static DecimalFormat formatter = new DecimalFormat("##,###,###"); // 금액 출력 포멧터
-	
+
 	// 달력 버튼 feat. 소영
-	private JButton selBtn = new JButton("조회"); 
+	private JButton selBtn = new JButton("조회");
 	private static String date_s, date_e;
-	
-	
-	// 덕중님 connection()에 있던 SQL 여기에 옮겼습니다 
+
+	// 덕중님 connection()에 있던 SQL 여기에 옮겼습니다
 //	static String Receipt_list;// = "select * from payment_view_1 ORDER BY DATETIME"; 
 //	static String Receipt_list = "SELECT * FROM payment_view_1"
 //			+ " WHERE DATETIME BETWEEN " + "TO_DATE('2021/07/26', 'YYYY/MM/DD')" + " AND " + "TO_DATE('2021/07/26', 'YYYY/MM/DD')" + " + 1"
 //			+ " ORDER BY DATETIME";
-	
+
 //  ----------------------------------------------------------------------------------------------
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_credit = new ArrayList<ArrayList<String>>();
-	
+
 	static String[] columnNames = null;
-	
+
 	static String Receipt_list = "select * from payment_view_2";
 	static String Receipt_list_cash = Receipt_list + " where cash > 0";
 	static String Receipt_list_credit = Receipt_list + " where credit > 0";
-	
+
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
 	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
 	static String cash_receipt = "UPDATE history_payment SET receipt_chk = 'Y' WHERE receipt_no = ";
 	static String cash_receipt_cancel = "UPDATE history_payment SET receipt_chk = 'N' WHERE receipt_no = ";
-	
+
 	static String[][] data_default = null;
 	static String[][] data_cash = null;
 	static String[][] data_credit = null;
-	
+
 	static int select_receipt_no = -1;
 	static String select_receipt_no_string = "";
-	
+
 	static int w_size, h_size;
 	static int cash_w_size, cash_h_size;
 	static int credit_w_size, credit_h_size;
-	
-	static int no;				// 
-	static String state_chk;	// 현재의 결제상태
-	
+
+	static int no; //
+	static String state_chk; // 현재의 결제상태
+
 	static String[] cash_receipt_result;
-	
+
 	private DefaultTableModel model;
-	
+
 	static String where_date = "20210807";
-	
-	private String sql = "SELECT receipt_no, "
-			+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
-			+ "total, credit, cash, cus_no, "
-			+ "point_used, point_saved, state, receipt_chk "
-			+ "FROM history_payment "
-			+ "WHERE state = 'complete' ORDER BY receipt_no " ;
-	
+
+	private String sql = "SELECT receipt_no, " + "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
+			+ "total, credit, cash, cus_no, " + "point_used, point_saved, state, receipt_chk " + "FROM history_payment "
+			+ "WHERE state = 'complete' ORDER BY receipt_no ";
+
 //	private String Receipt_list = "select * from payment_view_2 where datetime > TO_DATE('" +  where_date + "')";
-	
+
 	public void total() {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
-            
-        // ================================================================================================
-        // ================================================================================================
-            	
-            	// 기본 디폴트 리스트 
-            	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
-            	PreparedStatement pstmt_Receipt_list_cash = conn.prepareStatement(Receipt_list_cash);
-            	PreparedStatement pstmt_Receipt_list_credit = conn.prepareStatement(Receipt_list_credit);
-            	
-            	ResultSet rs_list = pstmt_Receipt_list.executeQuery();
-            	ResultSet rs_list_cash = pstmt_Receipt_list_cash.executeQuery();
-            	ResultSet rs_list_credit = pstmt_Receipt_list_credit.executeQuery();
-            	
-            	// 컬럼 명을 불러오기 위한 데이터 처리
-            	ResultSetMetaData md = rs_list.getMetaData();
-            	
-            	// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
-            	int column_size = md.getColumnCount();
-            	
-            	// 구한 컬럼 숫자+1의 이유는 컬럼 이외에 첫번째 col 에는 데이터의 수를 나타내기위한 No 을 추가하기 위함
-            	columnNames = new String[column_size+1];
-            	
-            	// 컬럼명을 배열에 문자열로 저장
-            	for(int i = 0; i < columnNames.length; i++) {
-            		if (i == 0) {
-            			columnNames[i] = "No";
-            		} else {
-            			columnNames[i] = md.getColumnName(i);
-            		}
-                }
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_default.clear();
-            	
-            	
-            	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
-            	while (rs_list.next()) {
-            		ArrayList<String> data_total = new ArrayList<>();
-            		data_total.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data_total.add("" + i);
-            			} else {
-            				data_total.add(rs_list.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_default.add(data_total);
-            	}
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_cash.clear();
-            	
-            	// 가져온 데이터를 list_data_cash(ArrayList) 에 저장
-            	while (rs_list_cash.next()) {
-            		
-            		ArrayList<String> data_cash = new ArrayList<>();
-            		data_cash.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data_cash.add("" + i);
-            			} else {
-            				data_cash.add(rs_list_cash.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_cash.add(data_cash);
-            	}
-            	
-            	// 기존에 담겨있던 데이터를 비움
-            	list_data_credit.clear();
-            	
-            	// 가져온 데이터를 list_data_credit(ArrayList) 에 저장
-            	while (rs_list_credit.next()) {
-            		ArrayList<String> data = new ArrayList<>();
-            		data.clear();
-            		for (int i = 0; i < columnNames.length; i++) {
-            			if (i == 0) {
-            				data.add("" + i);
-            			} else {
-            				data.add(rs_list_credit.getString(columnNames[i]));
-            			}
-            		}
-            		list_data_credit.add(data);
-            	}
-            	
-            	// 오픈 했던 각 리소스들 종료 
-            	rs_list.close();
-            	rs_list_cash.close();
-            	rs_list_credit.close();
-            	
-            	pstmt_Receipt_list.close();
-            	pstmt_Receipt_list_cash.close();
-            	pstmt_Receipt_list_credit.close();
-            	
-            	conn.close();
-            
-            // ================================================================================================
-        	// ================================================================================================
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
+
+			// ================================================================================================
+			// ================================================================================================
+
+			// 기본 디폴트 리스트
+			PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
+			PreparedStatement pstmt_Receipt_list_cash = conn.prepareStatement(Receipt_list_cash);
+			PreparedStatement pstmt_Receipt_list_credit = conn.prepareStatement(Receipt_list_credit);
+
+			ResultSet rs_list = pstmt_Receipt_list.executeQuery();
+			ResultSet rs_list_cash = pstmt_Receipt_list_cash.executeQuery();
+			ResultSet rs_list_credit = pstmt_Receipt_list_credit.executeQuery();
+
+			// 컬럼 명을 불러오기 위한 데이터 처리
+			ResultSetMetaData md = rs_list.getMetaData();
+
+			// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
+			int column_size = md.getColumnCount();
+
+			// 구한 컬럼 숫자+1의 이유는 컬럼 이외에 첫번째 col 에는 데이터의 수를 나타내기위한 No 을 추가하기 위함
+			columnNames = new String[column_size + 1];
+
+			// 컬럼명을 배열에 문자열로 저장
+			for (int i = 0; i < columnNames.length; i++) {
+				if (i == 0) {
+					columnNames[i] = "No";
+				} else {
+					columnNames[i] = md.getColumnName(i);
+				}
+			}
+
+			// 기존에 담겨있던 데이터를 비움
+			list_data_default.clear();
+
+			// 가져온 데이터를 list_data_default(ArrayList) 에 저장
+			while (rs_list.next()) {
+				ArrayList<String> data_total = new ArrayList<>();
+				data_total.clear();
+				for (int i = 0; i < columnNames.length; i++) {
+					if (i == 0) {
+						data_total.add("" + i);
+					} else {
+						data_total.add(rs_list.getString(columnNames[i]));
+					}
+				}
+				list_data_default.add(data_total);
+			}
+
+			// 기존에 담겨있던 데이터를 비움
+			list_data_cash.clear();
+
+			// 가져온 데이터를 list_data_cash(ArrayList) 에 저장
+			while (rs_list_cash.next()) {
+
+				ArrayList<String> data_cash = new ArrayList<>();
+				data_cash.clear();
+				for (int i = 0; i < columnNames.length; i++) {
+					if (i == 0) {
+						data_cash.add("" + i);
+					} else {
+						data_cash.add(rs_list_cash.getString(columnNames[i]));
+					}
+				}
+				list_data_cash.add(data_cash);
+			}
+
+			// 기존에 담겨있던 데이터를 비움
+			list_data_credit.clear();
+
+			// 가져온 데이터를 list_data_credit(ArrayList) 에 저장
+			while (rs_list_credit.next()) {
+				ArrayList<String> data = new ArrayList<>();
+				data.clear();
+				for (int i = 0; i < columnNames.length; i++) {
+					if (i == 0) {
+						data.add("" + i);
+					} else {
+						data.add(rs_list_credit.getString(columnNames[i]));
+					}
+				}
+				list_data_credit.add(data);
+			}
+
+			// 오픈 했던 각 리소스들 종료
+			rs_list.close();
+			rs_list_cash.close();
+			rs_list_credit.close();
+
+			pstmt_Receipt_list.close();
+			pstmt_Receipt_list_cash.close();
+			pstmt_Receipt_list_credit.close();
+
+			conn.close();
+
+			// ================================================================================================
+			// ================================================================================================
 //            	System.out.println("w_size : " + w_size);
 //            	System.out.println("cash_w_size : " + cash_w_size);
 //            	System.out.println("credit_w_size : " + credit_w_size);
-            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
-            	w_size = list_data_default.size();
-            	h_size = list_data_default.get(0).size();
-            	cash_w_size = list_data_cash.size();
-            	cash_h_size = list_data_cash.get(0).size();
-            	credit_w_size = list_data_credit.size();
-            	credit_h_size = list_data_credit.get(0).size();
+			// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
+			w_size = list_data_default.size();
+			h_size = list_data_default.get(0).size();
+			cash_w_size = list_data_cash.size();
+			cash_h_size = list_data_cash.get(0).size();
+			credit_w_size = list_data_credit.size();
+			credit_h_size = list_data_credit.get(0).size();
 //            	
 //            	System.out.println("w_size : " + w_size);
 //            	System.out.println("cash_w_size : " + cash_w_size);
 //            	System.out.println("credit_w_size : " + credit_w_size);
 //            	
-            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
-             	data_default = new String[w_size][h_size];
-             	data_cash = new String[cash_w_size][cash_h_size];
-             	data_credit = new String[credit_w_size][credit_h_size];
-             	
-             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < w_size; i++) {
-            		for (int x = 0; x < h_size; x++) {
-            			if (x == 0) {
-            				data_default[i][x] = "" + (i+1);
-            			}else {
-            				data_default[i][x] = list_data_default.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-             	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < cash_w_size; i++) {
-            		for (int x = 0; x < cash_h_size; x++) {
-            			if (x == 0) {
-            				data_cash[i][x] = "" + (i+1);
-            			}else {
-            				data_cash[i][x] = list_data_cash.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-             	// 카드(Credit) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < credit_w_size; i++) {
-            		for (int x = 0; x < credit_h_size; x++) {
-            			if (x == 0) {
-            				data_credit[i][x] = "" + (i+1);
-            			}else {
-        	    			data_credit[i][x] = list_data_credit.get(i).get(x);
-            			}
-            		}
-            	}
-             	
-            
+			// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
+			data_default = new String[w_size][h_size];
+			data_cash = new String[cash_w_size][cash_h_size];
+			data_credit = new String[credit_w_size][credit_h_size];
+
+			// 전체(total) 데이터를 JTable에 적용할 배열에 저장
+			for (int i = 0; i < w_size; i++) {
+				for (int x = 0; x < h_size; x++) {
+					if (x == 0) {
+						data_default[i][x] = "" + (i + 1);
+					} else {
+						data_default[i][x] = list_data_default.get(i).get(x);
+					}
+				}
+			}
+
+			// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
+			for (int i = 0; i < cash_w_size; i++) {
+				for (int x = 0; x < cash_h_size; x++) {
+					if (x == 0) {
+						data_cash[i][x] = "" + (i + 1);
+					} else {
+						data_cash[i][x] = list_data_cash.get(i).get(x);
+					}
+				}
+			}
+
+			// 카드(Credit) 데이터를 JTable에 적용할 배열에 저장
+			for (int i = 0; i < credit_w_size; i++) {
+				for (int x = 0; x < credit_h_size; x++) {
+					if (x == 0) {
+						data_credit[i][x] = "" + (i + 1);
+					} else {
+						data_credit[i][x] = list_data_credit.get(i).get(x);
+					}
+				}
+			}
+
 		} catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
-		
+			System.out.println("getConnection 하다가 문제 생김");
+		}
+
 	}
-	
+
 	private void setTB() {
-		
-		while(model.getRowCount() > 0) {
+
+		while (model.getRowCount() > 0) {
 			model.removeRow(0);
 		}
-		
-	    try (
-	    	Connection conn = DBCONN.DBConnector.getConnection();
-	    	PreparedStatement pstmt = conn.prepareStatement(Receipt_list);
-	    	ResultSet rs = pstmt.executeQuery();
-	    	){
-	    	
-			while(rs.next()) {
+
+		try (Connection conn = DBCONN.DBConnector.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(Receipt_list);
+				ResultSet rs = pstmt.executeQuery();) {
+
+			while (rs.next()) {
 				int receipt_no = rs.getInt("receipt_no");
 				String dtime = rs.getString("dtime");
 				int total = rs.getInt("total");
@@ -310,9 +301,9 @@ public class Receipt_duck_2 extends PosFrame {
 				int point_saved = rs.getInt("point_saved");
 				String state = rs.getString("state");
 				String receipt_chk = rs.getString("receipt_chk");
-				
-				Object data[] = {receipt_no, dtime, total, credit, cash, cus_no, 
-							point_used, point_saved, state, receipt_chk};
+
+				Object data[] = { receipt_no, dtime, total, credit, cash, cus_no, point_used, point_saved, state,
+						receipt_chk };
 				model.addRow(data);
 			}
 
@@ -320,111 +311,99 @@ public class Receipt_duck_2 extends PosFrame {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	// 반품 처리
 	public void refund(int receipt_no) {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
-            refund_sql += ("" + receipt_no);
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
+			refund_sql += ("" + receipt_no);
 
-            PreparedStatement refund = conn.prepareStatement(refund_sql);
-            
+			PreparedStatement refund = conn.prepareStatement(refund_sql);
+
 			int row = refund.executeUpdate();
-			
+
 			refund.close();
 			conn.close();
 
-            
 		} catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
+			System.out.println("getConnection 하다가 문제 생김");
+		}
 	}
-	
+
 	// 현금영수증 현재의 유무 확인
-		public String[] cash_receipt(int receipt_no) {
-			try {
-	            Connection conn = DriverManager.getConnection(
-	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-	            		"cafe",
-	            		"!!22Qorthdud");
-	            cash_receipt_chk += ("" + receipt_no);
-	            System.out.println(cash_receipt_chk);
-	            
-	            PreparedStatement cash_receipt_yn = conn.prepareStatement(cash_receipt_chk);
-	            ResultSet rs_cash_receipt_yn = cash_receipt_yn.executeQuery();
-	            
-	            cash_receipt_result = new String[3];
-	            
-	            while (rs_cash_receipt_yn.next()) {
+	public String[] cash_receipt(int receipt_no) {
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
+			cash_receipt_chk += ("" + receipt_no);
+			System.out.println(cash_receipt_chk);
+
+			PreparedStatement cash_receipt_yn = conn.prepareStatement(cash_receipt_chk);
+			ResultSet rs_cash_receipt_yn = cash_receipt_yn.executeQuery();
+
+			cash_receipt_result = new String[3];
+
+			while (rs_cash_receipt_yn.next()) {
 //	            	System.out.println(rs_cash_receipt_yn.getString("receipt_chk"));
-	            	cash_receipt_result[0] = rs_cash_receipt_yn.getString("cash");
-	            	cash_receipt_result[1] = rs_cash_receipt_yn.getString("credit");
-	            	cash_receipt_result[2] = rs_cash_receipt_yn.getString("receipt_chk");
-            	}
-	            
-				cash_receipt_yn.close();
-				conn.close();
-	            
-			} catch (SQLException e) {
-	            System.out.println("getConnection 하다가 문제 생김");
-	        }
-			
-			return cash_receipt_result;
+				cash_receipt_result[0] = rs_cash_receipt_yn.getString("cash");
+				cash_receipt_result[1] = rs_cash_receipt_yn.getString("credit");
+				cash_receipt_result[2] = rs_cash_receipt_yn.getString("receipt_chk");
+			}
+
+			cash_receipt_yn.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			System.out.println("getConnection 하다가 문제 생김");
 		}
-		
-		// 현금영수증 처리 실행
-		public void cash_receipt_executive(int receipt_no, String receipt_chk) {
-			try {
-	            Connection conn = DriverManager.getConnection(
-	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-	            		"cafe",
-	            		"!!22Qorthdud");
-	            
-		            
-	            if (receipt_chk.equals("N")) {
-	            	
-	            	cash_receipt += ("" + receipt_no);
-	            	PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt);
-	            	cash_receipt_executive.executeUpdate();
-	            	cash_receipt_executive.close();
-	            	
-	            } else if (receipt_chk.equals("Y")) {
-	            	
-	            	cash_receipt_cancel += ("" + receipt_no);
-	            	PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt_cancel);
-	            	cash_receipt_executive.executeUpdate();
-	            	cash_receipt_executive.close();
-	            	
-	            }
-	            
-	            
-				conn.close();
+
+		return cash_receipt_result;
+	}
+
+	// 현금영수증 처리 실행
+	public void cash_receipt_executive(int receipt_no, String receipt_chk) {
+		try {
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
+
+			if (receipt_chk.equals("N")) {
+
+				cash_receipt += ("" + receipt_no);
+				PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt);
+				cash_receipt_executive.executeUpdate();
+				cash_receipt_executive.close();
+
+			} else if (receipt_chk.equals("Y")) {
+
+				cash_receipt_cancel += ("" + receipt_no);
+				PreparedStatement cash_receipt_executive = conn.prepareStatement(cash_receipt_cancel);
+				cash_receipt_executive.executeUpdate();
+				cash_receipt_executive.close();
+
+			}
+
+			conn.close();
 //				total();
-	            
-			} catch (SQLException e) {
-	            System.out.println("getConnection 하다가 문제 생김");
-	        }
-			
-			
+
+		} catch (SQLException e) {
+			System.out.println("getConnection 하다가 문제 생김");
 		}
-	
-	
-	
-	
+
+	}
+
 	public Receipt_duck_2() {
 		super();
 		super.setTitle("영수증 관리");
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
 
-            String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = 24" + "";
+			String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = 24" + "";
 //            
 //            
 //            PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -437,144 +416,133 @@ public class Receipt_duck_2 extends PosFrame {
 //                System.out.println();
 //            }
 
-            // 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
+			// 6. 다 사용한 연결을 나중에 연 순서대로 닫아준다
 //            rs.close();
 //            pstmt.close();
-            conn.close();
+			conn.close();
 
-        } catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
-		
-		
-		
+		} catch (SQLException e) {
+			System.out.println("getConnection 하다가 문제 생김");
+		}
+
 		setLayout(null);
-		
-		
+
 		connection(); // 영수증 정보 커넥션
-		
+
 		receipt_print(); // 영수증 출력 함수
-		
+
 		main = getContentPane(); // 메인 컨테이너 선언
-		
+
 		// 시간을 문자열로 변경하기
-		DateTimeFormatter my_date_format = 
-				DateTimeFormatter.ofPattern("y년 M월 d일");
-		
+		DateTimeFormatter my_date_format = DateTimeFormatter.ofPattern("y년 M월 d일");
+
 		String message = my_date_format.format(LocalDate.now());
 
 		JButton date = new JButton(message);
 
 		JPanel frame = new JPanel();
-		
+
 		// 달력 출력
-				JPanel p1 = new JPanel();
-				
-				JPanel p3 = new JPanel(new FlowLayout());
-				
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				UtilDateModel model1 = new UtilDateModel();
-				JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
-				JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-				UtilDateModel model2 = new UtilDateModel();
-				JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
-				JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
-				
-				p3.add(datePicker);
-				p3.add(new JLabel("~"));
-				p3.add(datePicker2);
-				p3.add(selBtn);
-				
-				selBtn.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-						date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-						Receipt_list = "SELECT * FROM payment_view_1"
-								+ " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e + " + 1"
-								+ " ORDER BY DATETIME";
-						
-						connection();
+		JPanel p1 = new JPanel();
+
+		JPanel p3 = new JPanel(new FlowLayout());
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		UtilDateModel model1 = new UtilDateModel();
+		JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		UtilDateModel model2 = new UtilDateModel();
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
+		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+
+		p3.add(datePicker);
+		p3.add(new JLabel("~"));
+		p3.add(datePicker2);
+		p3.add(selBtn);
+
+		selBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+				Receipt_list = "SELECT * FROM payment_view_1" + " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e
+						+ " + 1" + " ORDER BY DATETIME";
+
+				connection();
 //						dbList(); 수정해야 할 부분
-						
-					}
-				});
-				
-				p1.add(p3);
-				
-				// 영수증 아래 박스
-				String[] columnNames = {"결제구분", "금액"};
-				String[][] data = {
-					{info, formatter.format(pay)},
-				};
-				
-				JTable table = new JTable(data, columnNames);
-				JScrollPane scrollPane1 = new JScrollPane(table);
-				
-				table.getTableHeader().setPreferredSize(new Dimension(
-						scrollPane1.getWidth(), 30
-				));
-				scrollPane1.setBounds(730, 670, 540, 70);
-				table.getTableHeader().setFont(new Font("Small Fonts", Font.BOLD, 22));
-				table.getTableHeader().setBackground(new Color(0xffffff));
-				table.setCellSelectionEnabled(true);
-				
-				table.setRowHeight(37);
-				table.setAlignmentX(JTable.TOP_ALIGNMENT);
-				table.setShowGrid(true);
-				table.setFont(new Font("Small Fonts", Font.PLAIN, 20));
-				
-				
-				main.add(scrollPane1);
-				
-				
-				if (state.equals("complete")) { // 영수증 종류 확인
-					receipt = new JLabel(receipt_string); 
-				} else {
-					receipt = new JLabel(return_string); 
-				}	
+
+			}
+		});
+
+		p1.add(p3);
+
+		// 영수증 아래 박스
+		String[] columnNames = { "결제구분", "금액" };
+		String[][] data = { { info, formatter.format(pay) }, };
+
+		JTable table_yoo = new JTable(data, columnNames);
+		JScrollPane scrollPane_yoo = new JScrollPane(table_yoo);
+
+		table_yoo.getTableHeader().setPreferredSize(new Dimension(scrollPane_yoo.getWidth(), 30));
+		scrollPane_yoo.setBounds(730, 670, 540, 70);
+		table_yoo.getTableHeader().setFont(new Font("Small Fonts", Font.BOLD, 22));
+		table_yoo.getTableHeader().setBackground(new Color(0xffffff));
+		table_yoo.setCellSelectionEnabled(true);
+
+		table_yoo.setRowHeight(37);
+		table_yoo.setAlignmentX(JTable.TOP_ALIGNMENT);
+		table_yoo.setShowGrid(true);
+		table_yoo.setFont(new Font("Small Fonts", Font.PLAIN, 20));
+
+		main.add(scrollPane_yoo);
+
+		if (state.equals("complete")) { // 영수증 종류 확인
+			receipt = new JLabel(receipt_string);
+		} else {
+			receipt = new JLabel(return_string);
+		}
 
 		ArrayList<JButton> buttons = new ArrayList<>();
-		
+
 		JLabel payment = new JLabel(info);
-		
-		buttons.add(new JButton("전표반품")); // 0 
+
+		buttons.add(new JButton("전표반품")); // 0
 		buttons.add(new JButton("재인쇄"));
 		buttons.add(new JButton("현금영수증"));
-		
-		
+
 		buttons.add(new JButton("결제변경"));
 		buttons.add(new JButton("전체"));
 		buttons.add(new JButton("현금"));
 		buttons.add(new JButton("신용카드")); // 6
-		
+
 		// 버튼 위치 조정
 		buttons.get(0).setBounds(20, 30, 150, 80);
 		buttons.get(1).setBounds(190, 30, 150, 80);
 		buttons.get(2).setBounds(360, 30, 150, 80);
 		buttons.get(3).setBounds(530, 30, 150, 80);
-		
+
 		buttons.get(4).setBounds(870, 30, 120, 80);
 		buttons.get(5).setBounds(1010, 30, 120, 80);
 		buttons.get(6).setBounds(1150, 30, 120, 80);
-		
+
 		p1.setBounds(20, 130, 660, 50); // 조회 패널
-		
+
 		for (int i = 0; i < buttons.size(); ++i) {
 			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
 		}
-		
+
 		date.setBounds(730, 30, 120, 80);
 		date.setBackground(new Color(0xffffff));
-		
+
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
-		receipt.setVerticalAlignment(JLabel.NORTH);; // 세로 가운데 표시 설정
+		receipt.setVerticalAlignment(JLabel.NORTH);
+		; // 세로 가운데 표시 설정
 		receipt.setBackground(new Color(0xffffff));// 라벨 배경색
 		receipt.setBounds(730, 140, 450, 500);
 //		frame.setBackground(new Color(0xffffff)); // 패널 배경색
@@ -583,322 +551,319 @@ public class Receipt_duck_2 extends PosFrame {
 		JScrollPane scrollPane = new JScrollPane( // 영수증에 수직 스크롤바 추가
 				receipt, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(new Dimension(540, 500)); // 스크롤바 크기조정
-		
+
 		payment.setFont(new Font("MV Bold", Font.BOLD, 20));
 		payment.setOpaque(true);
 		payment.setHorizontalAlignment(JLabel.CENTER);
 //		payment.setVerticalAlignment(JLabel.NORTH);
 		payment.setBackground(new Color(0xffffff));
-		
+
 		frame.add(scrollPane);
-		
+
 		// 좌측 위 버튼 추가
 		main.add(buttons.get(0));
 		main.add(buttons.get(1));
 		main.add(buttons.get(2));
 		main.add(buttons.get(3));
-		
+
 		main.add(date); // 날짜 출력
 		main.add(p1); // 날짜 조회 출력
-		
+
 		// 우측 위 버튼
 		main.add(buttons.get(4));
 		main.add(buttons.get(5));
 		main.add(buttons.get(6));
-		
+
 		main.add(frame);
-        
 
-     // ================================================================================================
-     // ================================================================================================
-        
-        total();
+		// ================================================================================================
+		// ================================================================================================
 
-        JPanel receipt_panel = new JPanel();        
-        
-     	receipt_panel.setBackground(Color.black);
-     	receipt_panel.setLocation(20, 140);
-     	receipt_panel.setSize(660, 500);
-     	
-     	
-     	DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
+		total();
+
+		JPanel receipt_panel = new JPanel();
+
+		receipt_panel.setBackground(Color.black);
+		receipt_panel.setLocation(20, 140);
+		receipt_panel.setSize(660, 500);
+
+		DefaultTableModel model = new DefaultTableModel(data_default, columnNames);
 
 		JTable table = new JTable(model);
-     	
-     	JScrollPane scrollPane1 = new JScrollPane(table);
-     	scrollPane1.setBorder(BorderFactory.createEmptyBorder());
-     	
-     	table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
-     	
-     	scrollPane1.setPreferredSize(new Dimension(658, 495));
 
-     	table.setRowSelectionAllowed(true);
-     	table.setColumnSelectionAllowed(false);
+		JScrollPane scrollPane1 = new JScrollPane(table);
+		scrollPane1.setBorder(BorderFactory.createEmptyBorder());
 
-     	receipt_panel.add(scrollPane1);
-     	add(receipt_panel);
-     	
+		table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
+
+		scrollPane1.setPreferredSize(new Dimension(658, 495));
+
+		table.setRowSelectionAllowed(true);
+		table.setColumnSelectionAllowed(false);
+
+		receipt_panel.add(scrollPane1);
+		add(receipt_panel);
+
 		// ================================================================================================
-     	// 테이블 내에 어떤 행을 선택했을때 그 데이터의 영수증 번호를 가져오기 위한 액션 
+		// 테이블 내에 어떤 행을 선택했을때 그 데이터의 영수증 번호를 가져오기 위한 액션
 		// ================================================================================================
-     	
-     	ListSelectionModel selection = table.getSelectionModel();
-     	
-     	selection.addListSelectionListener(new ListSelectionListener() {
-			
+
+		ListSelectionModel selection = table.getSelectionModel();
+
+		selection.addListSelectionListener(new ListSelectionListener() {
+
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				
+
 				if (e.getValueIsAdjusting()) {
-					
+
 					try {
 //						System.out.println("w_size : " + w_size + "\tcash_w_size : " + cash_w_size + "\tcredit_w_size : " + credit_w_size);
 //						System.out.println("model.getColumnCount() : " + model.getValueAt(table.getSelectedRow(), 2));
-						
+
 						no = table.getSelectedRow();
 						select_receipt_no_string = "" + table.getValueAt(table.getSelectedRow(), 2);
 						state_chk = "" + table.getValueAt(table.getSelectedRow(), 1);
 //						System.out.println("ddf : " + state_chk);
-						
+
 						select_receipt_no = Integer.parseInt(select_receipt_no_string);
-						
+
 						RECEIPT_NO = String.valueOf(table.getValueAt(table.getSelectedRow(), 2));
-						
+
 						connection();
-						
+
 						receipt_print();
-						
+
 						if (state.equals("complete")) {
-							receipt.setText(receipt_string); 
+							receipt.setText(receipt_string);
 						} else {
-							receipt.setText(return_string); 
+							receipt.setText(return_string);
 						}
-						
+
 						main.add(frame);
 					} catch (Exception a) {
 						a.printStackTrace();
 					}
-					
+
 				}
 			}
 		});
-     	
-     	// ================================================================================================
-        // '전표반품' 버튼을 눌렀을때의 액션
+
 		// ================================================================================================
-     	
-     	buttons.get(0).addActionListener(new ActionListener() {
-     		
-     		@Override
-     		public void actionPerformed(ActionEvent e) {
-     			
-     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
-     			
-     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
-     			// X 표를 눌러 닫은 경우 = -1
-     			// 예 = 0
-     			// 아니오 = 1
-     			int yes_or_no = JOptionPane.showConfirmDialog(null, a + "원 결제하셨습니다. 반품 하시겠습니까?", "반품", JOptionPane.YES_NO_OPTION);
-     			
-     			if (state_chk.equals("complete")) {
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-     				// 예 아니오 선택없이 창 닫은경우
-     					System.out.println(yes_or_no);
-     					System.out.println("그냥 닫았네?");
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-     				// 사용자가 예를 선택한경우
+		// '전표반품' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+
+		buttons.get(0).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+
+				// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+				// X 표를 눌러 닫은 경우 = -1
+				// 예 = 0
+				// 아니오 = 1
+				int yes_or_no = JOptionPane.showConfirmDialog(null, a + "원 결제하셨습니다. 반품 하시겠습니까?", "반품",
+						JOptionPane.YES_NO_OPTION);
+
+				if (state_chk.equals("complete")) {
+					if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+						// 예 아니오 선택없이 창 닫은경우
+						System.out.println(yes_or_no);
+						System.out.println("그냥 닫았네?");
+					} else if (yes_or_no == JOptionPane.YES_OPTION) {
+						// 사용자가 예를 선택한경우
 //     					refund(select_receipt_no);
-     					System.out.println(yes_or_no);
-     					System.out.println("반품이라니..");
-     				} else {
-     				// 사용자가 아니오를 선택한경우
-     					System.out.println(yes_or_no);
-     					System.out.println("돈 안줘도 된다~!~!");
-     				}	
-     			}
-     			
-     		}
-     	});
-     	
-     	// ================================================================================================
-        // '현금영수증' 버튼을 눌렀을때의 액션
+						System.out.println(yes_or_no);
+						System.out.println("반품이라니..");
+					} else {
+						// 사용자가 아니오를 선택한경우
+						System.out.println(yes_or_no);
+						System.out.println("돈 안줘도 된다~!~!");
+					}
+				}
+
+			}
+		});
+
 		// ================================================================================================
-     	
-     	buttons.get(2).addActionListener(new ActionListener() {
-     		
-     		@Override
-     		public void actionPerformed(ActionEvent e) {
-     			
-     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
-     			
-     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
-     			// X 표를 눌러 닫은 경우 = -1
-     			// 예 = 0
-     			// 아니오 = 1
-     			
-     			String[] check;
-     			
-     			// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기 
-     			check = cash_receipt(select_receipt_no);
-     			
+		// '현금영수증' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+
+		buttons.get(2).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+
+				// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+				// X 표를 눌러 닫은 경우 = -1
+				// 예 = 0
+				// 아니오 = 1
+
+				String[] check;
+
+				// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기
+				check = cash_receipt(select_receipt_no);
+
 //     			for (int i = 0; i < check.length; i++) {
 //     				System.out.print(check[i]);
 //     			}
-     			// check[0] = 현금결제금액		
-     			// check[1] = 카드결제금액		
-     			// check[2] = 현금영수증처리 유무
-     			
-     			int yes_or_no;
-     			
-     			if (check[2].equals("Y")) {
-     				
-     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
-     				
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {	// 예 아니오 선택없이 창 닫은경우
-     				
-     					System.out.println(yes_or_no);
-     					System.out.println("그냥 닫았네?");
-     					
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 예를 선택한경우
-     				
-     					cash_receipt_executive(select_receipt_no, "Y");
-     					System.out.println(yes_or_no); 
+				// check[0] = 현금결제금액
+				// check[1] = 카드결제금액
+				// check[2] = 현금영수증처리 유무
+
+				int yes_or_no;
+
+				if (check[2].equals("Y")) {
+
+					yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소",
+							JOptionPane.YES_NO_OPTION);
+
+					if (yes_or_no == JOptionPane.CLOSED_OPTION) { // 예 아니오 선택없이 창 닫은경우
+
+						System.out.println(yes_or_no);
+						System.out.println("그냥 닫았네?");
+
+					} else if (yes_or_no == JOptionPane.YES_OPTION) { // 사용자가 예를 선택한경우
+
+						cash_receipt_executive(select_receipt_no, "Y");
+						System.out.println(yes_or_no);
 //     					System.out.println("현금영수증취소");
-     					JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
-     					
-     				} else {	// 사용자가 아니오를 선택한경우
-     				
-     					System.out.println(yes_or_no);
-     					System.out.println("현금영수증 취소 안함");
-     				}
-     				
-     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
-     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
-     				JOptionPane.showMessageDialog(null, "카드 결제로 " + check[1] + "원 결제 하셨습니다.");
-     				
-     			} else if (check[2].equals("N") && !check[1].equals("0")) {
-     				
-     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
-     				
-     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
-     				
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-     				// 예 아니오 선택없이 창 닫은경우
-     					System.out.println(yes_or_no);
-     					System.out.println("그냥 닫았네?");
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-     				// 사용자가 예를 선택한경우
-     					cash_receipt_executive(select_receipt_no, "N");
-     					System.out.println(yes_or_no);
-     					System.out.println("현금영수증처리");
-     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
-     				} else {
-     				// 사용자가 아니오를 선택한경우
-     					System.out.println(yes_or_no);
-     					System.out.println("현금영수증 처리 안함");
-     				}	
-         			
-     				
-     			}
-     			
-     			
-     		}
-     	});
-     	
-     	// ================================================================================================
-        // '결제변경' 버튼을 눌렀을때의 액션
-		// ================================================================================================     	
-           
-           buttons.get(3).addActionListener(new ActionListener() {
-        	    
-        	   @Override
-        		public void actionPerformed(ActionEvent e) {
-        			
-        			payment_change a = new payment_change(select_receipt_no);
+						JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
 
-        		}
-        		
-        	});
-     	
-		// ================================================================================================
-        // '전체' 버튼을 눌렀을때의 액션
-		// ================================================================================================     	
-           
-           buttons.get(4).addActionListener(new ActionListener() {
-        	   
-        		@Override
-        		public void actionPerformed(ActionEvent e) {
-        			
-//        			String where_date = "20210807";
-        			
-        			total_data data = new total_data();
-        			
-        			DefaultTableModel model = new DefaultTableModel(data.table_total_data(where_date), columnNames);
-        			
-        			table.setModel(model);
+					} else { // 사용자가 아니오를 선택한경우
 
-        			model.fireTableDataChanged();
-        		}
-        		
-        	});
+						System.out.println(yes_or_no);
+						System.out.println("현금영수증 취소 안함");
+					}
+
+				} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
+					// 현금 결제금액 없이 카드 결제금액만 있는 경우
+					JOptionPane.showMessageDialog(null, "카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+
+				} else if (check[2].equals("N") && !check[1].equals("0")) {
+
+					// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
+
+					yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?",
+							"현금영수증 처리", JOptionPane.YES_NO_OPTION);
+
+					if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+						// 예 아니오 선택없이 창 닫은경우
+						System.out.println(yes_or_no);
+						System.out.println("그냥 닫았네?");
+					} else if (yes_or_no == JOptionPane.YES_OPTION) {
+						// 사용자가 예를 선택한경우
+						cash_receipt_executive(select_receipt_no, "N");
+						System.out.println(yes_or_no);
+						System.out.println("현금영수증처리");
+						JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+					} else {
+						// 사용자가 아니오를 선택한경우
+						System.out.println(yes_or_no);
+						System.out.println("현금영수증 처리 안함");
+					}
+
+				}
+
+			}
+		});
+
 		// ================================================================================================
-        // '현금' 버튼을 눌렀을때의 액션
+		// '결제변경' 버튼을 눌렀을때의 액션
 		// ================================================================================================
-           
-           buttons.get(5).addActionListener(new ActionListener() {
-        	   
-        		@Override
-        		public void actionPerformed(ActionEvent e) {
-        			
+
+		buttons.get(3).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				payment_change a = new payment_change(select_receipt_no);
+
+			}
+
+		});
+
+		// ================================================================================================
+		// '전체' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+
+		buttons.get(4).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
 //        			String where_date = "20210807";
-        			
-        			while(model.getRowCount() > 0) {
-        				model.removeRow(0);
-        			}
-        			
+
+				total_data data = new total_data();
+
+				DefaultTableModel model = new DefaultTableModel(data.table_total_data(where_date), columnNames);
+
+				table.setModel(model);
+
+				model.fireTableDataChanged();
+			}
+
+		});
+		// ================================================================================================
+		// '현금' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+
+		buttons.get(5).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+//        			String where_date = "20210807";
+
+				while (model.getRowCount() > 0) {
+					model.removeRow(0);
+				}
+
 //        			cash_data data = new cash_data();
 //        			data_cash = data.table_cash_data(where_date);
-        			
+
 //        			DefaultTableModel model = new DefaultTableModel(data.table_cash_data(where_date), columnNames);
-        			for (int i = 0; i < data_cash.length; i++) {
-        				model.addRow(data_cash[i]);
-        			}
-        			
-        			
+				for (int i = 0; i < data_cash.length; i++) {
+					model.addRow(data_cash[i]);
+				}
+
 //        			table.setModel(model);
 //
 //        			model.fireTableDataChanged();
-        		}
-        		
-        	});
-       // ================================================================================================
-       // '신용카드' 버튼을 눌렀을때의 액션
-       // ================================================================================================
-              
-              buttons.get(6).addActionListener(new ActionListener() {
-           	   
-           		@Override
-           		public void actionPerformed(ActionEvent e) {
-           			
+			}
+
+		});
+		// ================================================================================================
+		// '신용카드' 버튼을 눌렀을때의 액션
+		// ================================================================================================
+
+		buttons.get(6).addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
 //           			String where_date = "20210807";
-           			
-           			credit_data data = new credit_data();
-           			
-           	        
-           			DefaultTableModel model = new DefaultTableModel(data.table_credit_data(where_date), columnNames);
-           			table.setModel(model);
+
+				credit_data data = new credit_data();
+
+				DefaultTableModel model = new DefaultTableModel(data.table_credit_data(where_date), columnNames);
+				table.setModel(model);
 //           		JTable table = new JTable(model);
-           			
-           			model.fireTableDataChanged();
-           		}
-           		
-           	});  
 
-           
-     // ================================================================================================
-     // ================================================================================================
+				model.fireTableDataChanged();
+			}
 
-	} 
+		});
+
+		// ================================================================================================
+		// ================================================================================================
+
+	}
+
 	private static void receipt_print() {
 		String product = "";
 		// 받아온 HashMap 음료 수량 가격 영수증에 출력
@@ -908,281 +873,168 @@ public class Receipt_duck_2 extends PosFrame {
 			for (int number : entry.getValue()) {
 				price += number;
 			}
-			print += "<tr>"
-					+ "<td>" 
-					+ entry.getKey() 
-					+ "</td>"
-					+ "<td style='text-align:left;'>" 
-					+ formatter.format(entry.getValue().get(0)) 
-					+ "</td>"
-					+ "<td style='text-align:center;'>"
-					+ entry.getValue().size()
-					+ "</td>"
-					+ "<td style='text-align:right;'>"
-					+ formatter.format(price)
-					+ "</td>"
-					+ "</tr>";
+			print += "<tr>" + "<td>" + entry.getKey() + "</td>" + "<td style='text-align:left;'>"
+					+ formatter.format(entry.getValue().get(0)) + "</td>" + "<td style='text-align:center;'>"
+					+ entry.getValue().size() + "</td>" + "<td style='text-align:right;'>" + formatter.format(price)
+					+ "</td>" + "</tr>";
 			product += print;
 		}
 //		----------------------사용한 결제금액 bill, pay에 출력
 		String bill = "";
-		
+
 		if (cash != 0) {
-			bill += "<table style='width:100%;'>"
-					+ "<tr>"
-					+ "<td>현&emsp금</td>"
-					+ "<td style='text-align:right;'>"
-					+ formatter.format(cash)
-					+ "원</td>"
-					+ "</tr>"
-					+ "</table>";
+			bill += "<table style='width:100%;'>" + "<tr>" + "<td>현&emsp금</td>" + "<td style='text-align:right;'>"
+					+ formatter.format(cash) + "원</td>" + "</tr>" + "</table>";
 			if (info.equals("")) {
 				info += "현금";
 			} else {
 				info += ",현금";
 			}
-			
-			
+
 			pay += cash;
-			
+
 		}
 		if (credit != 0) {
-			bill += "<table style='width:100%;'>"
-					+ "<tr>"
-					+ "<td>카&emsp드</td>"
-					+ "<td style='text-align:right;'>"
-					+ formatter.format(credit)
-					+ "원</td>"
-					+ "</tr>"
-					+ "</table>";
+			bill += "<table style='width:100%;'>" + "<tr>" + "<td>카&emsp드</td>" + "<td style='text-align:right;'>"
+					+ formatter.format(credit) + "원</td>" + "</tr>" + "</table>";
 			if (info.equals("")) {
 				info += "카드";
 			} else {
 				info += ",카드";
 			}
-			
+
 			pay += credit;
-			
+
 		}
 		if (point_used != 0) {
-			bill += "<table style='width:100%;'>"
-					+ "<tr>"
-					+ "<td>사용 포인트</td>"
-					+ "<td style='text-align:right;'>"
-					+ formatter.format(point_used)
-					+ "점</td>"
-					+ "</tr>"
-					+ "</table>"
-					+ "<table style='width:100%;'>"
-					+ "<tr>"
-					+ "<td>남은 포인트</td>"
-					+ "<td style='text-align:right;'>"
-					+ formatter.format(point)
-					+ "점</td>"
-					+ "</tr>"
-					+ "</table>";
+			bill += "<table style='width:100%;'>" + "<tr>" + "<td>사용 포인트</td>" + "<td style='text-align:right;'>"
+					+ formatter.format(point_used) + "점</td>" + "</tr>" + "</table>" + "<table style='width:100%;'>"
+					+ "<tr>" + "<td>남은 포인트</td>" + "<td style='text-align:right;'>" + formatter.format(point) + "점</td>"
+					+ "</tr>" + "</table>";
 			if (info.equals("")) {
 				info += "포인트";
 			} else {
 				info += ",포인트";
 			}
-			
+
 			pay += point_used;
-			
+
 		}
 		if (receipt_chk.equals("Y")) { // 현금 영수증 체크
-			bill += "<br>[현금영수증 발급]"
-					+ "<br>발급 용도: 소비자 소득공제";
+			bill += "<br>[현금영수증 발급]" + "<br>발급 용도: 소비자 소득공제";
 		} else if (receipt_chk.equals("N")) {
 			bill += "<br>[현금영수증 미발급]";
 		}
 		// 영수증 시간 LocalDateTime로 변환 후 String으로 변환
-		
-		LocalDateTime localDateTime = new java.sql.Timestamp(transaction_date.getTime())
-				.toLocalDateTime();
-		
-		
-		
-		DateTimeFormatter my_date_format2 = 
-				DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
-		
-		
-		DateTimeFormatter my_date_format3 = 
-				DateTimeFormatter.ofPattern("M월 d일");
-		
-		
+
+		LocalDateTime localDateTime = new java.sql.Timestamp(transaction_date.getTime()).toLocalDateTime();
+
+		DateTimeFormatter my_date_format2 = DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
+
+		DateTimeFormatter my_date_format3 = DateTimeFormatter.ofPattern("M월 d일");
+
 		LocalDateTime returnDay = localDateTime.plusDays(30);
-		String transaction_date_string = my_date_format2.format(localDateTime);	// 판매일자
+		String transaction_date_string = my_date_format2.format(localDateTime); // 판매일자
 		String returnDayString = my_date_format3.format(returnDay); // 반품가능일자
-		
-		return_string = "<html><center><br>"
-				+ "환&emsp불&emsp전&emsp표"
-				+ "<br>"
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>거래일시: </td>"
-				+ "<td style='text-align:right;'>"+ transaction_date_string + "</td>"
+
+		return_string = "<html><center><br>" + "환&emsp불&emsp전&emsp표" + "<br>" + "<table style='width:100%;'>" + "<tr>"
+				+ "<td>거래일시: </td>" + "<td style='text-align:right;'>" + transaction_date_string + "</td>" + "</tr>"
+				+ "</table>" + "-------------------------------------------------------------------"
+				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을" + "<br>지참하셔야 하며, 카드결제는 30일" + "(환불완료)" + "<br>이내 카드와 영수증 지참 시 가능합니다."
+				+ "<br>-------------------------------------------------------------------" + "</center>"
+
+				+ "<table style='width:100%;'>" + "<tr>" + "<td>품명</td>" + "<td style='text-align:right;'>단가</td>"
+				+ "<td style='text-align:right;'>수량</td>" + "<td style='text-align:right;'>금액</td>" + "</tr>"
+				+ "</table>" + "-------------------------------------------------------------------"
+				+ "<table style='width:100%;'>" + product + "</table>"
+				+ "-------------------------------------------------------------------" + "<table style='width:100%;'>"
+				+ "<tr>" + "<td>과세매출</td>" + "<td style='text-align:right;'>" + formatter.format(vat * 10 - vat)
+				+ "원</td>" + "</tr>"
+
+				+ "<tr>" + "<td>부가세</td>" + "<td style='text-align:right;'>" + formatter.format(vat) + "원</td>"
 				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
-				+ "<br>지참하셔야 하며, 카드결제는 30일"
-				+ "(환불완료)"
-				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
-				+ "<br>-------------------------------------------------------------------"
-				+ "</center>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>품명</td>"
-				+ "<td style='text-align:right;'>단가</td>"
-				+ "<td style='text-align:right;'>수량</td>"
-				+ "<td style='text-align:right;'>금액</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>"
-				+ product
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>과세매출</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(vat * 10 - vat)
-				+ "원</td>"
-				+ "</tr>"
-				
-				+ "<tr>"
-				+ "<td>부가세</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(vat)
-				+ "원</td>"
-				+ "</tr>"
-				
-				+ "<tr>"
-				+ "<td>환불금액</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(total)
-				+ "원</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ bill
+
+				+ "<tr>" + "<td>환불금액</td>" + "<td style='text-align:right;'>" + formatter.format(total) + "원</td>"
+				+ "</tr>" + "</table>" + "-------------------------------------------------------------------" + bill
 				+ "<br>-------------------------------------------------------------------"
 				+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
 				+ "<br>-------------------------------------------------------------------"
-				+ "<center>감사합니다.<br><br> </center>"
-				+ "</html>";
-		receipt_string = // 영수증 전체 내용 
-				"<html><center><br>"
-				+ "매&emsp출&emsp전&emsp표"
-				+ "<br>"
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>거래일시: </td>"
-				+ "<td style='text-align:right;'>"+ transaction_date_string + "</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을"
-				+ "<br>지참하셔야 하며, 카드결제는 30일"
-				+ "(" + returnDayString + ")" // 데이터베이스에서 거래날짜 + 30 
-				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
-				+ "<br>-------------------------------------------------------------------"
-				+ "</center>"
-				
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>품명</td>"
-				+ "<td style='text-align:right;'>단가</td>"
-				+ "<td style='text-align:right;'>수량</td>"
-				+ "<td style='text-align:right;'>금액</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>"
-				+ product
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>"
-				+ "<tr>"
-				+ "<td>과세매출</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(vat * 10 - vat)
-				+ "원</td>"
-				+ "</tr>"
-				
-				+ "<tr>"
-				+ "<td>부가세</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(vat)
-				+ "원</td>"
-				+ "</tr>"
-				
-				+ "<tr>"
-				+ "<td>합&emsp계</td>"
-				+ "<td style='text-align:right;'>"
-				+ formatter.format(total)
-				+ "원</td>"
-				+ "</tr>"
-				+ "</table>"
-				+ "-------------------------------------------------------------------"
-				+ bill
-				+ "<br>-------------------------------------------------------------------"
-				+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
-				+ "<br>-------------------------------------------------------------------"
-				+ "<center>감사합니다.<br><br> </center>"
-				+ "</html>";
-	
-		
+				+ "<center>감사합니다.<br><br> </center>" + "</html>";
+		receipt_string = // 영수증 전체 내용
+				"<html><center><br>" + "매&emsp출&emsp전&emsp표" + "<br>" + "<table style='width:100%;'>" + "<tr>"
+						+ "<td>거래일시: </td>" + "<td style='text-align:right;'>" + transaction_date_string + "</td>"
+						+ "</tr>" + "</table>" + "-------------------------------------------------------------------"
+						+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을" + "<br>지참하셔야 하며, 카드결제는 30일" + "(" + returnDayString + ")" // 데이터베이스에서
+																													// 거래날짜
+																													// +
+																													// 30
+						+ "<br>이내 카드와 영수증 지참 시 가능합니다."
+						+ "<br>-------------------------------------------------------------------" + "</center>"
+
+						+ "<table style='width:100%;'>" + "<tr>" + "<td>품명</td>"
+						+ "<td style='text-align:right;'>단가</td>" + "<td style='text-align:right;'>수량</td>"
+						+ "<td style='text-align:right;'>금액</td>" + "</tr>" + "</table>"
+						+ "-------------------------------------------------------------------"
+						+ "<table style='width:100%;'>" + product + "</table>"
+						+ "-------------------------------------------------------------------"
+						+ "<table style='width:100%;'>" + "<tr>" + "<td>과세매출</td>" + "<td style='text-align:right;'>"
+						+ formatter.format(vat * 10 - vat) + "원</td>" + "</tr>"
+
+						+ "<tr>" + "<td>부가세</td>" + "<td style='text-align:right;'>" + formatter.format(vat) + "원</td>"
+						+ "</tr>"
+
+						+ "<tr>" + "<td>합&emsp계</td>" + "<td style='text-align:right;'>" + formatter.format(total)
+						+ "원</td>" + "</tr>" + "</table>"
+						+ "-------------------------------------------------------------------" + bill
+						+ "<br>-------------------------------------------------------------------"
+						+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
+						+ "<br>-------------------------------------------------------------------"
+						+ "<center>감사합니다.<br><br> </center>" + "</html>";
+
 		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
-		// <html> +  + <br> +  + </html> 줄 바꾸는 법
+		// <html> + + <br> + + </html> 줄 바꾸는 법
 	}
-	
+
 	private static void connection() {
 
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
 
-            String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = " + RECEIPT_NO;
-            
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+			String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = " + RECEIPT_NO;
 
-            ResultSet rs = pstmt.executeQuery();
-            drink = new HashMap<>();
-            while (rs.next()) {
-            	// HashMap에 음료수 내역 넣기
-            	drink.putIfAbsent(rs.getString("MENU"), new ArrayList<>());
-            	
-            	drink.get(rs.getString("MENU")).add(rs.getInt("PRICE"));
-            	state = rs.getString("STATE");
-            	total = rs.getInt("TOTAL");
-            	vat = rs.getInt("TOTAL") / 10;
-            	cash = rs.getInt("CASH");
-            	point_used = rs.getInt("POINT_USED");
-            	point = rs.getInt("POINT");
-            	credit = rs.getInt("CREDIT");
-            	receipt_chk = rs.getString("RECEIPT_CHK");
-            	transaction_date = rs.getDate("DATETIME");
-            }
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 
-            rs.close();
-            pstmt.close();
-            conn.close();
+			ResultSet rs = pstmt.executeQuery();
+			drink = new HashMap<>();
+			while (rs.next()) {
+				// HashMap에 음료수 내역 넣기
+				drink.putIfAbsent(rs.getString("MENU"), new ArrayList<>());
 
-        } catch (SQLException e) {
-            System.out.println("getConnection 하다가 문제 생김");
-        }
+				drink.get(rs.getString("MENU")).add(rs.getInt("PRICE"));
+				state = rs.getString("STATE");
+				total = rs.getInt("TOTAL");
+				vat = rs.getInt("TOTAL") / 10;
+				cash = rs.getInt("CASH");
+				point_used = rs.getInt("POINT_USED");
+				point = rs.getInt("POINT");
+				credit = rs.getInt("CREDIT");
+				receipt_chk = rs.getString("RECEIPT_CHK");
+				transaction_date = rs.getDate("DATETIME");
+			}
+
+			rs.close();
+			pstmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			System.out.println("getConnection 하다가 문제 생김");
+		}
 	}
-	
-	
-	
+
 	public static void main(String[] args) {
-		 Receipt_duck_2 frame = new Receipt_duck_2();	
-		 frame.setDefaultOptions();
+		Receipt_duck_2 frame = new Receipt_duck_2();
+		frame.setDefaultOptions();
 	}
 }

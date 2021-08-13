@@ -65,10 +65,10 @@ public class RightPanelBasic extends JPanel {
 		
 		// 메뉴 윗버튼(종류 고르는 버튼들)
 		// smal은 MenuButtonActionListener리스너자료형인데 매개변수로 MenuButtonActionListener내용을 받아서 전달해준다. 
-		sortCoffee = new ButtonSetting ("coffee",20, 0xb0e8f7, smal);
+		sortCoffee = new ButtonSetting ("Coffee",20, 0xb0e8f7, smal);
 		rightLUp.add(sortCoffee);
 		
-		sortDrink = new ButtonSetting ("drink",20, 0xb0e8f7, smal);
+		sortDrink = new ButtonSetting ("Drink",20, 0xb0e8f7, smal);
 		rightLUp.add(sortDrink);
 		
 		sortBlended = new ButtonSetting ("blended",20, 0xb0e8f7, smal);

@@ -40,7 +40,7 @@ public class MenuPanel extends JPanel {
 	CardLayout card;
 	int count;
 	
-	static String sql1 = "select menu_no, mname, price,type, display_order, stock_chk from menu";
+	static String sql1 = "SELECT * FROM menu WHERE type= ? ORDER BY display_order";
 	
 	
 	public MenuPanel(String sort, RightPanelBasic rpb, ActionListener al) {
@@ -65,22 +65,36 @@ public class MenuPanel extends JPanel {
 		rightR.removeAll();
 		rightCenter.removeAll();
 		
-
-		try {
-			Connection conn = DBConnector.getConnection();
-			PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+		count = 1;
+		try(
+				Connection conn = DBConnector.getConnection();
+				PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+				
+		) {
+			
+			
+			pstmt1.setString(1, sort);
 			ResultSet rs = pstmt1.executeQuery();
 			
 			while(rs.next()) {
 				String menuName = rs.getString("mname");
+				int menuPrice = rs.getInt("price");
+				String[] parsedName = menuName.split(" ");
+				String htmlName = "<HTML><body style='text-align:center'>";
+				for (int i = 0; i < parsedName.length; i++) {
+					htmlName += parsedName[i] + "<br>";
+				}
+				htmlName += Integer.toString(menuPrice);
+				htmlName += "</body></HTML>";
 				if(count > 23) {
-					panel3.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+					panel3.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
 				} else if (count > 11) {
-					panel2.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+					panel2.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
 				} else {
-					panel1.add(new ButtonSetting(menuName, 15, 0xfafeff, al));
+					panel1.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
 				}
 				count++;
+				
 			}//while
 			
 		} catch (SQLException e) {

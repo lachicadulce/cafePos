@@ -24,6 +24,7 @@ public class SortMenuActionListener implements ActionListener {
 		rpb.getRightLCenter().revalidate();
 		rpb.getRightLCenter().repaint();
 		new MenuPanel(e.getActionCommand(), rpb, al);
+		
 	}
 	
 }

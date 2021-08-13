@@ -58,7 +58,7 @@ public class AbsentManagerHandler implements ActionListener {
 					PreparedStatement workpstmt = conn.prepareStatement(workSql);
 					PreparedStatement workInsertpstmt = conn.prepareStatement(workInsert);
 					PreparedStatement finUpdatepstmt = conn.prepareStatement(finUpdate);
-					){
+					){//try시작
 
 				// 최근 번호 구하기
 				int recentNo = 0;
@@ -121,6 +121,7 @@ public class AbsentManagerHandler implements ActionListener {
 				noCheckRs.close();
 				rs.close();
 				workrs.close();
+			//try끝
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

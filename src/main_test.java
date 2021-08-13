@@ -184,7 +184,7 @@ public class main_test extends PosFrame {
 		
 		
 		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
-		
+	
 		
 		
 //		MenuPanel drink = new MenuPanel("drink", rpb, mbal);

@@ -65,7 +65,7 @@ public class ChangeActionListener implements ActionListener {
 		
 		String mmShipAddPointSql = "UPDATE customer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
 		
-		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE ?), ?)";
+		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE TRIM(?)), ?)";
 		
 //		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
 		
@@ -136,7 +136,7 @@ public class ChangeActionListener implements ActionListener {
 			
 			int menuNo = 0;
 			for(int i = 0; i < orderTableModel.getRowCount(); i++) {
-				hBpstmt.setString(2, (String)orderTableModel.getValueAt(i, 0) +"%");
+				hBpstmt.setString(2,(String)orderTableModel.getValueAt(i, 0));
 				hBpstmt.setInt(3, (int)orderTableModel.getValueAt(i, 1));
 				
 				hBpstmt.executeUpdate();

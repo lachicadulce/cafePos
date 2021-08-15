@@ -24,7 +24,7 @@ public class ChangeActionListener implements ActionListener {
 	CashActionHandler cah;
 	MemberShipActionListener msal;
 	DefaultTableModel orderTableModel;
-	
+
 	public ChangeActionListener(JTable calcTable, CashActionHandler cah, MemberShipActionListener msal, DefaultTableModel orderTableModel) {
 		this.calcTable = calcTable;
 		this.cah = cah;
@@ -47,28 +47,28 @@ public class ChangeActionListener implements ActionListener {
 
 		int change = priceSaleReceived[0] - priceSaleReceived[1]- priceSaleReceived[2];
 
-		
+
 		if(change <= 0)  {
 			change = Math.abs(change);
 		} else {
 
 		}
-		
+
 		String changestr = Integer.toString(change);
 		calcTable.setValueAt(changestr, 3, 1);
-		
-		
+
+
 
 		// DB에 데이터 넣기
 
 		String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
-		
-		String mmShipAddPointSql = "UPDATE cusomer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?;";
-		
+
+		String mmShipAddPointSql = "UPDATE customer_info SET point = ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
+
 		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT COUNT(*) FROM history_beverage)+1, ?, ?, ?)";
-		
-		String findmenuNoSql = "SELETE menu_no FROM menu WHERE MNAME LIKE ?";
-		
+
+		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
+
 		String hPCountSql = "SELECT COUNT(*) cnt FROM history_payment";
 		int cnt = 0;
 		int addPoint = 0;
@@ -76,17 +76,22 @@ public class ChangeActionListener implements ActionListener {
 				Connection conn = DBConnector.getConnection();
 				PreparedStatement hPpstmt = conn.prepareStatement(historyPaymentSql);
 				PreparedStatement hPCntpstmt = conn.prepareStatement(hPCountSql);	
-				
+
+				PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
+				PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
+				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
+
 				){
 			; 
 			ResultSet rs = hPCntpstmt.executeQuery();
+			
 			while(rs.next()) {
 				cnt = rs.getInt("cnt") + 1;
 			}
 			rs.close();
-			
+
 			addPoint = (priceSaleReceived[0] - msal.usePoint)/10;
-			
+
 			// history_payment DB에 추가 + 설정
 			hPpstmt.setInt(1, cnt);
 			hPpstmt.setInt(2, priceSaleReceived[0]);
@@ -95,45 +100,34 @@ public class ChangeActionListener implements ActionListener {
 			hPpstmt.setInt(5, msal.cus_no);
 			hPpstmt.setInt(6, msal.usePoint);
 			hPpstmt.setInt(7, addPoint);
-			
+
 			if( cah.cashReceipt) {
 				hPpstmt.setString(8, "Y");
 			} else {
 				hPpstmt.setString(8, "N");
 			}
-			System.out.println("history_payment DB1");
-			hPpstmt.executeUpdate();
-			System.out.println("history_payment DB add");
 			
-			
-
-		} catch (SQLException e1) {
-
-			e1.printStackTrace();
-		}
+			hPpstmt.execute();
 		
-		try(
-				Connection conn = DBConnector.getConnection();
-				PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
-				PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
-				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
-				
-				) {
-			
+			System.out.println("history_payment DB add");
+
+
 			// customer_info 에 멤버쉽 포인트 추가 + 설정
 			addPointpstmt.setInt(1, msal.cus_no);
 			addPointpstmt.setInt(2, addPoint);
 			addPointpstmt.setInt(3, msal.cus_no);
-			
+
 			addPointpstmt.executeUpdate();
 			
+			System.out.println("PointUpdate");
+			
 			// history_beverage 데이터 DB에 추가
-			
+
 			hBpstmt.setInt(1, cnt);
-			
+
 			int menuNo = 0;
 			for(int i = 0; i < orderTableModel.getRowCount(); i++) {
-				
+
 				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
 				ResultSet fMNRS = fMNpstmt.executeQuery();
 				while(fMNRS.next()) {
@@ -141,16 +135,15 @@ public class ChangeActionListener implements ActionListener {
 				}
 				hBpstmt.setInt(2, menuNo);
 				hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
-				
+
 				hBpstmt.executeUpdate();
 			}
 			System.out.println("history_beverage DB add");
-			
-		} catch (Exception e2) {
-			// TODO: handle exception
+
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
 		}
-
-
 
 	}
 

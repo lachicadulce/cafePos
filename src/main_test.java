@@ -21,6 +21,7 @@ import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
+import handler.ManagerButtonActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
@@ -58,6 +59,8 @@ public class main_test extends PosFrame {
 	JTable orderTable;
 	ListSelectionModel orderTableSelection;
 	JScrollPane orderScrollPanel;
+	
+	ManagerButtonActionListener managerAl;
 
 	String[][] calcdata = { 
 			{"총금액", lumpSum},
@@ -112,7 +115,7 @@ public class main_test extends PosFrame {
 		//
 		cah = new CashActionHandler(calcTable);
 		msal = new MemberShipActionListener(calcTable);
-		
+		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
 		
 		// 주문LIST
 		orderTableModel = new DefaultTableModel(); 
@@ -132,7 +135,7 @@ public class main_test extends PosFrame {
 
 		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
 		orderScrollPanel = new JScrollPane(orderTable);
-		orderScrollPanel.setBounds(5, 10, 350, 400);
+		orderScrollPanel.setBounds(5, 10, 500, 400);
 		add(orderScrollPanel);
 
 		// 주문리스트 버튼 변수
@@ -141,30 +144,30 @@ public class main_test extends PosFrame {
 		quantityPlus = new JButton("수량 +");
 		quantityMinus = new JButton("수량 -");
 
-		allCancel.setLocation(10, 430);
-		allCancel.setSize(85, 30);
+		allCancel.setLocation(50, 430);
+		allCancel.setSize(100, 30);
 		allCancel.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
 		add(allCancel);
 
-		selectCancel.setLocation(95, 430);
-		selectCancel.setSize(85, 30);
+		selectCancel.setLocation(150, 430);
+		selectCancel.setSize(100, 30);
 		selectCancel.addActionListener(new SelectCancelActionListener(orderTableModel, orderTable));
 		add(selectCancel);
 
-		quantityPlus.setLocation(180, 430);
-		quantityPlus.setSize(85, 30);
+		quantityPlus.setLocation(250, 430);
+		quantityPlus.setSize(100, 30);
 		quantityPlus.addActionListener(new QuantityIncreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityPlus);
 
-		quantityMinus.setLocation(265, 430);
-		quantityMinus.setSize(85, 30);
+		quantityMinus.setLocation(350, 430);
+		quantityMinus.setSize (100, 30);
 		quantityMinus.addActionListener(new QuantityDecreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityMinus);
 
 
 		
 		// 금액계산
-		calcTable.setBounds(5, 480, 250, 250);
+		calcTable.setBounds(20, 480, 300, 250);
 		calcTable.setRowHeight(65);
 		calcTable.setEnabled(false);	// 수정 불가, 클릭표시 안나옴	
 		add(calcTable);
@@ -175,25 +178,26 @@ public class main_test extends PosFrame {
 		exchange = new JButton("환전");
 
 		// 관리자 메뉴
-		managerMenu.setLocation(280, 470);
-		managerMenu.setSize(75,70);
+		managerMenu.setLocation(420, 470);
+		managerMenu.setSize(80,70);
+		managerMenu.addActionListener(managerAl);
 		add(managerMenu);
-		// 근태 관리
-		absentManager.setLocation(280, 540);
-		absentManager.setSize(75,70);
+		// 근태 
+		absentManager.setLocation(420, 540);
+		absentManager.setSize(80,70);
 		absentManager.addActionListener(new AbsentManagerHandler());
 		add(absentManager);
 
 		// 환전
-		exchange.setLocation(280, 610);
-		exchange.setSize(75,70);
+		exchange.setLocation(420, 610);
+		exchange.setSize(80,70);
 		exchange.addActionListener(new SafeOpenActionListener());
 		add(exchange);
 		
 		// 환전계산
 		payment = new JButton("<html>환전<br />계산</html>");
-		payment.setLocation(280, 680);
-		payment.setSize(75,70);
+		payment.setLocation(420, 680);
+		payment.setSize(80,70);
 		payment.addActionListener(new ChangeActionListener(calcTable, cah, msal, orderTableModel));
 		add(payment);
 		
@@ -210,7 +214,8 @@ public class main_test extends PosFrame {
 		
 		mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
 		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
+		
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, managerAl);
 		
 		MenuPanel m = new MenuPanel("Coffee", rpb, mbal);
 		

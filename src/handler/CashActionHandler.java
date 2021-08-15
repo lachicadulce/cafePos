@@ -1,6 +1,7 @@
 package handler;
 
 import java.awt.Component;
+
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -31,7 +32,7 @@ public class CashActionHandler implements ActionListener {
 	boolean cashReceipt;
 	int cashReceiptCheck;
 
-	
+
 	public CashActionHandler(JTable calcTable) {
 		super();
 		this.calcTable = calcTable;
@@ -52,8 +53,8 @@ public class CashActionHandler implements ActionListener {
 		panel.add(label);
 		textField = new JTextField(10);
 		panel.add(textField);
-		
-	
+
+
 
 		JOptionPane op = new JOptionPane
 				(
@@ -70,98 +71,105 @@ public class CashActionHandler implements ActionListener {
 		parent.setLayout( new GridLayout(4, 0, 5, 5) );
 		dialog = op.createDialog(null, "");
 
+		System.out.println(e.getActionCommand());
 		// 현금 결제 입력 받기
-		while(true) {
-			dialog = op.createDialog(null, "현금 결제");
-			dialog.setVisible(true);
+		if( e.getActionCommand() != null) {
+
+			while(true) {
+				dialog = op.createDialog(null, "현금 결제");
+				dialog.setVisible(true);
 
 
-			// 닫기 버튼 눌렸을때
-			if(op.getValue() == null) {
-				dialog.dispose();
-				break;
-				
-			// E 버튼 눌렸을때
-			} else if (op.getValue() == "E" ) {
-				
-				calcTable.setValueAt(textField.getText(), 2, 1);
-				cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
-				
-				input = "";
-				dialog.dispose();
-				
-				if(cashMoney > 0 ) {					
-					cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "근태관리", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
-					if(cashReceiptCheck == 0) {
-						cashReceipt = true;
-					} else {
-						cashReceipt = false;
+
+				// 닫기 버튼 눌렸을때
+				if(op.getValue() == null) {
+					dialog.dispose();
+					break;
+
+					// E 버튼 눌렸을때
+				} else if (op.getValue() == "E" ) {
+
+					calcTable.setValueAt(textField.getText(), 2, 1);
+					cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+
+					input = "";
+					dialog.dispose();
+
+					if(cashMoney > 0 ) {					
+						cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "근태관리", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
+						if(cashReceiptCheck == 0) {
+							cashReceipt = true;
+						} else {
+							cashReceipt = false;
+						}
 					}
+
+					break;
+
+					// 숫자 인지 확인후 추가
+				} else if (isNumeric((String)op.getValue())) {
+					input += op.getValue();
+					textField.setText(input);
+
+					// 취소버튼 눌렀을때 한자리수 지우기
+				} else if (op.getValue() == ">") {
+					int len = textField.getText().length();
+					String num = textField.getText();
+					String finnum = "";
+					char[] numChar = num.toCharArray();
+					for(int i = 0; i < len-1 ; i++) {
+						finnum += numChar[i];
+					}
+					input = finnum;
+					textField.setText(input);
 				}
 
-				break;
-				
-			// 숫자 인지 확인후 추가
-			} else if (isNumeric((String)op.getValue())) {
-				input += op.getValue();
-				textField.setText(input);
-				
-			// 취소버튼 눌렀을때 한자리수 지우기
-			} else if (op.getValue() == ">") {
-				int len = textField.getText().length();
-				String num = textField.getText();
-				String finnum = "";
-				char[] numChar = num.toCharArray();
-				for(int i = 0; i < len-1 ; i++) {
-					finnum += numChar[i];
-				}
-				input = finnum;
-				textField.setText(input);
 			}
 
-		}
-		
-		// 카드 결제 입력 받기
-		label.setText("카드 결제 금액을 입력해주세요");
-		while(true) {
-			dialog = op.createDialog(null, "카드 결제");
-			dialog.setVisible(true);
+			if(e.getActionCommand() != null) {
+				// 카드 결제 입력 받기
+				label.setText("카드 결제 금액을 입력해주세요");
+				while(true) {
+					dialog = op.createDialog(null, "카드 결제");
+					dialog.setVisible(true);
 
 
-			if(op.getValue() == null) {
-				dialog.dispose();
-				break;
-			} else if (op.getValue() == "E" ) {
-				
-				cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
-				cardMoney = Integer.parseInt((String)textField.getText());
-				calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
-				dialog.dispose();
-				break;
-			} else if (isNumeric((String)op.getValue())) {
-				input += op.getValue();
-				textField.setText(input);
-				
-			} else if (op.getValue() == ">") {
-				int len = textField.getText().length();
-				String num = textField.getText();
-				String finnum = "";
-				char[] numChar = num.toCharArray();
-				for(int i = 0; i < len-1 ; i++) {
-					finnum += numChar[i];
+					if(op.getValue() == null) {
+						dialog.dispose();
+						break;
+					} else if (op.getValue() == "E" ) {
+
+						cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+						cardMoney = Integer.parseInt((String)textField.getText());
+						calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
+						dialog.dispose();
+						break;
+
+					} else if (isNumeric((String)op.getValue())) {
+						input += op.getValue();
+						textField.setText(input);
+
+					} else if (op.getValue() == ">") {
+						int len = textField.getText().length();
+						String num = textField.getText();
+						String finnum = "";
+						char[] numChar = num.toCharArray();
+						for(int i = 0; i < len-1 ; i++) {
+							finnum += numChar[i];
+						}
+						input = finnum;
+						textField.setText(input);
+					}
+
 				}
-				input = finnum;
-				textField.setText(input);
 			}
-
 		}
-		
-	
-		
-		
-		
-		
-		
+
+
+
+
+
+
 
 
 	} // end AL

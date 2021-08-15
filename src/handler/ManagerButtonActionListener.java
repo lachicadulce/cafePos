@@ -15,13 +15,13 @@ public class ManagerButtonActionListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		frame.dispose();
-		frame.validate();
-		frame.invalidate();
 		
 		ManagerSales ms = new ManagerSales();
 		ms.setDefaultOptions();
 
+		frame.dispose();
+		frame.validate();
+		frame.invalidate();
 	}
 
 }

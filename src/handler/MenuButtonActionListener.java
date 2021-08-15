@@ -63,6 +63,7 @@ public class MenuButtonActionListener implements ActionListener {
 				quantity = (int) orderTableModel.getValueAt(row, 1);
 				quantityStr = Integer.toString(++quantity);
 				orderTableModel.setValueAt(quantityStr, row, 1);
+						
 				
 			} catch (Exception e2) {
 				

@@ -28,12 +28,8 @@ public class credit_data {
         	int credit_w_size, credit_h_size;
         // ================================================================================================
             
-            
-            	String Receipt_list = "select * from payment_view_2 where credit > 0 and datetime > TO_DATE('" +  date + "')"; 
+            	String Receipt_list = "select * from payment_view_2 where credit > 0 and " +  date ; 
             	
-            	
-            	System.out.println(Receipt_list);
-            
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_credit_list = conn.prepareStatement(Receipt_list);
             	
@@ -74,22 +70,23 @@ public class credit_data {
             		list_data_credit.add(data_total);
             	}
             	
-            	credit_w_size = list_data_credit.size();
-            	credit_h_size = list_data_credit.get(0).size();
-            	data_credit = new String[credit_w_size][credit_h_size];
+            	if (list_data_credit.size() > 0) {
+	            	credit_w_size = list_data_credit.size();
+	            	credit_h_size = list_data_credit.get(0).size();
+	            	data_credit = new String[credit_w_size][credit_h_size];
             	
-            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < credit_w_size; i++) {
-            		for (int x = 0; x < credit_h_size; x++) {
-            			if (x == 0) {
-            				data_credit[i][x] = "" + (i+1);
-            				System.out.print((i+1) + "\t");
-            			}else {
-            				data_credit[i][x] = list_data_credit.get(i).get(x);
-            				System.out.print(data_credit[i][x] + "\t");
-            			}
-            		}
-            		System.out.println();
+	            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
+	             	for (int i = 0; i < credit_w_size; i++) {
+	            		for (int x = 0; x < credit_h_size; x++) {
+	            			if (x == 0) {
+	            				data_credit[i][x] = "" + (i+1);
+	            			}else {
+	            				data_credit[i][x] = list_data_credit.get(i).get(x);
+	            			}
+	            		}
+	            	}
+	             	
+	             	return data_credit;
             	}
              	
             	// 오픈 했던 각 리소스들 종료 
@@ -99,8 +96,9 @@ public class credit_data {
             	
             	conn.close();
             
-            return data_credit;
+            return data_credit = new String[0][12];
             
+            	
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
         }

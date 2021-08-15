@@ -29,9 +29,8 @@ public class total_data {
         // ================================================================================================
             
             
-            	String Receipt_list = "select * from payment_view_2 where datetime > TO_DATE('" +  date + "')"; ;
-            	
-            	
+            	String Receipt_list = "select * from payment_view_2 where " +  date;
+            	            	
             	System.out.println(Receipt_list);
             
             	// 기본 디폴트 리스트 
@@ -74,24 +73,26 @@ public class total_data {
             		list_data_total.add(data);
             	}
             	
-            	total_w_size = list_data_total.size();
-            	total_h_size = list_data_total.get(0).size();
-            	data_total = new String[total_w_size][total_h_size];
-            	
-            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < total_w_size; i++) {
-            		for (int x = 0; x < total_h_size; x++) {
-            			if (x == 0) {
-            				data_total[i][x] = "" + (i+1);
-//            				System.out.print((i+1) + "\t");
-            			}else {
-            				data_total[i][x] = list_data_total.get(i).get(x);
-//            				System.out.print(data_total[i][x] + "\t");
-            			}
-            		}
-//            		System.out.println();
+            	if (list_data_total.size() > 0) {
+	            	total_w_size = list_data_total.size();
+	            	total_h_size = list_data_total.get(0).size();
+	            	data_total = new String[total_w_size][total_h_size];
+	            	
+	            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
+	             	for (int i = 0; i < total_w_size; i++) {
+	            		for (int x = 0; x < total_h_size; x++) {
+	            			if (x == 0) {
+	            				data_total[i][x] = "" + (i+1);
+	//            				System.out.print((i+1) + "\t");
+	            			}else {
+	            				data_total[i][x] = list_data_total.get(i).get(x);
+	//            				System.out.print(data_total[i][x] + "\t");
+	            			}
+	            		}
+	//            		System.out.println();
+	            	}
+	             	return data_total;
             	}
-             	
             	// 오픈 했던 각 리소스들 종료 
             	rs_list.close();
             	
@@ -99,7 +100,7 @@ public class total_data {
             	
             	conn.close();
             
-            return data_total;
+            return data_total = new String[0][12];
             
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");

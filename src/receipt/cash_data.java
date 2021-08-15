@@ -28,9 +28,8 @@ public class cash_data {
         	int cash_w_size, cash_h_size;
         // ================================================================================================
             
-            
-            	String Receipt_list = "select * from payment_view_2 where cash > 0 and datetime > TO_DATE('" +  date + "')"; ;
-            	
+            	System.out.println(date);
+            	String Receipt_list = "select * from payment_view_2 where cash > 0 and " + date ;
             	
             	System.out.println(Receipt_list);
             
@@ -74,24 +73,25 @@ public class cash_data {
             		list_data_cash.add(data_total);
             	}
             	
-            	cash_w_size = list_data_cash.size();
-            	cash_h_size = list_data_cash.get(0).size();
-            	data_cash = new String[cash_w_size][cash_h_size];
-            	
-            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < list_data_cash.size(); i++) {
-            		for (int x = 0; x < list_data_cash.get(i).size(); x++) {
-            			if (x == 0) {
-            				data_cash[i][x] = "" + (i+1);
-            				System.out.print((i+1) + "\t");
-            			}else {
-            				data_cash[i][x] = list_data_cash.get(i).get(x);
-            				System.out.print(data_cash[i][x] + "\t");
-            			}
-            		}
-            		System.out.println();
-            	}
-             	
+            	if (list_data_cash.size() > 0) {
+	            	cash_w_size = list_data_cash.size();
+	            	cash_h_size = list_data_cash.get(0).size();
+	            	data_cash = new String[cash_w_size][cash_h_size];
+	            	
+	            	// 현금(Cash) 데이터를 JTable에 적용할 배열에 저장
+	             	for (int i = 0; i < list_data_cash.size(); i++) {
+	            		for (int x = 0; x < list_data_cash.get(i).size(); x++) {
+	            			if (x == 0) {
+	            				data_cash[i][x] = "" + (i+1);
+	            			}else {
+	            				data_cash[i][x] = list_data_cash.get(i).get(x);
+	            			}
+	            		}
+	            	}
+	             	
+	             	return data_cash;
+            	} 
+            		
             	// 오픈 했던 각 리소스들 종료 
             	rs_list.close();
             	
@@ -99,18 +99,11 @@ public class cash_data {
             	
             	conn.close();
             
-            return data_cash;
+        	return data_cash = new String[0][12];
             
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
         }
 		return null;
 	}
-	
-	
-	
-	
-		
-		
-	
 }

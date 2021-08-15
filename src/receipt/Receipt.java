@@ -212,7 +212,9 @@ public class Receipt extends PosFrame {
         // ================================================================================================
 //            	Receipt_list += " where datetime > TO_DATE('" + where_date + "')";
             	//	date_s, date_e;
-            	
+         
+            	System.out.println(Receipt_list);
+            
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
             	
@@ -223,18 +225,6 @@ public class Receipt extends PosFrame {
             	
             	// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
             	int column_size = md.getColumnCount();
-            	
-            	// 구한 컬럼 숫자+1의 이유는 컬럼 이외에 첫번째 col 에는 데이터의 수를 나타내기위한 No 을 추가하기 위함
-            	columnNames = new String[column_size+1];
-            	
-            	// 컬럼명을 배열에 문자열로 저장
-            	for(int i = 0; i < columnNames.length; i++) {
-            		if (i == 0) {
-            			columnNames[i] = "No";
-            		} else {
-            			columnNames[i] = md.getColumnName(i);
-            		}
-                }
             	
             	// 기존에 담겨있던 데이터를 비움
 //            	list_data_default.clear();
@@ -261,31 +251,35 @@ public class Receipt extends PosFrame {
             
             // ================================================================================================
         	// ================================================================================================
-
-            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
-            	w_size = list_data_change.size();
-            	h_size = list_data_change.get(0).size();
+            	if (list_data_change.size() > 0) {
             	
-            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
-            	data_change = new String[w_size][h_size];
-             	
-             	System.out.println("1111");
-             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < w_size; i++) {
-            		for (int x = 0; x < h_size; x++) {
-            			if (x == 0) {
-            				data_change[i][x] = "" + (i+1);
-            			}else {
-            				data_change[i][x] = list_data_change.get(i).get(x);
-            			}
-            		}
+	            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
+	            	w_size = list_data_change.size();
+	            	h_size = list_data_change.get(0).size();
+	            	
+	            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
+	            	data_change = new String[w_size][h_size];
+	             	
+	             	System.out.println("1111");
+	             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
+	             	for (int i = 0; i < w_size; i++) {
+	            		for (int x = 0; x < h_size; x++) {
+	            			if (x == 0) {
+	            				data_change[i][x] = "" + (i+1);
+	            			}else {
+	            				data_change[i][x] = list_data_change.get(i).get(x);
+	            			}
+	            		}
+	            	}
+	             	return data_change;
             	}
-             	return data_change;
-            
+            	
+            	
+            	
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
         }
-		return null;
+		return data_change = new String[0][12];
 		
 	}
 
@@ -414,6 +408,7 @@ public class Receipt extends PosFrame {
 		
 		payBox(); // 영수증 아래 박스 출력 함수
 		
+		total();
 
 		// 시간을 문자열로 변경하기
 		DateTimeFormatter my_date_format = DateTimeFormatter.ofPattern("y년 M월 d일");
@@ -449,45 +444,7 @@ public class Receipt extends PosFrame {
 
 		p1.add(p3);
 		
-		selBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				System.out.println("date_s : " + date_s);
-				System.out.println("date_e : " + date_e);
-				
-				if (datePicker.getJFormattedTextField().getText().length() > 0 ) {
-					date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-					date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				}
-				System.out.println("date_s : " + date_s);
-				System.out.println("date_e : " + date_e);
-				
-				
-				date_s_e = " DATETIME BETWEEN " + date_s + " and " + date_e;
-				
-				Receipt_list = "SELECT * FROM payment_view_2" + " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e
-						+ " + 1";
-//				System.out.println(date_s_e);
-				
-				total();
-				
-				
-				while(model.getRowCount() > 0) {
-    				model.removeRow(0);
-    			}
-    			
-//    			total_data data = new total_data();
-    			data_change = table_change();
-				
-    			for (int i = 0; i < data_change.length; i++) {
-    				model.addRow(data_change[i]);
-    			}
-    			
-
-			}
-		});
+		
 		
 		
 		
@@ -565,7 +522,7 @@ public class Receipt extends PosFrame {
 		// ================================================================================================
 		// ================================================================================================
 		// 날짜 조회 이해해야 할 부분
-		total();
+		
 
 		JPanel receipt_panel = new JPanel();
 
@@ -846,6 +803,36 @@ public class Receipt extends PosFrame {
        	}); 
 
 		// ================================================================================================
+		selBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if (datePicker.getJFormattedTextField().getText().length() > 0 ) {
+					date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+					date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+				}
+				
+				date_s_e = " DATETIME BETWEEN " + date_s + " and " + date_e;
+				
+				Receipt_list = "SELECT * FROM payment_view_2" + " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e
+						+ " + 1";
+				
+				
+				while(model.getRowCount() > 0) {
+    				model.removeRow(0);
+    			}
+
+    			data_change = table_change();
+    			
+    			for (int i = 0; i < data_change.length; i++) {
+    				model.addRow(data_change[i]);
+    			}
+    			
+
+			}
+		});
+		
 		// ================================================================================================
 
 	}

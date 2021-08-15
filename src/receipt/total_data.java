@@ -29,7 +29,7 @@ public class total_data {
         // ================================================================================================
             
             
-            	String Receipt_list = "select * from payment_view_2 where " +  date;
+            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1";
             	            	
             	System.out.println(Receipt_list);
             

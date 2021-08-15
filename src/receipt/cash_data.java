@@ -29,7 +29,7 @@ public class cash_data {
         // ================================================================================================
             
             	System.out.println(date);
-            	String Receipt_list = "select * from payment_view_2 where cash > 0 and " + date ;
+            	String Receipt_list = "select * from payment_view_2 where cash > 0 and " + date + "+1";
             	
             	System.out.println(Receipt_list);
             

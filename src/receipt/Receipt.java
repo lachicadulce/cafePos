@@ -78,7 +78,7 @@ public class Receipt extends PosFrame {
 //	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
 //	static ArrayList<ArrayList<String>> list_data_credit = new ArrayList<ArrayList<String>>();
 
-	static String[] columnNames = null;
+	static String[] columnNames = null; 
 
 	static String Receipt_list = "select * from payment_view_2";
 	static String Receipt_list_cash = Receipt_list + " where cash > 0";

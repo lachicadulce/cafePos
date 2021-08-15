@@ -521,7 +521,7 @@ public class Receipt extends PosFrame {
 
 		// ================================================================================================
 		// ================================================================================================
-		// 날짜 조회 이해해야 할 부분
+		// 날짜 조회 (덕중)
 		
 
 		JPanel receipt_panel = new JPanel();
@@ -539,7 +539,10 @@ public class Receipt extends PosFrame {
 		table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
 
 		scrollPane1.setPreferredSize(new Dimension(658, 495));
-
+		table.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table.getColumnModel().getColumn(9).setPreferredWidth(100);
+		table.getColumnModel().getColumn(10).setPreferredWidth(200);
+		
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
 

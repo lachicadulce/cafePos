@@ -58,22 +58,25 @@ public class ManagerSales extends PosFrame {
 	    	PreparedStatement pstmt = conn.prepareStatement(sql);
 	    	ResultSet rs = pstmt.executeQuery();
 	    	){
-	    	
-			while(rs.next()) {
-				int receipt_no = rs.getInt("receipt_no");
-				String dtime = rs.getString("dtime");
-				int total = rs.getInt("total");
-				int credit = rs.getInt("credit");
-				int cash = rs.getInt("cash");
-				int cus_no = rs.getInt("cus_no");
-				int point_used = rs.getInt("point_used");
-				int point_saved = rs.getInt("point_saved");
-				String state = rs.getString("state");
-				String receipt_chk = rs.getString("receipt_chk");
-				
-				Object data[] = {receipt_no, dtime, total, credit, cash, cus_no, 
-							point_used, point_saved, state, receipt_chk};
-				model.addRow(data);
+	    	if(rs.next()) {
+				while(rs.next()) {
+					int receipt_no = rs.getInt("receipt_no");
+					String dtime = rs.getString("dtime");
+					int total = rs.getInt("total");
+					int credit = rs.getInt("credit");
+					int cash = rs.getInt("cash");
+					int cus_no = rs.getInt("cus_no");
+					int point_used = rs.getInt("point_used");
+					int point_saved = rs.getInt("point_saved");
+					String state = rs.getString("state");
+					String receipt_chk = rs.getString("receipt_chk");
+					
+					Object data[] = {receipt_no, dtime, total, credit, cash, cus_no, 
+								point_used, point_saved, state, receipt_chk};
+					model.addRow(data);
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "조회 결과가 없습니다.");
 			}
 
 		} catch (SQLException e) {

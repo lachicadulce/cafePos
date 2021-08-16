@@ -63,13 +63,14 @@ public class ChangeActionListener implements ActionListener {
 
 		String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
 
-		String mmShipAddPointSql = "UPDATE customer_info SET point = ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
+		String mmShipAddPointSql = "UPDATE customer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
 
-		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT COUNT(*) FROM history_beverage)+1, ?, ?, ?)";
+		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE TRIM(?)), ?)";
 
-		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
+		//		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
 
-		String hPCountSql = "SELECT COUNT(*) cnt FROM history_payment";
+		String hPCountSql = "SELECT MAX(receipt_no) AS cnt FROM history_payment";
+
 		int cnt = 0;
 		int addPoint = 0;
 		try (
@@ -79,12 +80,12 @@ public class ChangeActionListener implements ActionListener {
 
 				PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
 				PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
-				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
+				//				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
 
 				){
 			; 
 			ResultSet rs = hPCntpstmt.executeQuery();
-			
+
 			while(rs.next()) {
 				cnt = rs.getInt("cnt") + 1;
 			}
@@ -97,7 +98,8 @@ public class ChangeActionListener implements ActionListener {
 			hPpstmt.setInt(2, priceSaleReceived[0]);
 			hPpstmt.setInt(3, cah.cardMoney);
 			hPpstmt.setInt(4, cah.cashMoney > priceSaleReceived[0] ? cah.cashMoney - change : cah.cashMoney);
-			hPpstmt.setInt(5, msal.cus_no);
+
+			hPpstmt.setInt(5, 1000);
 			hPpstmt.setInt(6, msal.usePoint);
 			hPpstmt.setInt(7, addPoint);
 
@@ -106,45 +108,59 @@ public class ChangeActionListener implements ActionListener {
 			} else {
 				hPpstmt.setString(8, "N");
 			}
-			
-			hPpstmt.execute();
-		
+
+			hPpstmt.executeUpdate();
 			System.out.println("history_payment DB add");
 
 
 			// customer_info 에 멤버쉽 포인트 추가 + 설정
+
+			if (msal.cus_no == 0 ) {
+				msal.cus_no = 1000;
+			}
 			addPointpstmt.setInt(1, msal.cus_no);
 			addPointpstmt.setInt(2, addPoint);
 			addPointpstmt.setInt(3, msal.cus_no);
 
 			addPointpstmt.executeUpdate();
-			
+
 			System.out.println("PointUpdate");
-			
+
 			// history_beverage 데이터 DB에 추가
 
 			hBpstmt.setInt(1, cnt);
 
-			int menuNo = 0;
+			
+
 			for(int i = 0; i < orderTableModel.getRowCount(); i++) {
 
-				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
-				ResultSet fMNRS = fMNpstmt.executeQuery();
-				while(fMNRS.next()) {
-					menuNo = fMNRS.getInt("menu_no");
+				//				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
+				//				ResultSet fMNRS = fMNpstmt.executeQuery();
+
+				
+				String menuName = (String)orderTableModel.getValueAt(i, 0);
+				hBpstmt.setString(2, menuName.trim());
+				try {
+					hBpstmt.setInt(3, (int)orderTableModel.getValueAt(i, 1));
+				} catch (Exception e3) {
+					hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
 				}
-				hBpstmt.setInt(2, menuNo);
-				hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
 
 				hBpstmt.executeUpdate();
 			}
 			System.out.println("history_beverage DB add");
 
+
 		} catch (SQLException e1) {
 
 			e1.printStackTrace();
+
+
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 
 	}
+
 
 }

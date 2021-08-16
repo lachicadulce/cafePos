@@ -42,7 +42,7 @@ public class EmpBtn extends JDialog implements ActionListener {
 		add(cb_pos);
 		add(btn_add);
 		add(btn_can);
-		setResizable(false);
+		setResizable(false); // 창 크기 조절X
 		
 		// 화면 정중앙에 출력되도록 설정
 		setSize(270, 160);

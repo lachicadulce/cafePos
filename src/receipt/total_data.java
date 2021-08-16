@@ -20,7 +20,7 @@ public class total_data {
             		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
             		"cafe",
             		"!!22Qorthdud");
-            
+             
         // ================================================================================================
             String[] columnNames = null;
         	String[][] data_total = null;

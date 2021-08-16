@@ -12,7 +12,7 @@ public class cash_data {
 	
 	public cash_data() {
 		 
-	}
+	} 
 	
 	public String[][] table_cash_data(String date) {
 		try {

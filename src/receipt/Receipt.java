@@ -51,7 +51,7 @@ public class Receipt extends PosFrame {
 	static JPanel receipt_panel;
 	static JLabel receipt;
 	static String receipt_string;// 판매 영수증
-	static String return_string;// 환불 영수증
+	static String return_string;// 환불 영수증 
 	static String info = "";
 	static int pay;
 

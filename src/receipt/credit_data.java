@@ -12,7 +12,7 @@ public class credit_data {
 	
 	public credit_data() {
 		
-	}
+	} 
 	 
 	public String[][] table_credit_data(String date) {
 		try {

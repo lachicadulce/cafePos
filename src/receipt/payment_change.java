@@ -24,7 +24,7 @@ public class payment_change extends JDialog {
 	// =================================== 여기부터 패널 생성 ===================================
 	JPanel new_s1 = new JPanel(); 
 	JPanel new_s2 = new JPanel();
-	
+	 
 	JPanel new_text_top = new JPanel();
 	JPanel new_text_left = new JPanel();
 	JPanel new_text_right = new JPanel();

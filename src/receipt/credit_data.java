@@ -83,7 +83,7 @@ public class credit_data {
 	            			}else {
 	            				data_credit[i][x] = list_data_credit.get(i).get(x);
 	            			}
-	            		}
+	            		} 
 	            	}
 	             	
 	             	return data_credit;

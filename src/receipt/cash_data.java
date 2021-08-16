@@ -13,7 +13,7 @@ public class cash_data {
 	public cash_data() {
 		 
 	}
-	 
+	
 	public String[][] table_cash_data(String date) {
 		try {
             Connection conn = DriverManager.getConnection(
@@ -28,11 +28,8 @@ public class cash_data {
         	int cash_w_size, cash_h_size;
         // ================================================================================================
             
-            	System.out.println(date);
             	String Receipt_list = "select * from payment_view_2 where cash > 0 and " + date + "+1";
             	
-            	System.out.println(Receipt_list);
-            
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_cash_list = conn.prepareStatement(Receipt_list);
             	

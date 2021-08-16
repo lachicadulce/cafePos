@@ -184,19 +184,18 @@ public class payment_change extends JDialog {
 				
 //				System.out.println(sql);
 				if ( cash == 0 ) {				// 현금 결제 내역이 없는 경우_( 현금→카드 로 바꿔주는 프로세스 이므로 아무런 동작이 없음 )
-					JOptionPane.showMessageDialog(null, "너 임마 너 !!  현금 낸거 없는데???? 다시 확인해봐 !! ");
+					JOptionPane.showMessageDialog(null, "현금으로 결제하신 내역이 없습니다. 다시 확인 바랍니다. ");
 				} else if ( cash > 0 ) { 			// 현금 결제 내역과 포인트 사용 내역이 있는 경우
 					
-					int yes_or_no = JOptionPane.showConfirmDialog(null, "너 현금 " + cash + " 이만큼 냈는데 이거 카드 계산할거야??. ", "카드수수료 나간다.........", JOptionPane.YES_NO_OPTION);
+					int yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + cash + " 원 결제하셨습니다. 변경하시겠습니까?. ", "", JOptionPane.YES_NO_OPTION);
 					
 					if (yes_or_no == JOptionPane.CLOSED_OPTION) {			// "예", "아니오" 선택없이 창 닫은경우 yes_or_no = 2
-	     					System.out.println("그냥 닫았네?");
+	     					
 	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 "예"를 선택한경우 yes_or_no = 0
-	     				
 	     					data_update(sql);
-	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+	     					JOptionPane.showMessageDialog(null, "현금 결제금액을 카드 결제로 변경하셨습니다.");
 	     				} else {							   				// 사용자가 "아니오"를 선택한경우 yes_or_no = 1
-	     					JOptionPane.showMessageDialog(null, "그래그래~~ 잘 생각했어 ~ ");
+	     					JOptionPane.showMessageDialog(null, "취소하셔서 변경사항이 없습니다.");
 	     				}
 				}
 			}
@@ -213,19 +212,18 @@ public class payment_change extends JDialog {
 				
 //				System.out.println(sql);
 				if ( credit == 0 ) {				// 현금 결제 내역이 없는 경우_( 현금→카드 로 바꿔주는 프로세스 이므로 아무런 동작이 없음 )
-					JOptionPane.showMessageDialog(null, "너 임마 너 !!  카드 안썼어!?!? 다시 확인해봐 !! ");
+					JOptionPane.showMessageDialog(null, "카드로 결제하신 내역이 없습니다. 다시 확인 바랍니다. ");
 				} else if ( credit > 0 ) { 			// 현금 결제 내역과 포인트 사용 내역이 있는 경우
 					
-					int yes_or_no = JOptionPane.showConfirmDialog(null, "너 카드로 " + credit + " 이만큼 계산했어", "현금영수증 해줘야하네.....", JOptionPane.YES_NO_OPTION);
-					
+					int yes_or_no = JOptionPane.showConfirmDialog(null, "카드로 " + credit + " 원 결제하셨습니다. 변경하시겠습니까?. ", "", JOptionPane.YES_NO_OPTION);
 					
 					if (yes_or_no == JOptionPane.CLOSED_OPTION) {			// "예", "아니오" 선택없이 창 닫은경우 yes_or_no = 2
-	     					System.out.println("그냥 닫았네?");
+	     					
 	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 "예"를 선택한경우 yes_or_no = 0
 	     					data_update(sql);
-	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+	     					JOptionPane.showMessageDialog(null, "카드 결제금액을 현금 결제로 변경하셨습니다.");
 	     				} else {							   				// 사용자가 "아니오"를 선택한경우 yes_or_no = 1
-	     					JOptionPane.showMessageDialog(null, "그래그래~~ 잘 생각했어 ~ ");
+	     					JOptionPane.showMessageDialog(null, "취소하셔서 변경사항이 없습니다.");
 	     				}
 				}
 				

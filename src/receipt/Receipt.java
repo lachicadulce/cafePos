@@ -401,12 +401,12 @@ public class Receipt extends PosFrame {
 		
 		total();
 
-		// 시간을 문자열로 변경하기
-		DateTimeFormatter my_date_format = DateTimeFormatter.ofPattern("y년 M월 d일");
+		// 메인으로 가는 버튼
+		
 
-		String message = my_date_format.format(LocalDate.now());
+		String message = "Main";
 
-		JButton date = new JButton(message);
+		JButton  tomain = new JButton(message);
 
 		JPanel frame = new JPanel();
 
@@ -452,11 +452,10 @@ public class Receipt extends PosFrame {
 		buttons.add(new JButton("신용카드")); // 6
 
 		// 버튼 위치 조정
-		buttons.get(0).setBounds(20, 30, 150, 80);
-		buttons.get(1).setBounds(190, 30, 150, 80);
-		buttons.get(2).setBounds(360, 30, 150, 80);
-		buttons.get(3).setBounds(530, 30, 150, 80);
-
+		buttons.get(0).setBounds(190, 30, 150, 80);
+		buttons.get(1).setBounds(360, 30, 150, 80);
+		buttons.get(2).setBounds(530, 30, 150, 80);
+		buttons.get(3).setBounds(730, 30, 120, 80);
 		buttons.get(4).setBounds(870, 30, 120, 80);
 		buttons.get(5).setBounds(1010, 30, 120, 80);
 		buttons.get(6).setBounds(1150, 30, 120, 80);
@@ -466,10 +465,11 @@ public class Receipt extends PosFrame {
 		for (int i = 0; i < buttons.size(); ++i) {
 			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
 		}
-
-		date.setBounds(730, 30, 120, 80);
-		date.setBackground(new Color(0xffffff));
-
+		// 메인으로 가는 버튼 세부 설정 
+		tomain.setBounds(20, 30, 150, 80);
+//		tomain.setBackground(new Color(0xffffff));
+		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
+		//
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
@@ -492,7 +492,7 @@ public class Receipt extends PosFrame {
 		main.add(buttons.get(2));
 		main.add(buttons.get(3));
 
-		main.add(date); // 날짜 출력
+		main.add(tomain); // 메인으로 가는 버튼
 		main.add(p1); // 날짜 조회 출력
 
 		// 우측 위 버튼

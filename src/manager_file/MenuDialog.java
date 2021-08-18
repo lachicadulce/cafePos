@@ -71,6 +71,7 @@ public class MenuDialog extends JDialog {
 		add(btn_can);
 		setSize(270, 160);
 		setLocation(100, 100);
+		setResizable(false);
 		setModal(true);
 		
 		btn_ok.addActionListener(new ActionListener() {
@@ -164,6 +165,7 @@ public class MenuDialog extends JDialog {
 		add(btn_can);
 		setSize(270, 170);
 		setLocation(100, 100);
+		setResizable(false);
 		
 		btn_ok.addActionListener(new ActionListener() {
 			

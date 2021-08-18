@@ -50,7 +50,7 @@ public class MenuDialog extends JDialog {
 	JButton btn_can = new JButton("취소");
 	
 	
-	public MenuDialog(JFrame frame, String title) {		
+	public MenuDialog(JFrame frame, String title, JButton selBtn) {		
 		super(frame, title);
 
 		types = new ArrayList();
@@ -71,14 +71,16 @@ public class MenuDialog extends JDialog {
 		add(btn_can);
 		setSize(270, 160);
 		setLocation(100, 100);
+		setModal(true);
 		
 		btn_ok.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 메뉴 이름, 가격 미입력 시 리턴.
-				if(tf_name.getText().equals("") || tf_price.getText().equals("")) {
-					System.out.println("입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
+				if(tf_name.getText().equals("") || tf_price.getText().equals("") || !tf_price.getText().matches("\\d+")) {
+//					System.out.println("입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
+					JOptionPane.showMessageDialog(frame, "입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
 					return;
 				}
 
@@ -112,6 +114,7 @@ public class MenuDialog extends JDialog {
 				tf_type.setText("");
 				cb_type.setSelectedIndex(0);
 				
+				selBtn.doClick();
 			}
 		});
 		
@@ -127,7 +130,7 @@ public class MenuDialog extends JDialog {
 		});
 	}
 	
-	public MenuDialog(String menu_no, String menu_name, String menu_price, String menu_type, String menu_display_order) {
+	public MenuDialog(String menu_no, String menu_name, String menu_price, String menu_type, String menu_display_order, JButton selBtn) {
 		super();
 		
 		types = new ArrayList();
@@ -186,6 +189,7 @@ public class MenuDialog extends JDialog {
 					type_name = types.get(cb_type.getSelectedIndex());
 				}
 				insert.dbinsert("UPDATE menu SET mname = '" + tf_name.getText() + "', price = " + tf_price.getText() + ", type = '" + type_name + "', display_order = " + tf_display_order.getText() + " WHERE menu_no = " + menu_no);
+				selBtn.doClick();
 				dispose();			
 			}
 		});

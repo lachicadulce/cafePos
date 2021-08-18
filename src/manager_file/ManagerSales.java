@@ -42,6 +42,7 @@ public class ManagerSales extends PosFrame {
 	private String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
 			"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
 	private String date_s, date_e;
+	
 	public ManagerSales() {
 		super();
 		init();

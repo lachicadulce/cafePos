@@ -3,7 +3,7 @@ import baseSettings.*;
 public class F01_Login extends PosFrame{
 
 	/*
-		·Î±×ÀÎ ÆäÀÌÁö
+		ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	*/
 	public F01_Login() {
 		super();

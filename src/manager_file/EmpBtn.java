@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.*;
-import java.util.regex.*;
 
 import javax.swing.*;
 
@@ -33,6 +32,7 @@ public class EmpBtn extends JDialog implements ActionListener {
 		cb_pos = new JComboBox<String>(position.toArray(new String[position.size()]));
 		cb_pos.setPreferredSize(new Dimension(210, 20));
 		
+		setTitle("직원 등록");
 		setLayout(new FlowLayout());
 		add(new JLabel("이름"));
 		add(emp_name);

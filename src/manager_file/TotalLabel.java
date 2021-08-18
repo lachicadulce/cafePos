@@ -46,12 +46,19 @@ public class TotalLabel {
 					int dsum = rs.getInt("dsum");
 					int total = rs.getInt("total");
 
-					labels.get(0).setText("◇ 현금 매출 합계 ◇");
+					labels.get(0).setText("현금 매출 합계");
 					labels.get(1).setText("" + fm.format(hsum) + "원　");
-					labels.get(2).setText("◇ 카드 매출 합계 ◇");
+					labels.get(2).setText("카드 매출 합계");
 					labels.get(3).setText(""+ fm.format(dsum) + "원　");
-					labels.get(4).setText("▶ cafe 매출 총 합계 ◀");
+					labels.get(4).setText("cafe 매출 총 합계");
 					labels.get(5).setText("" + fm.format(total) + "원　");
+					
+					ImageIcon cash = new ImageIcon("manager/cash.png");
+					labels.get(0).setIcon(cash);
+					ImageIcon card = new ImageIcon("manager/card.png");
+					labels.get(2).setIcon(card);
+					ImageIcon won = new ImageIcon("manager/won.png");
+					labels.get(4).setIcon(won);
 				}
 
 			} catch (SQLException e) {

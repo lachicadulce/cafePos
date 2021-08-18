@@ -42,6 +42,8 @@ public class ManagerSales extends PosFrame {
 	private String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
 			"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
 	private String date_s, date_e;
+	final public static int MAX_BUTTON = 6;
+	
 	public ManagerSales() {
 		super();
 		init();
@@ -106,14 +108,15 @@ public class ManagerSales extends PosFrame {
 	
 		scrollpane = new JScrollPane(tb);
 
-		//우측버튼 너비
-		jsp.setResizeWeight(0.9);
+		tbheader.setBackground(new Color(0xEFF8FB)); // Header 컬러 설정
+		jsp.setResizeWeight(1.0); //우측버튼 너비
+		jsp.setEnabled(false); // 테이블 <> 버튼 사이에 사이즈 조정 불가능하게 설정
 		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
 		JPanel p1  = new JPanel(new BorderLayout());
-		JPanel p2 = new JPanel(new GridLayout(5, 1));
+		JPanel p2 = new JPanel(new GridLayout(MAX_BUTTON, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		// 매출 합계 구성패널 추가

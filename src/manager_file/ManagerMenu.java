@@ -1,10 +1,6 @@
 package manager_file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -46,7 +42,8 @@ public class ManagerMenu extends PosFrame {
 	
 	JComboBox<String> cb_type;
 	
-	private MenuDialog addMenuDialog;
+	private MenuDialog addMenuDialog;	
+	final public static int MAX_BUTTON = 6;
 	
 	public ManagerMenu() {
 		super();
@@ -93,7 +90,7 @@ public class ManagerMenu extends PosFrame {
 		tb = new JTable(model);
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
-		tbheader.setFont(new Font("", Font.PLAIN, 15));
+		tbheader.setFont(new Font("", Font.BOLD, 15));
 		TableColumnModel colModel = tb.getColumnModel();
 		colModel.getColumn(0).setPreferredWidth(20);
 		colModel.getColumn(1).setPreferredWidth(60);
@@ -103,12 +100,15 @@ public class ManagerMenu extends PosFrame {
 	
 		scrollpane = new JScrollPane(tb);
 		
-		jsp.setResizeWeight(0.9);
+		tbheader.setBackground(new Color(0xEFF8FB)); // Header 컬러 설정
+		jsp.setResizeWeight(1.0);
+		jsp.setEnabled(false); // 테이블 <> 버튼 사이에 사이즈 조정 불가능하게 설정
+		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
 		JPanel p1  = new JPanel(new BorderLayout());
-		JPanel p2 = new JPanel(new GridLayout(5, 1));
+		JPanel p2 = new JPanel(new GridLayout(MAX_BUTTON, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		JLabel lb = new JLabel("메뉴 이름");

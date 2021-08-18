@@ -85,7 +85,7 @@ public class Receipt extends PosFrame {
 	static String Receipt_list_credit = Receipt_list + " where credit > 0";
 
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
-	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
+	
 	static String cash_receipt = "UPDATE history_payment SET receipt_chk = 'Y' WHERE receipt_no = ";
 	static String cash_receipt_cancel = "UPDATE history_payment SET receipt_chk = 'N' WHERE receipt_no = ";
 
@@ -340,6 +340,8 @@ public class Receipt extends PosFrame {
             		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
             		"cafe",
             		"!!22Qorthdud");
+            
+            String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
             cash_receipt_chk += ("" + receipt_no);
             
             PreparedStatement cash_receipt_yn = conn.prepareStatement(cash_receipt_chk);

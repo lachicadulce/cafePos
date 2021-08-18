@@ -21,21 +21,22 @@ public class Manager_Btns {
 			JButton jb = new JButton();
 			jb.setFont(new Font("default", Font.BOLD, 16));
 			jb.setBackground(new Color(0xD7E7F7));
+			jb.setHorizontalAlignment(SwingConstants.LEFT); // 좌측 정렬되도록 설정
 			btns.add(jb);
 		}
 		
 		// 버튼 이미지아이콘 추가
 		ImageIcon main = new ImageIcon("manager/main.png");
-		btns.get(0).setIcon(main);
 		ImageIcon total = new ImageIcon("manager/total.png");
-		btns.get(1).setIcon(total);
 		ImageIcon closing = new ImageIcon("manager/closing.png");
-		btns.get(2).setIcon(closing);
 		ImageIcon emp = new ImageIcon("manager/emp.png");
-		btns.get(3).setIcon(emp);
 		ImageIcon work = new ImageIcon("manager/work.png");
-		btns.get(4).setIcon(work);
 		ImageIcon menu = new ImageIcon("manager/menu.png");
+		btns.get(0).setIcon(main);
+		btns.get(1).setIcon(total);
+		btns.get(2).setIcon(closing);
+		btns.get(3).setIcon(emp);
+		btns.get(4).setIcon(work);
 		btns.get(5).setIcon(menu);
 				
 		// 버튼 이름 설정
@@ -49,6 +50,15 @@ public class Manager_Btns {
 		// get(1) : 마감용지출력, get(2) : 직원등록
 		btns.get(2).addActionListener(new ClosingBtn());
 		btns.get(3).addActionListener(new EmpBtn());
+		
+		// 메인화면 연결 필요
+		btns.get(0).addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		
 		btns.get(1).addActionListener(new ActionListener() {
 			

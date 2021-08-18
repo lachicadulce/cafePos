@@ -83,7 +83,7 @@ public class Receipt extends PosFrame {
 	static String Receipt_list_credit = Receipt_list + " where credit > 0";
 
 	static String refund_sql = "UPDATE history_payment SET state = 'cancel' WHERE receipt_no = ";
-	static String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
+	
 	static String cash_receipt = "UPDATE history_payment SET receipt_chk = 'Y' WHERE receipt_no = ";
 	static String cash_receipt_cancel = "UPDATE history_payment SET receipt_chk = 'N' WHERE receipt_no = ";
 
@@ -331,6 +331,7 @@ public class Receipt extends PosFrame {
             		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
             		"cafe",
             		"!!22Qorthdud");
+            String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
             cash_receipt_chk += ("" + receipt_no);
             
             PreparedStatement cash_receipt_yn = conn.prepareStatement(cash_receipt_chk);
@@ -634,11 +635,11 @@ public class Receipt extends PosFrame {
 	     			// 예 = 0
 	     			// 아니오 = 1
 	     			
-	     			String[] check;
+	     			String[] check = cash_receipt(select_receipt_no);
 	     			
 	     			// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기 
-	     			check = cash_receipt(select_receipt_no);
-	
+//	     			check = cash_receipt(select_receipt_no);
+	     			
 	     			// check[0] = 현금결제금액		
 	     			// check[1] = 카드결제금액		
 	     			// check[2] = 현금영수증처리 유무
@@ -646,7 +647,7 @@ public class Receipt extends PosFrame {
 	     			int yes_or_no;
 	     			
 	     			if (check[2].equals("Y")) {
-	     				
+	     				 
 	     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
 	     				
 	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {	// 예 아니오 선택없이 창 닫은경우
@@ -662,7 +663,7 @@ public class Receipt extends PosFrame {
 	     				
 	     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
 	     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
-	     				JOptionPane.showMessageDialog(null, "카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+	     				JOptionPane.showMessageDialog(null, "현금 결제 금액 없이, 카드 결제로 " + check[1] + "원 결제 하셨습니다.");
 	     				
 	     			} else if (check[2].equals("N") && !check[1].equals("0")) {
 	     				

@@ -155,7 +155,7 @@ public class ManagerPage extends PosFrame {
 		JPanel south = new JPanel(new GridLayout(1,2));
 		
 		Employees_List el = new Employees_List();
-		ImageIcon image = new ImageIcon("image/coffee.png");
+		ImageIcon image = new ImageIcon("manager/attendance.png");
 		JLabel south_left = new JLabel(image);
 		south.setBackground(new Color(0xD7E7F7)); // 이미지 배경색 설정
 		

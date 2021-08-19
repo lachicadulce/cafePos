@@ -15,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -94,6 +94,9 @@ public class Receipt extends PosFrame {
 
 	static int select_receipt_no = -1;
 	static String select_receipt_no_string = "";
+	
+	static String db_sysdate = "";
+	static int[] default_date;
 
 	static int w_size, h_size;
 	static int cash_w_size, cash_h_size;
@@ -119,6 +122,8 @@ public class Receipt extends PosFrame {
             
         // ================================================================================================
         // ================================================================================================
+            	
+            	Receipt_list += " where " +  date_s_e + " + 1";
             	
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
@@ -386,6 +391,48 @@ public class Receipt extends PosFrame {
         }
 		
 	}
+	
+	// 반품 처리
+		public void DBsysdate() {
+			try {
+	            Connection conn = DriverManager.getConnection(
+	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
+	            		"cafe",
+	            		"!!22Qorthdud");
+	            
+	            String sql = "select sysdate from dual";
+	            
+	            String[] temp = new String[3]; 
+	            
+	            PreparedStatement select_data = conn.prepareStatement(sql);
+	            ResultSet selected_data = select_data.executeQuery();
+	            
+	            while (selected_data.next()) {
+	            	
+	            	Date dbsys = selected_data.getDate("sysdate");
+	            	SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+	            	String to = transFormat.format(dbsys);
+
+	            	db_sysdate = to;
+
+	        	}
+	            String[] temp_db_sysdate = db_sysdate.split("-"); 
+	            default_date = new int[temp_db_sysdate.length];
+	            
+//	            default_date = db_sysdate.split("-");
+	            for (int i = 0; i < temp_db_sysdate.length; i++) {
+	            	default_date[i] = Integer.parseInt(temp_db_sysdate[i]);
+	            }
+	            
+				
+	            select_data.close();
+				conn.close();
+
+	            
+			} catch (SQLException e) {
+	            System.out.println("getConnection 하다가 문제 생김");
+	        }
+		}
 
 	public Receipt() {
 		super();
@@ -400,7 +447,7 @@ public class Receipt extends PosFrame {
 		
 		payBox(); // 영수증 아래 박스 출력 함수
 		
-		total();
+		
 
 		// 메인으로 가는 버튼
 		
@@ -426,6 +473,14 @@ public class Receipt extends PosFrame {
 		UtilDateModel model2 = new UtilDateModel();
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
 		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		
+		DBsysdate();
+		model1.setDate(default_date[0], default_date[1]-1, default_date[2]);
+		model1.setSelected(true);
+		
+		model2.setDate(default_date[0], default_date[1]-1, default_date[2]);
+		model2.setSelected(true);
+
 
 		p3.add(datePicker);
 		p3.add(new JLabel("~"));
@@ -433,6 +488,8 @@ public class Receipt extends PosFrame {
 		p3.add(selBtn);
 
 		p1.add(p3);
+		
+		total();
 		
 
 		if (state.equals("complete")) { // 영수증 종류 확인
@@ -835,6 +892,10 @@ public class Receipt extends PosFrame {
     			}
 
     			data_change = table_change(date_s_e);
+    			
+    			if (data_change.length == 0) {
+       				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+       			}
     			
     			for (int i = 0; i < data_change.length; i++) {
     				model.addRow(data_change[i]);

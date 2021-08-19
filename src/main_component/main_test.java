@@ -1,16 +1,7 @@
 package main_component;
 import java.awt.BorderLayout;
-
-
-import java.awt.CardLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Iterator;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,15 +19,10 @@ import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
 import handler.QuantityIncreaseActionListener;
+import handler.ReceiptActionListener;
 import handler.RevalidateActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
-import handler.SortMenuActionListener;
-
-import main_component.ButtonSetting;
-import main_component.MenuPanel;
-
-import main_component.RightPanelBasic;
 
 public class main_test extends PosFrame {
 
@@ -47,6 +33,7 @@ public class main_test extends PosFrame {
 	JTable calcTable;
 	CashActionHandler cah;
 	MemberShipActionListener msal;
+	ReceiptActionListener rcal;
 	String[] calcColumn = { "", "" };
 	String lumpSum;
 	String discount;
@@ -137,6 +124,7 @@ public class main_test extends PosFrame {
 		msal = new MemberShipActionListener(calcTable);
 		cah = new CashActionHandler(calcTable, msal, orderTableModel, this.getFrames()[0]);
 		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
+		rcal = new ReceiptActionListener(this);
 		
 		
 		// 주문리스트 버튼 변수
@@ -220,7 +208,7 @@ public class main_test extends PosFrame {
 		mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
 		
 		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, managerAl);
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, managerAl, rcal);
 		
 		MenuPanel m = new MenuPanel("Coffee", rpb, mbal);
 		

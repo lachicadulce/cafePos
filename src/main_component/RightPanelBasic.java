@@ -31,7 +31,7 @@ public class RightPanelBasic extends JPanel {
 	MenuPanel coffee;
 
 	public RightPanelBasic(JSplitPane jsp2, ActionListener ...als) {
-		// als[0] = mbal, als[1] = msal, als[2] = cah, als[3] = managerActionListener
+		// als[0] = mbal, als[1] = msal, als[2] = cah, als[3] = managerActionListener als[4] = receiptActionListener
 		SortMenuActionListener smal = new SortMenuActionListener(this, als[0]);
 		// als[0]는 MenuButtonActionListener내용이다.
 		setLayout(new BorderLayout());
@@ -81,7 +81,7 @@ public class RightPanelBasic extends JPanel {
 
 
 		// 맨 아래 버튼(영수증관리, 멤버쉽, 결제 버튼)
-		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xe2d4fc, null);
+		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xe2d4fc, als[4]);
 		rightLDown.add(ManageReceipts);
 
 		ButtonSetting MemberShip = new ButtonSetting("<HTML><body style='text-align:center'>멤버쉽</body></HTML>",25,0xe3aada, als[1] );

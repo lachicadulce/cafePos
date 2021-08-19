@@ -35,6 +35,8 @@ public class ChangeActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+//		환전계산기능
+		
 		int[] priceSaleReceived = new int[3];
 		for(int i=0; i < calcTable.getRowCount() -1; i++) {
 			if((String)calcTable.getValueAt(i, 1) == null) {
@@ -50,13 +52,7 @@ public class ChangeActionListener implements ActionListener {
 
 		if(change <= 0)  {
 			change = Math.abs(change);
-		} else {
-
 		}
-
-		String changestr = Integer.toString(change);
-		calcTable.setValueAt(changestr, 3, 1);
-
 
 
 		// DB에 데이터 넣기
@@ -73,6 +69,7 @@ public class ChangeActionListener implements ActionListener {
 
 		int cnt = 0;
 		int addPoint = 0;
+		
 		try (
 				Connection conn = DBConnector.getConnection();
 				PreparedStatement hPpstmt = conn.prepareStatement(historyPaymentSql);
@@ -115,16 +112,15 @@ public class ChangeActionListener implements ActionListener {
 
 			// customer_info 에 멤버쉽 포인트 추가 + 설정
 
-			if (msal.cus_no == 0 ) {
-				msal.cus_no = 1000;
+			if (msal.cus_no != 0 ) {
+				addPointpstmt.setInt(1, msal.cus_no);
+				addPointpstmt.setInt(2, addPoint);
+				addPointpstmt.setInt(3, msal.cus_no);
+				
+				addPointpstmt.executeUpdate();
+				
+				System.out.println("PointUpdate");
 			}
-			addPointpstmt.setInt(1, msal.cus_no);
-			addPointpstmt.setInt(2, addPoint);
-			addPointpstmt.setInt(3, msal.cus_no);
-
-			addPointpstmt.executeUpdate();
-
-			System.out.println("PointUpdate");
 
 			// history_beverage 데이터 DB에 추가
 
@@ -136,7 +132,6 @@ public class ChangeActionListener implements ActionListener {
 
 				//				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
 				//				ResultSet fMNRS = fMNpstmt.executeQuery();
-
 				
 				String menuName = (String)orderTableModel.getValueAt(i, 0);
 				hBpstmt.setString(2, menuName.trim());
@@ -150,11 +145,8 @@ public class ChangeActionListener implements ActionListener {
 			}
 			System.out.println("history_beverage DB add");
 
-
 		} catch (SQLException e1) {
-
 			e1.printStackTrace();
-
 
 		} catch (Exception e2) {
 			e2.printStackTrace();

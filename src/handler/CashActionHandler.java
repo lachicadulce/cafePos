@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+
 // 금액 계산 버튼 (현금 + 카드 합침, 현금 먼저 입력)
 
 public class CashActionHandler implements ActionListener {
@@ -52,6 +53,7 @@ public class CashActionHandler implements ActionListener {
 		JLabel label = new JLabel("받은 현금을 입력해 주세요");
 		panel.add(label);
 		textField = new JTextField(10);
+		textField.setText("0");
 		panel.add(textField);
 
 
@@ -67,6 +69,7 @@ public class CashActionHandler implements ActionListener {
 						);
 
 		List<JButton> buttons = SwingUtils.getDescendantsOfType(JButton.class, op, true);
+
 		Container parent = buttons.get(0).getParent();
 		parent.setLayout( new GridLayout(4, 0, 5, 5) );
 		dialog = op.createDialog(null, "");
@@ -96,7 +99,7 @@ public class CashActionHandler implements ActionListener {
 					dialog.dispose();
 
 					if(cashMoney > 0 ) {					
-						cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "근태관리", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
+						cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "현금영수증 확인", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
 						if(cashReceiptCheck == 0) {
 							cashReceipt = true;
 						} else {
@@ -125,52 +128,73 @@ public class CashActionHandler implements ActionListener {
 				}
 
 			}
-
+			int total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
+			int mustRecevie = total - cashMoney;
 			if(e.getActionCommand() != null) {
-				// 카드 결제 입력 받기
-				label.setText("카드 결제 금액을 입력해주세요");
-				while(true) {
-					dialog = op.createDialog(null, "카드 결제");
-					dialog.setVisible(true);
+				if(total - cashMoney != 0) {
+					
+					// 카드 결제 입력 받기
+					label.setText("카드 결제 금액을 입력해주세요");
+					textField.setText(Integer.toString(mustRecevie));
+
+					while(true) {
+						dialog = op.createDialog(null, "카드 결제");
+						dialog.setVisible(true);
 
 
-					if(op.getValue() == null) {
-						dialog.dispose();
-						break;
-					} else if (op.getValue() == "E" ) {
+						if(op.getValue() == null) {
+							dialog.dispose();
+							break;
+						} else if (op.getValue() == "E" ) {
 
-						cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
-						cardMoney = Integer.parseInt((String)textField.getText());
-						calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
-						dialog.dispose();
-						break;
+							cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+							cardMoney = Integer.parseInt((String)textField.getText());
+							calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
+							dialog.dispose();
+							break;
 
-					} else if (isNumeric((String)op.getValue())) {
-						input += op.getValue();
-						textField.setText(input);
+						} else if (isNumeric((String)op.getValue())) {
+							input += op.getValue();
+							textField.setText(input);
 
-					} else if (op.getValue() == ">") {
-						int len = textField.getText().length();
-						String num = textField.getText();
-						String finnum = "";
-						char[] numChar = num.toCharArray();
-						for(int i = 0; i < len-1 ; i++) {
-							finnum += numChar[i];
+						} else if (op.getValue() == ">") {
+							int len = textField.getText().length();
+							String num = textField.getText();
+							String finnum = "";
+							char[] numChar = num.toCharArray();
+							for(int i = 0; i < len-1 ; i++) {
+								finnum += numChar[i];
+							}
+							input = finnum;
+							textField.setText(input);
 						}
-						input = finnum;
-						textField.setText(input);
-					}
 
+					}
 				}
 			}
 		}
 
+		int[] priceSaleReceived = new int[3];
+		for(int i=0; i < calcTable.getRowCount() -1; i++) {
+			if((String)calcTable.getValueAt(i, 1) == null) {
+				priceSaleReceived[i] = 0;
+			} else {
+				priceSaleReceived[i] = Integer.parseInt((String)calcTable.getValueAt(i, 1));
+			}
+
+		}
+
+		int change = priceSaleReceived[0] - priceSaleReceived[1]- priceSaleReceived[2];
 
 
+		if(change <= 0)  {
+			change = Math.abs(change);
+		} else {
 
+		}
 
-
-
+		String changestr = Integer.toString(change);
+		calcTable.setValueAt(changestr, 3, 1);
 
 	} // end AL
 	public static boolean isNumeric(String s) {

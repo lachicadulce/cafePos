@@ -1,10 +1,6 @@
 package manager_file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -46,7 +42,8 @@ public class ManagerMenu extends PosFrame {
 	
 	JComboBox<String> cb_type;
 	
-	private MenuDialog addMenuDialog;
+	private MenuDialog addMenuDialog;	
+	final public static int MAX_BUTTON = 6;
 	
 	public ManagerMenu() {
 		super();
@@ -87,13 +84,12 @@ public class ManagerMenu extends PosFrame {
 	
 	// 화면 구성
 	private void init() {
-		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn);
 		model = new DefaultTableModel(header, 0);
 
 		tb = new JTable(model);
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
-		tbheader.setFont(new Font("", Font.PLAIN, 15));
+		tbheader.setFont(new Font("", Font.BOLD, 15));
 		TableColumnModel colModel = tb.getColumnModel();
 		colModel.getColumn(0).setPreferredWidth(20);
 		colModel.getColumn(1).setPreferredWidth(60);
@@ -103,14 +99,18 @@ public class ManagerMenu extends PosFrame {
 	
 		scrollpane = new JScrollPane(tb);
 		
-		jsp.setResizeWeight(0.9);
+		tbheader.setBackground(new Color(0xEFF8FB)); // Header 컬러 설정
+		jsp.setResizeWeight(1.0);
+		jsp.setEnabled(false); // 테이블 <> 버튼 사이에 사이즈 조정 불가능하게 설정
+		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
 		JPanel p1  = new JPanel(new BorderLayout());
-		JPanel p2 = new JPanel(new GridLayout(5, 1));
+		JPanel p2 = new JPanel(new GridLayout(MAX_BUTTON, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
-		
+
+		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn, p3);
 		JLabel lb = new JLabel("메뉴 이름");
 		tf_name = new JTextField(20);
 		cb_type = new JComboBox(addMenuDialog.types.toArray(new String[addMenuDialog.types.size()]));
@@ -118,7 +118,7 @@ public class ManagerMenu extends PosFrame {
 		cb_type.addItem("전체");
 		cb_type.setSelectedIndex(cb_type.getItemCount() - 1);
 //		lb.setSize(WIDTH, HEIGHT);
-		
+
 		// p3에 검색 라인, 조회, 추가, 수정, 삭제 버튼 추가
 		p3.add(lb);
 		p3.add(tf_name);
@@ -171,7 +171,7 @@ public class ManagerMenu extends PosFrame {
 					String menu_display_order = String.valueOf(model.getValueAt(tb.getSelectedRow(), 4));
 					
 					// 수정 화면 띄우기.
-					MenuDialog mmd = new MenuDialog(menu_no, menu_name, menu_price, menu_type, menu_display_order, selBtn);
+					MenuDialog mmd = new MenuDialog(menu_no, menu_name, menu_price, menu_type, menu_display_order, selBtn, p1);
 					mmd.setModal(true);
 					mmd.setVisible(true);
 				} else {
@@ -212,7 +212,7 @@ public class ManagerMenu extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns(this);
+		Manager_Btns mb = new Manager_Btns(this, 5);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}

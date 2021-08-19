@@ -118,7 +118,6 @@ public class ManagerPage extends PosFrame {
 		
 		// 달력 출력
 		LocalDate now = LocalDate.now();
-		LocalDate firstDayOfThisMonth = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
@@ -129,12 +128,13 @@ public class ManagerPage extends PosFrame {
 		UtilDateModel model2 = new UtilDateModel();
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
 		datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
-		try {
-			datePicker.getJFormattedTextField().setText(firstDayOfThisMonth.toString());
-			datePicker2.getJFormattedTextField().setText(now.toString());
-		} catch (Exception e) {
-			
-		}
+		
+		// JDatePickerImpl 디폴트 날짜 set
+ 		model1.setDate(now.getYear(), now.getMonthValue()-1, 1);
+ 		model1.setSelected(true);
+ 		
+ 		model2.setDate(now.getYear(), now.getMonthValue()-1, now.getDayOfMonth());
+ 		model2.setSelected(true);
 		
 		
 		// p3에 달력 ~ 달력 조회버튼 추가

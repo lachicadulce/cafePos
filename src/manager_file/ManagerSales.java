@@ -137,7 +137,6 @@ public class ManagerSales extends PosFrame {
 		
 	    // 달력 출력
 		LocalDate now = LocalDate.now();
-		LocalDate firstDayOfThisMonth = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
  		Properties p = new Properties();
  		p.put("text.today", "Today");
  		p.put("text.month", "Month");

@@ -27,16 +27,24 @@ public class ClosingBtn implements ActionListener {
 	// 마감용지출력 버튼 클릭 시 [출력 완료] 팝업 출력 설정
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date showdate = new Date();
-		dateFormat2.format(showdate);
-		JOptionPane end = new JOptionPane();				
-		Font f1 = new Font("", Font.BOLD, 15);
-		UIManager.put("OptionPane.messageFont", f1);
-		UIManager.put("OptionPane.minimumSize",new Dimension(220,100)); 
-		sumDB();
-		end.showMessageDialog(null, "[ " + dateFormat2.format(showdate)+ " ]" 
-					+ "\n마감 용지 출력이 완료되었습니다.", "마감 용지 출력", JOptionPane.PLAIN_MESSAGE);
+		if(JOptionPane.showConfirmDialog(null, "마감용지를 출력 하시겠습니까?", "출력", 0) == 0) {
+			SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date showdate = new Date();
+			dateFormat2.format(showdate);
+			JOptionPane end = new JOptionPane();				
+			Font f1 = new Font("", Font.BOLD, 15);
+			UIManager.put("OptionPane.messageFont", f1);
+			UIManager.put("OptionPane.minimumSize",new Dimension(220,100)); 
+			sumDB();
+			end.showMessageDialog(null, "[ " + dateFormat2.format(showdate)+ " ]" 
+						+ "\n마감 용지 출력이 완료되었습니다.", "마감 용지 출력", JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane cancel = new JOptionPane();
+			Font f1 = new Font("", Font.BOLD, 15);
+			UIManager.put("OptionPane.messageFont", f1);
+			UIManager.put("OptionPane.minimumSize",new Dimension(220,100)); 
+			cancel.showMessageDialog(null, "마감용지 출력을 취소했습니다.", "출력 취소", JOptionPane.OK_OPTION);
+		}
 	}
 	
 	// 매출 합계 DB 불러오기 후 txt 파일에 저장

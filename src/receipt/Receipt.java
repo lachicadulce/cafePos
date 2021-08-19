@@ -692,7 +692,7 @@ public class Receipt extends PosFrame {
 					
 					String receipt_time = receipt_time_format.format(LocalDateTime.now());
 					
-					File f = new File("reprint/" + receipt_time +".txt");
+					File f = new File("src/receipt/reprint/" + receipt_time.replace(":", ".") +".txt");
 					
 					
 					try (
@@ -715,7 +715,7 @@ public class Receipt extends PosFrame {
 						e1.printStackTrace();
 					}
 					
-					System.out.println("쓰기 끝");
+					JOptionPane.showMessageDialog(null, "재인쇄 완료.");
 				} else {
 	    			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
 	    		}

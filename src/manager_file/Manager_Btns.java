@@ -1,11 +1,17 @@
 package manager_file;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
+
+import main_component.main_test;
 
 // 관리자메뉴 버튼 설정
 public class Manager_Btns {
@@ -55,7 +61,8 @@ public class Manager_Btns {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				main_test mt = new main_test();
+				mt.setDefaultOptions();
 			}
 		});
 		

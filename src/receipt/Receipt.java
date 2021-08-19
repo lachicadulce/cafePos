@@ -782,15 +782,14 @@ public class Receipt extends PosFrame {
 	     				
 	     				}
 	     				
-	     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
-	     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
-	     				JOptionPane.showMessageDialog(null, "현금 결제 금액 없이, 카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+	     			} else if (check[2].equals("N") && check[0].equals("0")) {
+	     				// 현금 결제금액이 없는 경우 
+	     				JOptionPane.showMessageDialog(null, "현금 결제 금액이 없습니다.");
 	     				
-	     			} else if (check[2].equals("N") && !check[1].equals("0")) {
-	     				
+	     			} else if (check[2].equals("N") && !check[0].equals("0")) {
 	     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
 	     				
-	     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
+	     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[0] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
 	     				
 	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
 	     				// 예 아니오 선택없이 창 닫은경우

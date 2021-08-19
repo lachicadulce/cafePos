@@ -461,7 +461,7 @@ public class Receipt extends PosFrame {
 
 		String message = "Main";
 
-		JButton  tomain = new JButton(message);
+		JButton  to_main = new JButton(message);
 
 		JPanel frame = new JPanel();
 
@@ -532,9 +532,9 @@ public class Receipt extends PosFrame {
 			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
 		}
 		// 메인으로 가는 버튼 세부 설정 
-		tomain.setBounds(20, 30, 150, 80);
+		to_main.setBounds(20, 30, 150, 80);
 //		tomain.setBackground(new Color(0xffffff));
-		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
+		to_main.setFont(new Font("MV Bold", Font.BOLD, 25));
 		//
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
@@ -558,7 +558,7 @@ public class Receipt extends PosFrame {
 		main.add(buttons.get(2));
 		main.add(buttons.get(3));
 
-		main.add(tomain); // 메인으로 가는 버튼
+		main.add(to_main); // 메인으로 가는 버튼
 		main.add(p1); // 날짜 조회 출력
 
 		// 우측 위 버튼

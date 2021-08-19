@@ -84,7 +84,6 @@ public class ManagerMenu extends PosFrame {
 	
 	// 화면 구성
 	private void init() {
-		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn);
 		model = new DefaultTableModel(header, 0);
 
 		tb = new JTable(model);
@@ -118,7 +117,8 @@ public class ManagerMenu extends PosFrame {
 		cb_type.addItem("전체");
 		cb_type.setSelectedIndex(cb_type.getItemCount() - 1);
 //		lb.setSize(WIDTH, HEIGHT);
-		
+
+		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn, p3);
 		// p3에 검색 라인, 조회, 추가, 수정, 삭제 버튼 추가
 		p3.add(lb);
 		p3.add(tf_name);
@@ -171,7 +171,7 @@ public class ManagerMenu extends PosFrame {
 					String menu_display_order = String.valueOf(model.getValueAt(tb.getSelectedRow(), 4));
 					
 					// 수정 화면 띄우기.
-					MenuDialog mmd = new MenuDialog(menu_no, menu_name, menu_price, menu_type, menu_display_order, selBtn);
+					MenuDialog mmd = new MenuDialog(menu_no, menu_name, menu_price, menu_type, menu_display_order, selBtn, p1);
 					mmd.setModal(true);
 					mmd.setVisible(true);
 				} else {

@@ -19,6 +19,7 @@ import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -86,16 +87,32 @@ public class MenuPanel extends JPanel {
 				}
 				htmlName += Integer.toString(menuPrice);
 				htmlName += "</body></HTML>";
-				if(count > 23) {
+				if(count >36) {
+					JOptionPane.showMessageDialog(null,"각 분류별 최대 36개까지 등록이 가능합니다.","Message"
+							,JOptionPane.ERROR_MESSAGE);
+				}// type마다 36개초과로 등록될경우 에러메시지팝업을 띄우게 작성함.(만들어는 놨지만 테스트는 안해보고 다른 대체방안이 필요해보임)
+				else if(count > 24) {
 					panel3.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
-				} else if (count > 11) {
+				} else if (count > 12) {
 					panel2.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
-				} else {
+				} else{
 					panel1.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
 				}
 				count++;
 				
 			}//while
+			while(count <= 36) {
+				
+				if(count > 24) {
+					panel3.add(new UnusedButtonSetting("", 15, 0xeeeeee, al));
+				} else if (count > 12) {
+					panel2.add(new UnusedButtonSetting("", 15, 0xeeeeee, al));
+				} else {
+					panel1.add(new UnusedButtonSetting("", 15, 0xeeeeee, al));
+				}
+				count++;
+				
+			}
 			
 		} catch (SQLException e) {
 			

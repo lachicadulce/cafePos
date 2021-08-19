@@ -1,5 +1,6 @@
 package main_component;
 import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,7 +16,6 @@ import javax.swing.JSplitPane;
 
 import baseSettings.DBConnector;
 import handler.SortMenuActionListener;
-import main_component.BasicButton;
 
 
 public class RightPanelBasic extends JPanel {

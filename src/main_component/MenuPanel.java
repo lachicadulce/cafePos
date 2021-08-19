@@ -30,10 +30,7 @@ import handler.ChangeMenuDownActionListener;
 import handler.ChangeMenuUpActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
-import main_component.BasicButton;
 import main_component.ButtonSetting;
-import main_component.MainBtns;
-import main_component.OrderButton;
 
 
 public class MenuPanel extends JPanel {

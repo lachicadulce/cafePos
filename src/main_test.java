@@ -112,11 +112,7 @@ public class main_test extends PosFrame {
 
 		calcTable = new JTable(calcdata, calcColumn);
 		
-		//
-		cah = new CashActionHandler(calcTable);
-		msal = new MemberShipActionListener(calcTable);
-		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
-		
+	
 		// 주문LIST
 		orderTableModel = new DefaultTableModel(); 
 		orderTable = new JTable(orderTableModel);
@@ -124,6 +120,7 @@ public class main_test extends PosFrame {
 		orderTableModel.addColumn("메뉴이름");
 		orderTableModel.addColumn("수량");
 		orderTableModel.addColumn("가격");
+		
 
 		//			orderTableModel.addRow(new Object[] {"v1", "1", "4500"}); //행추가
 		//			orderTableModel.addRow(new Object[] {"v2", "1", "4500"}); //행추가
@@ -138,12 +135,20 @@ public class main_test extends PosFrame {
 		orderScrollPanel.setBounds(5, 10, 500, 400);
 		add(orderScrollPanel);
 
+		// 액션리스너 선언
+		msal = new MemberShipActionListener(calcTable);
+		cah = new CashActionHandler(calcTable, msal, orderTableModel, this.getFrames()[0]);
+		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
+		
+		
 		// 주문리스트 버튼 변수
 		allCancel = new JButton("전체취소");
 		selectCancel = new JButton("선택취소");
 		quantityPlus = new JButton("수량 +");
 		quantityMinus = new JButton("수량 -");
-
+		
+		
+		// 전체취소버튼
 		allCancel.setLocation(50, 430);
 		allCancel.setSize(100, 30);
 		allCancel.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));

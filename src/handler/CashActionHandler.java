@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import baseSettings.DBConnector;
 
 
 // 금액 계산 버튼 (현금 + 카드 합침, 현금 먼저 입력)
@@ -32,19 +39,22 @@ public class CashActionHandler implements ActionListener {
 	int cardMoney;
 	boolean cashReceipt;
 	int cashReceiptCheck;
-	
-
-	public CashActionHandler(JTable calcTable) {
+	MemberShipActionListener msal;
+	DefaultTableModel orderTableModel;
+	Frame frame;
+	public CashActionHandler(JTable calcTable, MemberShipActionListener msal, DefaultTableModel orderTableModel, Frame frame) {
 		super();
 		this.calcTable = calcTable;
-		
+		this.msal = msal;
+		this.orderTableModel = orderTableModel;
+		this.frame = frame;
 	}
 
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		
 		JDialog dialog = null;
 
 		String[] commands = {"1", "2", "3", "4","5", "6", "7", "8", "9", "0", ">", "E"};
@@ -158,7 +168,6 @@ public class CashActionHandler implements ActionListener {
 							
 							cardMoney = Integer.parseInt((String)textField.getText());
 							calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
-							JOptionPane.showMessageDialog(null, "결제가 완료되었습니다.","Message",JOptionPane.INFORMATION_MESSAGE);
 							dialog.dispose();
 							break;
 
@@ -197,7 +206,113 @@ public class CashActionHandler implements ActionListener {
 		
 		
 		
+		// DB에 데이터 넣기
+		String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
 
+		String mmShipAddPointSql = "UPDATE customer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
+
+		String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE TRIM(?)), ?)";
+
+		//		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
+
+		String hPCountSql = "SELECT MAX(receipt_no) AS cnt FROM history_payment";
+
+		int cnt = 0;
+		int addPoint = 0;
+		
+		try (
+				Connection conn = DBConnector.getConnection();
+				PreparedStatement hPpstmt = conn.prepareStatement(historyPaymentSql);
+				PreparedStatement hPCntpstmt = conn.prepareStatement(hPCountSql);	
+
+				PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
+				PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
+				//				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
+
+				){
+			; 
+			ResultSet rs = hPCntpstmt.executeQuery();
+
+			while(rs.next()) {
+				cnt = rs.getInt("cnt") + 1;
+			}
+			rs.close();
+
+			addPoint = (total - msal.usePoint)/10;
+
+			// history_payment DB에 추가 + 설정
+			hPpstmt.setInt(1, cnt);
+			hPpstmt.setInt(2, total);
+			hPpstmt.setInt(3, cardMoney);
+			hPpstmt.setInt(4, cashMoney > total ? cashMoney - change : cashMoney);
+
+			hPpstmt.setInt(5, 1000);
+			hPpstmt.setInt(6, msal.usePoint);
+			hPpstmt.setInt(7, addPoint);
+
+			if(cashReceipt) {
+				hPpstmt.setString(8, "Y");
+			} else {
+				hPpstmt.setString(8, "N");
+			}
+
+			hPpstmt.executeUpdate();
+			System.out.println("history_payment DB add");
+
+
+			// customer_info 에 멤버쉽 포인트 추가 + 설정
+
+			if (msal.cus_no != 0 ) {
+				addPointpstmt.setInt(1, msal.cus_no);
+				addPointpstmt.setInt(2, addPoint);
+				addPointpstmt.setInt(3, msal.cus_no);
+				
+				addPointpstmt.executeUpdate();
+				
+				System.out.println("PointUpdate");
+			}
+
+			// history_beverage 데이터 DB에 추가
+			
+			hBpstmt.setInt(1, cnt);
+
+			
+
+			for(int i = 0; i < orderTableModel.getRowCount(); i++) {
+
+				//				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
+				//				ResultSet fMNRS = fMNpstmt.executeQuery();
+				
+				String menuName = (String)orderTableModel.getValueAt(i, 0);
+				hBpstmt.setString(2, menuName.trim());
+				try {
+					hBpstmt.setInt(3, (int)orderTableModel.getValueAt(i, 1));
+				} catch (Exception e3) {
+					hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
+				}
+
+				hBpstmt.executeUpdate();
+			}
+			System.out.println("history_beverage DB add");
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+
+		
+		
+		JOptionPane.showMessageDialog(null, "결제가 완료되었습니다.","Message",JOptionPane.INFORMATION_MESSAGE);
+		
+		orderTableModel.setRowCount(0);
+		for(int i= 0; i < calcTable.getRowCount(); i++) {
+			calcTable.setValueAt("", i, 1);	
+		}
+		frame.validate();
+	
+				
 	} // end AL
 	public static boolean isNumeric(String s) {
 		try {

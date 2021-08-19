@@ -1,4 +1,6 @@
+package main_component;
 import java.awt.BorderLayout;
+
 
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -21,6 +23,7 @@ import baseSettings.PosFrame;
 import handler.AbsentManagerHandler;
 import handler.CashActionHandler;
 import handler.ChangeActionListener;
+import handler.ManagerButtonActionListener;
 import handler.MemberShipActionListener;
 import handler.MenuButtonActionListener;
 import handler.QuantityDecreaseActionListener;
@@ -29,24 +32,55 @@ import handler.RevalidateActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 import handler.SortMenuActionListener;
-import main_component.BasicButton;
+
 import main_component.ButtonSetting;
 import main_component.MenuPanel;
-import main_component.OrderButton;
+
 import main_component.RightPanelBasic;
 
-
-//////////////////////////////////////////////////////////// 지금 수정중
-
-
-public class main_test3 extends PosFrame {
+public class main_test extends PosFrame {
 
 	private JSplitPane jsp1 = new JSplitPane();
 	private JSplitPane jsp2 = new JSplitPane();
 
 	RightPanelBasic rpb;
+	JTable calcTable;
+	CashActionHandler cah;
+	MemberShipActionListener msal;
+	String[] calcColumn = { "", "" };
+	String lumpSum;
+	String discount;
+	String received;
+	String change;
+	
+	DefaultTableModel orderTableModel;
+	JTable orderTable;
+	ListSelectionModel orderTableSelection;
+	JScrollPane orderScrollPanel;
+	
+	ManagerButtonActionListener managerAl;
 
-	public main_test3() {
+	String[][] calcdata = { 
+			{"총금액", lumpSum},
+			{"할인금액", discount},
+			{"받은금액", received},
+			{"거스름돈", change},
+	};
+	
+	
+	JButton allCancel;
+	JButton selectCancel;
+	JButton quantityPlus;
+	JButton quantityMinus;
+	
+	JButton managerMenu;
+	JButton absentManager;
+	JButton exchange;
+	
+	JButton payment;
+	MenuButtonActionListener mbal;
+	
+	public main_test() {
 		super();
 		mainScreenInit();
 
@@ -54,6 +88,8 @@ public class main_test3 extends PosFrame {
 
 	private void mainScreenInit() {
 
+		
+		
 		jsp1.setResizeWeight(0.9);
 		jsp2.setResizeWeight(0.8);
 		
@@ -63,121 +99,132 @@ public class main_test3 extends PosFrame {
 		// 왼쪽 화면
 		JPanel leftScreen = new JPanel();
 		leftScreen.setLayout(null);
+
 		
 		// 금액계산 변수
-		String[] calcColumn = { "", "" };
-		String lumpSum = "";
-		String discount = "";
-		String received = "";
-		String change = "";
+		
+		lumpSum = "";
+		discount = "";
+		received = "";
+		change = "";
 
-		String[][] calcdata = { 
-				{"총금액", lumpSum},
-				{"할인금액", discount},
-				{"받은금액", received},
-				{"거스름돈", change},
-		};
-		JTable calcTable = new JTable(calcdata, calcColumn);
-
+		calcTable = new JTable(calcdata, calcColumn);
+		
+	
 		// 주문LIST
-		DefaultTableModel orderTableModel = new DefaultTableModel(); 
-		JTable orderTable = new JTable(orderTableModel);
+		orderTableModel = new DefaultTableModel(); 
+		orderTable = new JTable(orderTableModel);
 
 		orderTableModel.addColumn("메뉴이름");
 		orderTableModel.addColumn("수량");
 		orderTableModel.addColumn("가격");
+		
 
 		//			orderTableModel.addRow(new Object[] {"v1", "1", "4500"}); //행추가
 		//			orderTableModel.addRow(new Object[] {"v2", "1", "4500"}); //행추가
 		//			orderTableModel.addRow(new Object[] {"v3", "1", "4500"}); //행추가
 		//			orderTable.setValueAt("", 0, 0); //행수정
 
-		ListSelectionModel orderTableSelection =  orderTable.getSelectionModel();
+		orderTableSelection =  orderTable.getSelectionModel();
 		orderTableSelection.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		orderTable.setDefaultEditor(Object.class, null); // 수정 불가
-		JScrollPane orderScrollPanel = new JScrollPane(orderTable);
-		orderScrollPanel.setBounds(5, 10, 350, 400);
+		orderScrollPanel = new JScrollPane(orderTable);
+		orderScrollPanel.setBounds(5, 10, 500, 400);
 		add(orderScrollPanel);
 
+		// 액션리스너 선언
+		msal = new MemberShipActionListener(calcTable);
+		cah = new CashActionHandler(calcTable, msal, orderTableModel, this.getFrames()[0]);
+		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
+		
+		
 		// 주문리스트 버튼 변수
-		JButton allCancel = new JButton("전체취소");
-		JButton selectCancel = new JButton("선택취소");
-		JButton quantityPlus = new JButton("수량 +");
-		JButton quantityMinus = new JButton("수량 -");
-
-		allCancel.setLocation(10, 430);
-		allCancel.setSize(85, 30);
+		allCancel = new JButton("전체취소");
+		selectCancel = new JButton("선택취소");
+		quantityPlus = new JButton("수량 +");
+		quantityMinus = new JButton("수량 -");
+		
+		
+		// 전체취소버튼
+		allCancel.setLocation(50, 430);
+		allCancel.setSize(100, 30);
 		allCancel.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
 		add(allCancel);
 
-		selectCancel.setLocation(95, 430);
-		selectCancel.setSize(85, 30);
+		selectCancel.setLocation(150, 430);
+		selectCancel.setSize(100, 30);
 		selectCancel.addActionListener(new SelectCancelActionListener(orderTableModel, orderTable));
 		add(selectCancel);
 
-		quantityPlus.setLocation(180, 430);
-		quantityPlus.setSize(85, 30);
+		quantityPlus.setLocation(250, 430);
+		quantityPlus.setSize(100, 30);
 		quantityPlus.addActionListener(new QuantityIncreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityPlus);
 
-		quantityMinus.setLocation(265, 430);
-		quantityMinus.setSize(85, 30);
+		quantityMinus.setLocation(350, 430);
+		quantityMinus.setSize (100, 30);
 		quantityMinus.addActionListener(new QuantityDecreaseActionListener(calcTable, orderTableModel, orderTable));
 		add(quantityMinus);
 
+
+		
 		// 금액계산
-		calcTable.setBounds(5, 480, 250, 250);
+		calcTable.setBounds(20, 480, 300, 250);
 		calcTable.setRowHeight(65);
 		calcTable.setEnabled(false);	// 수정 불가, 클릭표시 안나옴	
 		add(calcTable);
 
 		// 관리자 메뉴, 근태관리, 환전 메뉴 변수
-		JButton managerMenu = new JButton("<html>관리자<br />&nbsp메뉴</html>");
-		JButton absentManager = new JButton("<html>근태<br />관리</html>");
-		JButton exchange = new JButton("환전");
+		managerMenu = new JButton("<html>관리자<br />&nbsp메뉴</html>");
+		absentManager = new JButton("<html>근태<br />관리</html>");
+		exchange = new JButton("환전");
 
 		// 관리자 메뉴
-		managerMenu.setLocation(280, 470);
-		managerMenu.setSize(75,70);
+
+		managerMenu.setLocation(420, 470);
+		managerMenu.setSize(80,70);
+		managerMenu.addActionListener(managerAl);
+
 		add(managerMenu);
-		// 근태 관리
-		absentManager.setLocation(280, 540);
-		absentManager.setSize(75,70);
+		// 근태 
+		absentManager.setLocation(420, 540);
+		absentManager.setSize(80,70);
 		absentManager.addActionListener(new AbsentManagerHandler());
 		add(absentManager);
 
 		// 환전
-		exchange.setLocation(280, 610);
-		exchange.setSize(75,70);
+		exchange.setLocation(420, 610);
+		exchange.setSize(80,70);
 		exchange.addActionListener(new SafeOpenActionListener());
 		add(exchange);
 		
-		// 결제
-		JButton payment = new JButton("<html>환전<br />계산</html>");
-		payment.setLocation(280, 680);
-		payment.setSize(75,70);
-		payment.addActionListener(new ChangeActionListener(calcTable));
+		// 환전계산
+		payment = new JButton("<html>환전<br />계산</html>");
+		payment.setLocation(420, 680);
+		payment.setSize(80,70);
+		payment.addActionListener(new ChangeActionListener(calcTable, cah, msal, orderTableModel));
 		add(payment);
 		
-		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
-		test2.setLocation(220, 610);
-		test2.setSize(75,70);
-		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
-		add(test2);
+
+//		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
+//		test2.setLocation(220, 610);
+//		test2.setSize(75,70);
+//		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
+//		add(test2);
 
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		
-		MenuButtonActionListener mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
-		MemberShipActionListener msal = new MemberShipActionListener(calcTable);
-		CashActionHandler cah = new CashActionHandler(calcTable);
-		
-		rpb = new RightPanelBasic(jsp2, mbal, msal, cah);
+
+		mbal = new MenuButtonActionListener(calcTable, orderTableModel, orderTable);
 		
 		
+		rpb = new RightPanelBasic(jsp2, mbal, msal, cah, managerAl);
 		
-//		MenuPanel drink = new MenuPanel("drink", rpb, mbal);
+		MenuPanel m = new MenuPanel("Coffee", rpb, mbal);
+		
+		//		MenuPanel drink = new MenuPanel("drink", rpb, mbal);
 		
 		jsp1.setLeftComponent(leftScreen);
 		jsp1.setRightComponent(rpb);
@@ -187,7 +234,7 @@ public class main_test3 extends PosFrame {
 
 	public static void main(String[] args) {
 
-		main_test3 m = new main_test3();
+		main_test m = new main_test();
 		m.setDefaultOptions();
 	}
 
@@ -195,10 +242,3 @@ public class main_test3 extends PosFrame {
 
 
 }
-
-
-
-
-
-
-

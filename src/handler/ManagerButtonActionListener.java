@@ -1,9 +1,9 @@
 package handler;
 
 import java.awt.Frame;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import manager_file.ManagerSales;
 
 public class ManagerButtonActionListener implements ActionListener {
@@ -18,8 +18,11 @@ public class ManagerButtonActionListener implements ActionListener {
 		
 		ManagerSales ms = new ManagerSales();
 		ms.setDefaultOptions();
-		
+
 		frame.dispose();
+		frame.validate();
+		frame.invalidate();
+
 	}
 
 }

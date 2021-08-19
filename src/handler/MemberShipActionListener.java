@@ -30,6 +30,9 @@ public class MemberShipActionListener implements ActionListener {
 
 	JTable calcTable;
 
+	int usePoint;
+	int cus_no;
+
 	public MemberShipActionListener(JTable calcTable) {
 		this.calcTable = calcTable;
 	}
@@ -75,33 +78,34 @@ public class MemberShipActionListener implements ActionListener {
 					name = rs.getString("name");
 					tel = rs.getString("tel");
 					point = rs.getInt("point");
+					cus_no = rs.getInt("cus_no");
 
 					memshipTableModel.addRow(new Object[] {name, tel, point}); //행추가
 				}
 
 				String usePointstr = JOptionPane.showInputDialog(null, panel, "멤버쉽", 1);
-				int usePoint = Integer.parseInt(usePointstr);
-				if( usePoint > point) {
-					JOptionPane.showMessageDialog(null, "포인트가 부족합니다.", "오류", 0);
-				} else {
-					calcTable.setValueAt(usePointstr, 1, 1);
-					memPointpstmt.setInt(1, usePoint);
-					memPointpstmt.setString(2, "%"+memTel+"%");
-					memPointpstmt.executeUpdate();
-					JOptionPane.showMessageDialog(null, "포인트사용이 완료되었습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
+				
+				if(usePointstr != null) {
+					usePoint = Integer.parseInt(usePointstr);
+					
+					if( usePoint > point) {
+						JOptionPane.showMessageDialog(null, "포인트가 부족합니다.", "오류", 0);
+					} else {
+						calcTable.setValueAt(usePointstr, 1, 1);
+						memPointpstmt.setInt(1, usePoint);
+						memPointpstmt.setString(2, "%"+memTel+"%");
+						memPointpstmt.executeUpdate();
+						JOptionPane.showMessageDialog(null, "포인트사용이 완료되었습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 
 				rs.close();
-
-
 
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else {
-
-		}
+		} 
 
 	}
 

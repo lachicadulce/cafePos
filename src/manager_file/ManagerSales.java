@@ -180,7 +180,7 @@ public class ManagerSales extends PosFrame {
 		jsp.setLeftComponent(p1);
 		
 		// Manager_Btns 으로 버튼 추가
-		Manager_Btns mb = new Manager_Btns(this);
+		Manager_Btns mb = new Manager_Btns(this, 1);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}

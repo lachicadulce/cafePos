@@ -109,7 +109,8 @@ public class ManagerMenu extends PosFrame {
 		JPanel p1  = new JPanel(new BorderLayout());
 		JPanel p2 = new JPanel(new GridLayout(MAX_BUTTON, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
-		
+
+		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn, p3);
 		JLabel lb = new JLabel("메뉴 이름");
 		tf_name = new JTextField(20);
 		cb_type = new JComboBox(addMenuDialog.types.toArray(new String[addMenuDialog.types.size()]));
@@ -118,7 +119,6 @@ public class ManagerMenu extends PosFrame {
 		cb_type.setSelectedIndex(cb_type.getItemCount() - 1);
 //		lb.setSize(WIDTH, HEIGHT);
 
-		addMenuDialog = new MenuDialog(this, "Menu Add", selBtn, p3);
 		// p3에 검색 라인, 조회, 추가, 수정, 삭제 버튼 추가
 		p3.add(lb);
 		p3.add(tf_name);
@@ -212,7 +212,7 @@ public class ManagerMenu extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns(this);
+		Manager_Btns mb = new Manager_Btns(this, 5);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}

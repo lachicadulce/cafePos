@@ -13,18 +13,17 @@ public class Manager_Btns {
 	private ArrayList<JButton> btns;
 	final public static int MAX_BUTTON = 6;
 	
-	public Manager_Btns(JFrame frame) {
+	public Manager_Btns(JFrame frame, int selected) {
 		btns = new ArrayList<>();
 		
 		// 버튼 폰트, 배경색 설정
 		for(int i = 0; i < MAX_BUTTON; i++) {
 			JButton jb = new JButton();
 			jb.setFont(new Font("default", Font.BOLD, 16));
-			jb.setBackground(new Color(0xD7E7F7));
 			jb.setHorizontalAlignment(SwingConstants.LEFT); // 좌측 정렬되도록 설정
 			btns.add(jb);
 		}
-		
+		setBtnCol(selected);
 		// 버튼 이미지아이콘 추가
 		ImageIcon main = new ImageIcon("manager/main.png");
 		ImageIcon total = new ImageIcon("manager/total.png");
@@ -89,6 +88,15 @@ public class Manager_Btns {
 			}
 		});
 
+	}
+	
+	public void setBtnCol(int selectedIndex) {
+		for(int i = 0; i < btns.size(); i++) {
+			if(i != selectedIndex) {
+				btns.get(i).setBackground(new Color(0xD7E7F7));
+			}
+		}
+		btns.get(selectedIndex).setBackground(new Color(0x2E9AFE));
 	}
 	
 	public ArrayList<JButton> getJBtns() {

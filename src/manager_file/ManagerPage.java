@@ -172,7 +172,7 @@ public class ManagerPage extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns(this);
+		Manager_Btns mb = new Manager_Btns(this, 4);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}

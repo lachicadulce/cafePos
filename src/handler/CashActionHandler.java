@@ -58,8 +58,13 @@ public class CashActionHandler implements ActionListener {
 		panel.add(textField);
 		
 		int total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
-		int sale = Integer.parseInt((String)calcTable.getValueAt(1, 1));
-
+		int sale = 0;
+        try {
+            sale = Integer.parseInt((String)calcTable.getValueAt(1, 1));
+        }
+        catch (Exception e2) {
+            sale = 0;
+        }
 
 		JOptionPane op = new JOptionPane
 				(
@@ -103,7 +108,7 @@ public class CashActionHandler implements ActionListener {
 
 					if(cashMoney > 0 ) {					
 						cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "현금영수증 확인", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
-						if(cashReceiptCheck == 0) {
+						if(cashReceiptCheck == 0) {// 영수증한다의 yes == 0 / cancel == 1 / 
 							cashReceipt = true;
 						} else {
 							cashReceipt = false;
@@ -116,7 +121,7 @@ public class CashActionHandler implements ActionListener {
 				} else if (isNumeric((String)op.getValue())) {
 					input += op.getValue();
 					textField.setText(input);
-
+					
 					// 취소버튼 눌렀을때 한자리수 지우기
 				} else if (op.getValue() == ">") {
 					int len = textField.getText().length();
@@ -134,8 +139,8 @@ public class CashActionHandler implements ActionListener {
 		
 			
 			int mustRecevie = total - sale - cashMoney;
-			if(e.getActionCommand() != null) {
-				if( mustRecevie != 0) {
+			if(e.getActionCommand() != null) { // 팝업 닫기,취소 버튼 안눌러진 상황일때.
+				if( mustRecevie > 0) {
 					
 					// 카드 결제 입력 받기
 					label.setText("카드 결제 금액을 입력해주세요");
@@ -144,23 +149,23 @@ public class CashActionHandler implements ActionListener {
 					while(true) {
 						dialog = op.createDialog(null, "카드 결제");
 						dialog.setVisible(true);
+						
 
-
-						if(op.getValue() == null) {
-							dialog.dispose();
+						if(op.getValue() == null) { // 결제팝업창에서 X버튼눌렀을때
+							dialog.dispose(); // 결제팝업창 끄기.
 							break;
 						} else if (op.getValue() == "E" ) {
-
-							cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+							
 							cardMoney = Integer.parseInt((String)textField.getText());
 							calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
+							JOptionPane.showMessageDialog(null, "결제가 완료되었습니다.","Message",JOptionPane.INFORMATION_MESSAGE);
 							dialog.dispose();
 							break;
 
 						} else if (isNumeric((String)op.getValue())) {
 							input += op.getValue();
 							textField.setText(input);
-
+							
 						} else if (op.getValue() == ">") {
 							int len = textField.getText().length();
 							String num = textField.getText();
@@ -184,11 +189,11 @@ public class CashActionHandler implements ActionListener {
 
 
 		if(change <= 0)  {
-			change = Math.abs(change);
+			change = Math.abs(change); //잔돈 거스름을 주기위한 과정
 		} 
 
 		String changestr = Integer.toString(change);
-		calcTable.setValueAt(changestr, 3, 1);
+		calcTable.setValueAt(changestr, 3, 1); // 거스름돈 금액
 		
 		
 		

@@ -123,7 +123,7 @@ public class ChangeActionListener implements ActionListener {
 			}
 
 			// history_beverage 데이터 DB에 추가
-
+			
 			hBpstmt.setInt(1, cnt);
 
 			

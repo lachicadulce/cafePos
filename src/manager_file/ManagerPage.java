@@ -1,11 +1,17 @@
 package manager_file;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -31,24 +37,20 @@ public class ManagerPage extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
-	private String sql = "SELECT a_no, emp_no, name, emp_degree, "
-			+ "start_work, "
-			+ "fin_work, "
-			+ "round((fin_work - start_work) * 24) AS wtime, "
-			+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-			+ "FROM absent_info INNER JOIN employees_info  USING (emp_no)";
+	private String sql;
 	private JTable tb;
 	private DefaultTableModel model;
 	private JButton selBtn = new JButton("조회");
 	private String header[] = {"No", "사번", "이름", "직위", "출근시간", "퇴근시간", "근무시간", "근무시작일"};
 	private String date_s, date_e;
+	private JDatePickerImpl datePicker, datePicker2;
 	final public static int MAX_BUTTON = 6; // 우측 버튼 총 개수
 	
 	public ManagerPage() {
 		super();
 
 		init();
-		setTB();
+		refreshTB();
 	}
 	
 	// db에서 table에 띄울 데이타 가져오기.
@@ -115,16 +117,25 @@ public class ManagerPage extends PosFrame {
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		// 달력 출력
+		LocalDate now = LocalDate.now();
+		LocalDate firstDayOfThisMonth = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		UtilDateModel model1 = new UtilDateModel();
 		JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		UtilDateModel model2 = new UtilDateModel();
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
-		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		try {
+			datePicker.getJFormattedTextField().setText(firstDayOfThisMonth.toString());
+			datePicker2.getJFormattedTextField().setText(now.toString());
+		} catch (Exception e) {
+			
+		}
+		
 		
 		// p3에 달력 ~ 달력 조회버튼 추가
 		p3.add(datePicker);
@@ -136,15 +147,7 @@ public class ManagerPage extends PosFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				sql = "SELECT a_no, emp_no, name, emp_degree, "
-						+ "start_work, "
-						+ "fin_work, "
-						+ "round((fin_work - start_work) * 24) AS wtime, "
-						+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-						+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
-				setTB();
+				refreshTB();
 			}
 		});
 		
@@ -180,6 +183,18 @@ public class ManagerPage extends PosFrame {
 		// 오른쪽 구성요소 추가
 		jsp.setRightComponent(p2);
 		con.add("Center", jsp);
+	}
+	
+	public void refreshTB() {
+		date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		sql = "SELECT a_no, emp_no, name, emp_degree, "
+				+ "start_work, "
+				+ "fin_work, "
+				+ "round((fin_work - start_work) * 24) AS wtime, "
+				+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
+				+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
+		setTB();
 	}
 	
 //	public static void main(String[] args) {

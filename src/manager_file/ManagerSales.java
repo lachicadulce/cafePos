@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.swing.*;
@@ -42,12 +43,14 @@ public class ManagerSales extends PosFrame {
 	private String header[] = {"No", "결제일자", "총 금액", "현금결제","카드결제", "멤버쉽번호", 
 			"차감포인트", "적립포인트", "결제상태", "현금영수증(Y/N)"};
 	private String date_s, date_e;
+	private JDatePickerImpl datePicker, datePicker2;
+	private TotalLabel tl;
 	final public static int MAX_BUTTON = 6;
 	
 	public ManagerSales() {
 		super();
 		init();
-		setTB();
+		refreshTB();
 	}
 	
 	// table 생성 및 컬럼 사이즈 조정
@@ -125,7 +128,7 @@ public class ManagerSales extends PosFrame {
 		p4.setBackground(new Color(0xD7E7F7));
 		
 		// 매출 합계 라벨로 추가
-		TotalLabel tl = new TotalLabel();
+		tl = new TotalLabel();
 		for (JLabel labels : tl.getLabels()) {
 			p4.add(labels);
 		}    
@@ -133,17 +136,24 @@ public class ManagerSales extends PosFrame {
 	 	p1.add(p4, BorderLayout.SOUTH);
 		
 	    // 달력 출력
+		LocalDate now = LocalDate.now();
+		LocalDate firstDayOfThisMonth = LocalDate.of(now.getYear(), now.getMonthValue(), 1);
  		Properties p = new Properties();
  		p.put("text.today", "Today");
  		p.put("text.month", "Month");
  		p.put("text.year", "Year");
  		UtilDateModel model1 = new UtilDateModel();
  		JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
- 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+ 		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
  		UtilDateModel model2 = new UtilDateModel();
  		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
- 		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
-
+ 		datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		try {
+			datePicker.getJFormattedTextField().setText(firstDayOfThisMonth.toString());
+			datePicker2.getJFormattedTextField().setText(now.toString());
+		} catch (Exception e) {
+			
+		}
 		// p3에 달력 ~ 달력 조회버튼 추가
  		p3.add(datePicker);
 		p3.add(new JLabel("~"));
@@ -155,19 +165,7 @@ public class ManagerSales extends PosFrame {
 			// 선택한 날짜가 입력되어 데이터 검색 값을 불러오도록 설정
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				sql = "SELECT receipt_no, "
-						+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
-						+ "total, credit, cash, cus_no, "
-						+ "point_used, point_saved, state, receipt_chk "
-						+ "FROM history_payment "
-						+ "WHERE state = 'complete' AND datetime BETWEEN "
-						+ date_s + " AND " + date_e + " + 1 "
-						+ "ORDER BY receipt_no ";
-				setTB();
-				// 매출 합계를 선택한 기간에 맞게 데이터를 조회하여 노출
-				tl.updateDB(date_s, date_e);
+				refreshTB();
 			}
 		});
  		
@@ -190,6 +188,21 @@ public class ManagerSales extends PosFrame {
 		con.add("Center", jsp);
 	}
 	
+	public void refreshTB() {
+		date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		sql = "SELECT receipt_no, "
+				+ "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
+				+ "total, credit, cash, cus_no, "
+				+ "point_used, point_saved, state, receipt_chk "
+				+ "FROM history_payment "
+				+ "WHERE state = 'complete' AND datetime BETWEEN "
+				+ date_s + " AND " + date_e + " + 1 "
+				+ "ORDER BY receipt_no ";
+		setTB();
+		// 매출 합계를 선택한 기간에 맞게 데이터를 조회하여 노출
+		tl.updateDB(date_s, date_e);
+	}
 //	public static void main(String[] args) {
 //		ManagerSales frame = new ManagerSales();
 //		frame.setDefaultOptions();

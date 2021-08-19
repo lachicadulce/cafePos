@@ -51,7 +51,7 @@ public class Receipt extends PosFrame {
 	static JPanel receipt_panel;
 	static JLabel receipt;
 	static String receipt_string;// 판매 영수증
-	static String return_string;// 환불 영수증
+	static String return_string;// 환불 영수증 
 	static String info = "";
 	static int pay;
 
@@ -70,13 +70,11 @@ public class Receipt extends PosFrame {
 	private JButton selBtn = new JButton("조회");
 	private static String date_s = "TO_DATE(sysdate, 'YYYY/MM/DD')";
 	private static String date_e = "TO_DATE(sysdate, 'YYYY/MM/DD')";
-	private static String date_s_e = "datetime between " + date_s + " and " + date_e; 
+	private static String date_s_e = "TO_DATE(DATETIME, 'YYYY/MM/DD') between " + date_s + " and " + date_e; 
 
 //  ----------------------------------------------------------------------------------------------
 	static ArrayList<ArrayList<String>> list_data_default = new ArrayList<ArrayList<String>>();
 	static ArrayList<ArrayList<String>> list_data_change = new ArrayList<ArrayList<String>>();
-//	static ArrayList<ArrayList<String>> list_data_cash = new ArrayList<ArrayList<String>>();
-//	static ArrayList<ArrayList<String>> list_data_credit = new ArrayList<ArrayList<String>>();
 
 	static String[] columnNames = null;
 
@@ -108,13 +106,9 @@ public class Receipt extends PosFrame {
 
 	private DefaultTableModel model;
 
-	static String where_date = "20210707";
-
 	private String sql = "SELECT receipt_no, " + "to_char(datetime, 'YYYY/MM/DD HH24:MI:SS') AS dtime, "
 			+ "total, credit, cash, cus_no, " + "point_used, point_saved, state, receipt_chk " + "FROM history_payment "
 			+ "WHERE state = 'complete' ORDER BY receipt_no ";
-
-//	private String Receipt_list = "select * from payment_view_2 where datetime > TO_DATE('" +  where_date + "')";
 
 	public void total() {
 		try {
@@ -125,8 +119,6 @@ public class Receipt extends PosFrame {
             
         // ================================================================================================
         // ================================================================================================
-//            	Receipt_list += " where datetime > TO_DATE('" + where_date + "')";
-            	//	date_s, date_e;
             	
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
@@ -201,7 +193,7 @@ public class Receipt extends PosFrame {
 		
 	}
 	
-	public String[][] table_change() {
+	public String[][] table_change(String date) {
 		try {
             Connection conn = DriverManager.getConnection(
             		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
@@ -213,8 +205,8 @@ public class Receipt extends PosFrame {
 //            	Receipt_list += " where datetime > TO_DATE('" + where_date + "')";
             	//	date_s, date_e;
          
-            	System.out.println(Receipt_list);
-            
+            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1";
+            	
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
             	
@@ -227,7 +219,7 @@ public class Receipt extends PosFrame {
             	int column_size = md.getColumnCount();
             	
             	// 기존에 담겨있던 데이터를 비움
-//            	list_data_default.clear();
+            	list_data_change.clear();
             	
             	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
             	while (rs_list.next()) {
@@ -260,7 +252,6 @@ public class Receipt extends PosFrame {
 	            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
 	            	data_change = new String[w_size][h_size];
 	             	
-	             	System.out.println("1111");
 	             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
 	             	for (int i = 0; i < w_size; i++) {
 	            		for (int x = 0; x < h_size; x++) {
@@ -340,7 +331,6 @@ public class Receipt extends PosFrame {
             		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
             		"cafe",
             		"!!22Qorthdud");
-            
             String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
             cash_receipt_chk += ("" + receipt_no);
             
@@ -412,12 +402,12 @@ public class Receipt extends PosFrame {
 		
 		total();
 
-		// 시간을 문자열로 변경하기
-		DateTimeFormatter my_date_format = DateTimeFormatter.ofPattern("y년 M월 d일");
+		// 메인으로 가는 버튼
+		
 
-		String message = my_date_format.format(LocalDate.now());
+		String message = "Main";
 
-		JButton date = new JButton(message);
+		JButton  tomain = new JButton(message);
 
 		JPanel frame = new JPanel();
 
@@ -442,15 +432,7 @@ public class Receipt extends PosFrame {
 		p3.add(datePicker2);
 		p3.add(selBtn);
 
-		
-
 		p1.add(p3);
-		
-		
-		
-		
-		
-
 		
 
 		if (state.equals("complete")) { // 영수증 종류 확인
@@ -471,11 +453,10 @@ public class Receipt extends PosFrame {
 		buttons.add(new JButton("신용카드")); // 6
 
 		// 버튼 위치 조정
-		buttons.get(0).setBounds(20, 30, 150, 80);
-		buttons.get(1).setBounds(190, 30, 150, 80);
-		buttons.get(2).setBounds(360, 30, 150, 80);
-		buttons.get(3).setBounds(530, 30, 150, 80);
-
+		buttons.get(0).setBounds(190, 30, 150, 80);
+		buttons.get(1).setBounds(360, 30, 150, 80);
+		buttons.get(2).setBounds(530, 30, 150, 80);
+		buttons.get(3).setBounds(730, 30, 120, 80);
 		buttons.get(4).setBounds(870, 30, 120, 80);
 		buttons.get(5).setBounds(1010, 30, 120, 80);
 		buttons.get(6).setBounds(1150, 30, 120, 80);
@@ -485,10 +466,11 @@ public class Receipt extends PosFrame {
 		for (int i = 0; i < buttons.size(); ++i) {
 			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
 		}
-
-		date.setBounds(730, 30, 120, 80);
-		date.setBackground(new Color(0xffffff));
-
+		// 메인으로 가는 버튼 세부 설정 
+		tomain.setBounds(20, 30, 150, 80);
+//		tomain.setBackground(new Color(0xffffff));
+		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
+		//
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
@@ -511,7 +493,7 @@ public class Receipt extends PosFrame {
 		main.add(buttons.get(2));
 		main.add(buttons.get(3));
 
-		main.add(date); // 날짜 출력
+		main.add(tomain); // 메인으로 가는 버튼
 		main.add(p1); // 날짜 조회 출력
 
 		// 우측 위 버튼
@@ -523,7 +505,7 @@ public class Receipt extends PosFrame {
 
 		// ================================================================================================
 		// ================================================================================================
-		// 날짜 조회 (덕중)
+		// 날짜 조회 이해해야 할 부분
 		
 
 		JPanel receipt_panel = new JPanel();
@@ -539,12 +521,12 @@ public class Receipt extends PosFrame {
 		scrollPane1.setBorder(BorderFactory.createEmptyBorder());
 
 		table.getTableHeader().setPreferredSize(new Dimension(scrollPane1.getWidth(), 50));
-
-		scrollPane1.setPreferredSize(new Dimension(658, 495));
 		table.getColumnModel().getColumn(0).setPreferredWidth(30);
 		table.getColumnModel().getColumn(9).setPreferredWidth(100);
 		table.getColumnModel().getColumn(10).setPreferredWidth(200);
-		
+
+		scrollPane1.setPreferredSize(new Dimension(658, 495));
+
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
 
@@ -605,27 +587,32 @@ public class Receipt extends PosFrame {
      		@Override
      		public void actionPerformed(ActionEvent e) {
      			
-     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+     			if (select_receipt_no > 0 ) {
      			
-     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
-     			// X 표를 눌러 닫은 경우 = -1
-     			// 예 = 0
-     			// 아니오 = 1
-     			int yes_or_no = JOptionPane.showConfirmDialog(null, a + "원 결제하셨습니다. 반품 하시겠습니까?", "반품", JOptionPane.YES_NO_OPTION);
-     			
-     			if (state_chk.equals("complete")) {
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-     				// 예 아니오 선택없이 창 닫은경우
-     					
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-     				// 사용자가 예를 선택한경우
-     					refund(select_receipt_no);
-     					System.out.println("반품이라니..");
-     				} else {
-     				// 사용자가 아니오를 선택한경우
-     					System.out.println("돈 안줘도 된다~!~!");
-     				}
-     			}
+	     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+	     			
+	     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+	     			// X 표를 눌러 닫은 경우 = -1
+	     			// 예 = 0
+	     			// 아니오 = 1
+	     			int yes_or_no = JOptionPane.showConfirmDialog(null, a + "원 결제하셨습니다. 반품 하시겠습니까?", "반품", JOptionPane.YES_NO_OPTION);
+	     			
+	     			if (state_chk.equals("complete")) {
+	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+	     				// 예 아니오 선택없이 창 닫은경우
+	     					
+	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
+	     				// 사용자가 예를 선택한경우
+	     					refund(select_receipt_no);
+	     					JOptionPane.showMessageDialog(null, "반품이 완료되었습니다.");
+	     				} else {
+	     				// 사용자가 아니오를 선택한경우
+	     					JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+	     				}
+	     			}
+     			} else {
+     	  			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
+       		   }
      			
      		}
      	});
@@ -639,62 +626,67 @@ public class Receipt extends PosFrame {
      		@Override
      		public void actionPerformed(ActionEvent e) {
      			
-     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+     			if (select_receipt_no > 0 ) {
      			
-     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
-     			// X 표를 눌러 닫은 경우 = -1
-     			// 예 = 0
-     			// 아니오 = 1
-     			
-     			String[] check;
-     			
-     			// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기 
-     			check = cash_receipt(select_receipt_no);
-
-     			// check[0] = 현금결제금액		
-     			// check[1] = 카드결제금액		
-     			// check[2] = 현금영수증처리 유무
-     			
-     			int yes_or_no;
-     			
-     			if (check[2].equals("Y")) {
-     				
-     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
-     				
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {	// 예 아니오 선택없이 창 닫은경우
-     					
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 예를 선택한경우
-     				
-     					cash_receipt_executive(select_receipt_no, "Y");
-     					JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
-     					
-     				} else {	// 사용자가 아니오를 선택한경우
-     				
-     				}
-     				
-     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
-     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
-     				JOptionPane.showMessageDialog(null, "카드 결제로 " + check[1] + "원 결제 하셨습니다.");
-     				
-     			} else if (check[2].equals("N") && !check[1].equals("0")) {
-     				
-     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
-     				
-     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
-     				
-     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
-     				// 예 아니오 선택없이 창 닫은경우
-     					
-     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
-     				// 사용자가 예를 선택한경우
-     					cash_receipt_executive(select_receipt_no, "N");
-     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
-     				} else {
-     				// 사용자가 아니오를 선택한경우
-     					System.out.println("현금영수증 처리 안함");
-     				}	
-	
-     			}
+	     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
+	     			
+	     			// JOptionPane.showConfirmDialog의 결과가 숫자로 반환된다.
+	     			// X 표를 눌러 닫은 경우 = -1
+	     			// 예 = 0
+	     			// 아니오 = 1
+	     			
+	     			String[] check = cash_receipt(select_receipt_no);
+	     			
+	     			// 현금결제금액과 카드결제금액, 현금영수증처리 유무를 받아오기 
+//	     			check = cash_receipt(select_receipt_no);
+	     			
+	     			// check[0] = 현금결제금액		
+	     			// check[1] = 카드결제금액		
+	     			// check[2] = 현금영수증처리 유무
+	     			
+	     			int yes_or_no;
+	     			
+	     			if (check[2].equals("Y")) {
+	     				 
+	     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
+	     				
+	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {	// 예 아니오 선택없이 창 닫은경우
+	     					
+	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 예를 선택한경우
+	     				
+	     					cash_receipt_executive(select_receipt_no, "Y");
+	     					JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
+	     					
+	     				} else {	// 사용자가 아니오를 선택한경우
+	     				
+	     				}
+	     				
+	     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
+	     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
+	     				JOptionPane.showMessageDialog(null, "현금 결제 금액 없이, 카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+	     				
+	     			} else if (check[2].equals("N") && !check[1].equals("0")) {
+	     				
+	     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
+	     				
+	     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
+	     				
+	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
+	     				// 예 아니오 선택없이 창 닫은경우
+	     					
+	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
+	     				// 사용자가 예를 선택한경우
+	     					cash_receipt_executive(select_receipt_no, "N");
+	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+	     				} else {
+	     				// 사용자가 아니오를 선택한경우
+	     					JOptionPane.showMessageDialog(null, "현금영수증 처리를 취소하셨습니다.");
+	     				}	
+		
+	     			}
+     		}else {
+  			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
+  		   }
      			
      		}
      	});
@@ -708,7 +700,11 @@ public class Receipt extends PosFrame {
      	   @Override
      		public void actionPerformed(ActionEvent e) {
      			
-     			payment_change a = new payment_change(select_receipt_no);
+     		  if (select_receipt_no > 0 ) {
+    			   payment_change a = new payment_change(select_receipt_no);
+    		   } else {
+    			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
+    		   }
 
      		}
      		
@@ -738,8 +734,8 @@ public class Receipt extends PosFrame {
     			data_default = data.table_total_data(date_s_e);
     			
     			if (data_default.length == 0) {
-    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
-    			}
+       				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+       			}
     			
     			for (int i = 0; i < data_default.length; i++) {
     				model.addRow(data_default[i]);
@@ -769,10 +765,10 @@ public class Receipt extends PosFrame {
     			
     			cash_data data = new cash_data();
     			data_cash = data.table_cash_data(date_s_e);
-    			
-    			if (data_cash.length == 0) {
-    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
-    			}
+
+       			if (data_cash.length == 0) {
+       				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+       			}
     			
 				for (int i = 0; i < data_cash.length; i++) {
 					model.addRow(data_cash[i]);
@@ -806,8 +802,8 @@ public class Receipt extends PosFrame {
        			data_credit = data.table_credit_data(date_s_e);
        			
        			if (data_credit.length == 0) {
-    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
-    			}
+       				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+       			}
 
        			for (int i = 0; i < data_credit.length; i++) {
     				model.addRow(data_credit[i]);
@@ -826,19 +822,19 @@ public class Receipt extends PosFrame {
 				if (datePicker.getJFormattedTextField().getText().length() > 0 ) {
 					date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
 					date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+					
+					date_s_e = " DATETIME BETWEEN " + date_s + " and " + date_e;
 				}
 				
-				date_s_e = " DATETIME BETWEEN " + date_s + " and " + date_e;
 				
-				Receipt_list = "SELECT * FROM payment_view_2" + " WHERE DATETIME BETWEEN " + date_s + " AND " + date_e
-						+ " + 1";
-				
+//				Receipt_list = "SELECT * FROM payment_view_2 WHERE TO_DATE(DATETIME, 'YYYY/MM/DD') BETWEEN " + date_s + " AND " + date_e
+//						+ " + 1";
 				
 				while(model.getRowCount() > 0) {
     				model.removeRow(0);
     			}
 
-    			data_change = table_change();
+    			data_change = table_change(date_s_e);
     			
     			for (int i = 0; i < data_change.length; i++) {
     				model.addRow(data_change[i]);

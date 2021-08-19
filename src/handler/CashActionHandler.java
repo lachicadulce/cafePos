@@ -32,11 +32,12 @@ public class CashActionHandler implements ActionListener {
 	int cardMoney;
 	boolean cashReceipt;
 	int cashReceiptCheck;
-
+	
 
 	public CashActionHandler(JTable calcTable) {
 		super();
 		this.calcTable = calcTable;
+		
 	}
 
 
@@ -55,7 +56,9 @@ public class CashActionHandler implements ActionListener {
 		textField = new JTextField(10);
 		textField.setText("0");
 		panel.add(textField);
-
+		
+		int total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
+		int sale = Integer.parseInt((String)calcTable.getValueAt(1, 1));
 
 
 		JOptionPane op = new JOptionPane
@@ -128,10 +131,11 @@ public class CashActionHandler implements ActionListener {
 				}
 
 			}
-			int total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
-			int mustRecevie = total - cashMoney;
+		
+			
+			int mustRecevie = total - sale - cashMoney;
 			if(e.getActionCommand() != null) {
-				if(total - cashMoney != 0) {
+				if( mustRecevie != 0) {
 					
 					// 카드 결제 입력 받기
 					label.setText("카드 결제 금액을 입력해주세요");
@@ -174,27 +178,20 @@ public class CashActionHandler implements ActionListener {
 			}
 		}
 
-		int[] priceSaleReceived = new int[3];
-		for(int i=0; i < calcTable.getRowCount() -1; i++) {
-			if((String)calcTable.getValueAt(i, 1) == null) {
-				priceSaleReceived[i] = 0;
-			} else {
-				priceSaleReceived[i] = Integer.parseInt((String)calcTable.getValueAt(i, 1));
-			}
 
-		}
 
-		int change = priceSaleReceived[0] - priceSaleReceived[1]- priceSaleReceived[2];
+		int change = total - sale - cashMoney - cardMoney;
 
 
 		if(change <= 0)  {
 			change = Math.abs(change);
-		} else {
-
-		}
+		} 
 
 		String changestr = Integer.toString(change);
 		calcTable.setValueAt(changestr, 3, 1);
+		
+		
+		
 
 	} // end AL
 	public static boolean isNumeric(String s) {

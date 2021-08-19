@@ -63,6 +63,7 @@ public class Manager_Btns {
 			public void actionPerformed(ActionEvent e) {
 				main_test mt = new main_test();
 				mt.setDefaultOptions();
+				frame.dispose();
 			}
 		});
 		

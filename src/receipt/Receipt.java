@@ -45,6 +45,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import baseSettings.PosFrame;
+import main_component.main_test;
 
 public class Receipt extends PosFrame {
 
@@ -535,7 +536,16 @@ public class Receipt extends PosFrame {
 		tomain.setBounds(20, 30, 150, 80);
 //		tomain.setBackground(new Color(0xffffff));
 		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
-		//
+		tomain.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				main_test mt = new main_test();
+				mt.setDefaultOptions();
+				dispose();
+			}
+		});
+		
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정

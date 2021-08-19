@@ -462,6 +462,15 @@ public class Receipt extends PosFrame {
 		String message = "Main";
 
 		JButton  to_main = new JButton(message);
+		
+		to_main.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+			}
+		});
 
 		JPanel frame = new JPanel();
 

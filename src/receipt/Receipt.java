@@ -7,6 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -15,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -505,7 +509,7 @@ public class Receipt extends PosFrame {
 
 		// ================================================================================================
 		// ================================================================================================
-		// 날짜 조회 이해해야 할 부분
+		// 날짜 리스트 만드는 곳 
 		
 
 		JPanel receipt_panel = new JPanel();
@@ -616,6 +620,50 @@ public class Receipt extends PosFrame {
      			
      		}
      	});
+		// ================================================================================================
+		// '재인쇄' 버튼 눌렀을때의 액션 // 승민 
+		// ================================================================================================
+		buttons.get(1).addActionListener(new ActionListener() {
+			
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (select_receipt_no > 0 ) {
+					DateTimeFormatter receipt_time_format = 
+							DateTimeFormatter.ofPattern("y년 M월 d일 HH:mm:ss");
+					
+					String receipt_time = receipt_time_format.format(LocalDateTime.now());
+					
+					File f = new File("reprint/" + receipt_time +".txt");
+					
+					
+					try (
+						FileOutputStream fout = new FileOutputStream(f, true);
+						BufferedOutputStream bout = new BufferedOutputStream(fout);
+						PrintStream out = new PrintStream(bout);
+							
+					) {
+						if (state.equals("complete")) { // 영수증 종류 확인
+							out.write(receipt_string.getBytes());
+						} else {
+							out.write(return_string.getBytes());
+						}
+						
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					System.out.println("쓰기 끝");
+				} else {
+	    			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
+	    		}
+				
+			}
+		});
 
 		// ================================================================================================
 		// '현금영수증' 버튼을 눌렀을때의 액션
@@ -956,25 +1004,59 @@ public class Receipt extends PosFrame {
 		String transaction_date_string = my_date_format2.format(localDateTime); // 판매일자
 		String returnDayString = my_date_format3.format(returnDay); // 반품가능일자
 
-		return_string = "<html><center><br>" + "환&emsp불&emsp전&emsp표" + "<br>" + "<table style='width:100%;'>" + "<tr>"
-				+ "<td>거래일시: </td>" + "<td style='text-align:right;'>" + transaction_date_string + "</td>" + "</tr>"
-				+ "</table>" + "-------------------------------------------------------------------"
-				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을" + "<br>지참하셔야 하며, 카드결제는 30일" + "(환불완료)" + "<br>이내 카드와 영수증 지참 시 가능합니다."
-				+ "<br>-------------------------------------------------------------------" + "</center>"
+		return_string = "<html><center><br>" 
+				+ "환&emsp불&emsp전&emsp표" 
+				+ "<br>" 
+				+ "<table style='width:100%;'>" 
+				+ "<tr>"
+				+ "<td>거래일시: </td>" 
+				+ "<td style='text-align:right;'>" 
+				+ transaction_date_string + "</td>" + "</tr>"
+				+ "</table>" 
+				+ "-------------------------------------------------------------------"
+				+ "<br>*정부방침에 의해 교환/환불은 반드시 영수증을" + "<br>지참하셔야 하며, 카드결제는 30일" 
+				+ "(환불완료)" 
+				+ "<br>이내 카드와 영수증 지참 시 가능합니다."
+				+ "<br>-------------------------------------------------------------------" 
+				+ "</center>"
 
-				+ "<table style='width:100%;'>" + "<tr>" + "<td>품명</td>" + "<td style='text-align:right;'>단가</td>"
-				+ "<td style='text-align:right;'>수량</td>" + "<td style='text-align:right;'>금액</td>" + "</tr>"
-				+ "</table>" + "-------------------------------------------------------------------"
-				+ "<table style='width:100%;'>" + product + "</table>"
-				+ "-------------------------------------------------------------------" + "<table style='width:100%;'>"
-				+ "<tr>" + "<td>과세매출</td>" + "<td style='text-align:right;'>" + formatter.format(vat * 10 - vat)
-				+ "원</td>" + "</tr>"
-
-				+ "<tr>" + "<td>부가세</td>" + "<td style='text-align:right;'>" + formatter.format(vat) + "원</td>"
+				+ "<table style='width:100%;'>" 
+				+ "<tr>" 
+				+ "<td>품명</td>" 
+				+ "<td style='text-align:right;'>단가</td>"
+				+ "<td style='text-align:right;'>수량</td>" 
+				+ "<td style='text-align:right;'>금액</td>" 
+				+ "</tr>"
+				+ "</table>" 
+				+ "-------------------------------------------------------------------"
+				+ "<table style='width:100%;'>" 
+				+ product 
+				+ "</table>"
+				+ "-------------------------------------------------------------------" 
+				+ "<table style='width:100%;'>"
+				+ "<tr>" 
+				+ "<td>과세매출</td>" 
+				+ "<td style='text-align:right;'>" 
+				+ formatter.format(vat * 10 - vat)
+				+ "원</td>" 
 				+ "</tr>"
 
-				+ "<tr>" + "<td>환불금액</td>" + "<td style='text-align:right;'>" + formatter.format(total) + "원</td>"
-				+ "</tr>" + "</table>" + "-------------------------------------------------------------------" + bill
+				+ "<tr>" 
+				+ "<td>부가세</td>" 
+				+ "<td style='text-align:right;'>" 
+				+ formatter.format(vat) 
+				+ "원</td>"
+				+ "</tr>"
+
+				+ "<tr>" 
+				+ "<td>환불금액</td>" 
+				+ "<td style='text-align:right;'>" 
+				+ formatter.format(total) 
+				+ "원</td>"
+				+ "</tr>" 
+				+ "</table>" 
+				+ "-------------------------------------------------------------------" 
+				+ bill
 				+ "<br>-------------------------------------------------------------------"
 				+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
 				+ "<br>-------------------------------------------------------------------"

@@ -737,6 +737,10 @@ public class Receipt extends PosFrame {
     			total_data data = new total_data();
     			data_default = data.table_total_data(date_s_e);
     			
+    			if (data_default.length == 0) {
+    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+    			}
+    			
     			for (int i = 0; i < data_default.length; i++) {
     				model.addRow(data_default[i]);
     			}
@@ -766,7 +770,9 @@ public class Receipt extends PosFrame {
     			cash_data data = new cash_data();
     			data_cash = data.table_cash_data(date_s_e);
     			
-//    			System.out.println(data_cash.length);
+    			if (data_cash.length == 0) {
+    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+    			}
     			
 				for (int i = 0; i < data_cash.length; i++) {
 					model.addRow(data_cash[i]);
@@ -798,6 +804,10 @@ public class Receipt extends PosFrame {
        			credit_data data = new credit_data();
        			
        			data_credit = data.table_credit_data(date_s_e);
+       			
+       			if (data_credit.length == 0) {
+    				JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+    			}
 
        			for (int i = 0; i < data_credit.length; i++) {
     				model.addRow(data_credit[i]);

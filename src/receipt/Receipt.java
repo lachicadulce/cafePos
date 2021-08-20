@@ -130,7 +130,7 @@ public class Receipt extends PosFrame {
         // ================================================================================================
 
             	
-            	Receipt_list += " where " +  date_s_e + " + 1";
+            	Receipt_list += " where " +  date_s_e + " + 1 order by datetime asc";
 
             	
             	// 기본 디폴트 리스트 
@@ -220,7 +220,7 @@ public class Receipt extends PosFrame {
 //            	Receipt_list += " where datetime > TO_DATE('" + where_date + "')";
             	//	date_s, date_e;
          
-            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1";
+            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1 order by datetime asc";
             	
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);

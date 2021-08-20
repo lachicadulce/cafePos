@@ -1,11 +1,5 @@
 package manager_file;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,9 +9,7 @@ import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.*;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -101,6 +93,7 @@ public class ManagerSales extends PosFrame {
 		
 		tb = new JTable(model);
 		tb.getTableHeader().setReorderingAllowed(false);
+		tb.getTableHeader().setResizingAllowed(false); 
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.BOLD, 15));

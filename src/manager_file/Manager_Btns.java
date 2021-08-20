@@ -104,7 +104,7 @@ public class Manager_Btns {
 				btns.get(i).setBackground(new Color(0xD7E7F7));
 			}
 		}
-		btns.get(selectedIndex).setBackground(new Color(0x2E9AFE));
+		btns.get(selectedIndex).setBackground(new Color(0xA9BCF5));
 	}
 	
 	public ArrayList<JButton> getJBtns() {

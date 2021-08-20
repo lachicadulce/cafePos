@@ -94,6 +94,7 @@ public class ManagerMenu extends PosFrame {
 
 		tb = new JTable(model);
 		tb.getTableHeader().setReorderingAllowed(false);
+		tb.getTableHeader().setResizingAllowed(false); 
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.BOLD, 15));

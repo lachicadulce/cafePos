@@ -789,10 +789,10 @@ public class Receipt extends PosFrame {
 	     			// check[0] = 현금결제금액		
 	     			// check[1] = 카드결제금액		
 	     			// check[2] = 현금영수증처리 유무
-	     			
 	     			int yes_or_no;
-	     			
-	     			if (check[2].equals("Y")) {
+	     			if (state.equals("cancel")) { 
+	     				JOptionPane.showMessageDialog(null, "반품 기록입니다.");
+	     			} else if (check[2].equals("Y")) {
 	     				 
 	     				yes_or_no = JOptionPane.showConfirmDialog(null, "이미 현금영수증 처리를 한 상태입니다. 취소하시겠습니까?", "현금영수증 취소", JOptionPane.YES_NO_OPTION);
 	     				
@@ -882,8 +882,10 @@ public class Receipt extends PosFrame {
     	    
      	   @Override
      		public void actionPerformed(ActionEvent e) {
-     			
-     		  if (select_receipt_no > 0 ) {
+     		   
+     		  if (state.equals("cancel")) {
+   				JOptionPane.showMessageDialog(null, "반품 기록입니다.");
+   			}else if (select_receipt_no > 0 ) {
     			   payment_change a = new payment_change(select_receipt_no);
     			   
     			   while(model.getRowCount() > 0) {
@@ -1321,6 +1323,7 @@ public class Receipt extends PosFrame {
 				credit = rs.getInt("CREDIT");
 				receipt_chk = rs.getString("RECEIPT_CHK");
 				transaction_date = rs.getDate("DATETIME");
+				
 			}
 
 			rs.close();

@@ -1,6 +1,6 @@
 package main_component;
-import java.awt.BorderLayout;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +25,6 @@ import javax.swing.JSplitPane;
 
 import baseSettings.DBConnector;
 import handler.CashActionHandler;
-import handler.ChangeActionListener;
 import handler.ChangeMenuDownActionListener;
 import handler.ChangeMenuUpActionListener;
 import handler.MemberShipActionListener;

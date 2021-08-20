@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,13 +27,14 @@ public class RightPanelBasic extends JPanel {
 	JPanel rightL;
 	JPanel rightR;
 
-	ButtonSetting sortMenu;
+	ArrayList<ButtonSetting> sortMenu = new ArrayList<>();
+//	ButtonSetting[] sortMenu = new ButtonSetting[8];
 
 	MenuPanel coffee;
 
 	public RightPanelBasic(JSplitPane jsp2, ActionListener ...als) {
 		// als[0] = mbal, als[1] = msal, als[2] = cah, als[3] = managerActionListener als[4] = receiptActionListener
-		SortMenuActionListener smal = new SortMenuActionListener(this, als[0]);
+//		SortMenuActionListener smal = new SortMenuActionListener(this, als[0], sortMenu);
 		// als[0]는 MenuButtonActionListener내용이다.
 		setLayout(new BorderLayout());
 
@@ -66,16 +68,22 @@ public class RightPanelBasic extends JPanel {
 				Connection conn = DBConnector.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				){
+			
 			ResultSet rs = pstmt.executeQuery();
 			int cnt = 0;
 			while(rs.next()) {
-
-				sortMenu = new ButtonSetting (rs.getString("type"),20, 0xA9D0F5, smal);
-				rightLUp.add(sortMenu);
+				
+				sortMenu.add(new ButtonSetting (rs.getString("type"),20, 0xA9D0F5, null));
+				rightLUp.add(sortMenu.get(cnt));
 				cnt++;
 			}
+			
 			for(int i = cnt; i < 8; i++) {
 				rightLUp.add(new UnusedButtonSetting("", 20, 0xeeeeee, null));
+			}
+			
+			for(int i = 0; i < sortMenu.size(); i++) {
+				sortMenu.get(i).setActionListener(new SortMenuActionListener(this, als[0], sortMenu));
 			}
 
 			

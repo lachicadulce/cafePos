@@ -3,6 +3,7 @@ package handler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,18 +14,19 @@ public class SelectCancelActionListener implements ActionListener {
 
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
-	
+
 	public SelectCancelActionListener(DefaultTableModel orderTableModel, JTable orderTable) {
 		this.orderTableModel = orderTableModel;
 		this.orderTable = orderTable;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		orderTableModel.removeRow(orderTable.getSelectedRow());
-		
-		
+		try {
+			orderTableModel.removeRow(orderTable.getSelectedRow());
+		} catch (Exception e2) {
+			JOptionPane.showMessageDialog(null, "지울 메뉴를 선택하세요.","Message",JOptionPane.ERROR_MESSAGE);
+		}
 
 	}
 

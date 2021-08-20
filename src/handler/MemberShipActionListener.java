@@ -90,6 +90,8 @@ public class MemberShipActionListener implements ActionListener {
 					
 					if( usePoint > point) {
 						JOptionPane.showMessageDialog(null, "포인트가 부족합니다.", "오류", 0);
+					} else if (usePointstr.equals("0"))  {
+						JOptionPane.showMessageDialog(null, "포인트 사용이 취소되었습니다.", "정보", 0);
 					} else {
 						calcTable.setValueAt(usePointstr, 1, 1);
 						memPointpstmt.setInt(1, usePoint);

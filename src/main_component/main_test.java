@@ -191,7 +191,7 @@ public class main_test extends PosFrame {
 		exchange.setSize(125,65);
 		exchange.addActionListener(new SafeOpenActionListener());
 		exchange.setFont(new Font("default", Font.BOLD, 14));
-		exchange.setBackground(new Color(0xF7F8E0));
+		exchange.setBackground(new Color(0xE0ECF8));
 		exchange.setHorizontalAlignment(SwingConstants.LEFT);
 		ImageIcon money = new ImageIcon("mainpng/money.png");
 		exchange.setIcon(money);

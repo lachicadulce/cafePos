@@ -70,7 +70,7 @@ public class RightPanelBasic extends JPanel {
 			int cnt = 0;
 			while(rs.next()) {
 
-				sortMenu = new ButtonSetting (rs.getString("type"),20, 0xb0e8f7, smal);
+				sortMenu = new ButtonSetting (rs.getString("type"),20, 0xA9D0F5, smal);
 				rightLUp.add(sortMenu);
 				cnt++;
 			}
@@ -84,13 +84,13 @@ public class RightPanelBasic extends JPanel {
 
 
 		// 맨 아래 버튼(영수증관리, 멤버쉽, 결제 버튼)
-		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xe2d4fc, als[4]);
+		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xCEE3F6, als[4]);
 		rightLDown.add(ManageReceipts);
 
-		ButtonSetting MemberShip = new ButtonSetting("<HTML><body style='text-align:center'>멤버쉽</body></HTML>",25,0xe3aada, als[1] );
+		ButtonSetting MemberShip = new ButtonSetting("<HTML><body style='text-align:center'>멤버쉽</body></HTML>",25,0xCED8F6, als[1] );
 		rightLDown.add(MemberShip);
 
-		ButtonSetting Payment = new ButtonSetting("<HTML><body style='text-align:center'>결제</body></HTML>", 25, 0xb5f5c8, als[2]);
+		ButtonSetting Payment = new ButtonSetting("<HTML><body style='text-align:center'>결제</body></HTML>", 25, 0xCECEF6, als[2]);
 		rightLDown.add(Payment);
 
 

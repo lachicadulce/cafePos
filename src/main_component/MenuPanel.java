@@ -1,35 +1,18 @@
 package main_component;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-
 import baseSettings.DBConnector;
-import handler.CashActionHandler;
 import handler.ChangeMenuDownActionListener;
 import handler.ChangeMenuUpActionListener;
-import handler.MemberShipActionListener;
-import handler.MenuButtonActionListener;
-import main_component.ButtonSetting;
+
 
 
 public class MenuPanel extends JPanel {
@@ -45,8 +28,8 @@ public class MenuPanel extends JPanel {
 		card = new CardLayout();
 		JPanel rightCenter = rpb.getRightLCenter();
 		JPanel rightR = rpb.getRightR();
-		ButtonSetting up = new ButtonSetting("△", 25 ,0xb0e8f7, null);
-		ButtonSetting down  = new ButtonSetting("▽", 25 ,0xb0e8f7, null);
+		ButtonSetting up = new ButtonSetting("△", 25 ,0xE0E6F8, null);
+		ButtonSetting down  = new ButtonSetting("▽", 25 ,0xE0E6F8, null);
 			
 		rightCenter.setLayout(card);
 		
@@ -88,11 +71,11 @@ public class MenuPanel extends JPanel {
 							,JOptionPane.ERROR_MESSAGE);
 				}// type마다 36개초과로 등록될경우 에러메시지팝업을 띄우게 작성함.(만들어는 놨지만 테스트는 안해보고 다른 대체방안이 필요해보임)
 				else if(count > 24) {
-					panel3.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
+					panel3.add(new ButtonSetting(htmlName, 15, 0xE0ECF8, al));
 				} else if (count > 12) {
-					panel2.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
+					panel2.add(new ButtonSetting(htmlName, 15, 0xE0ECF8, al));
 				} else{
-					panel1.add(new ButtonSetting(htmlName, 15, 0xfafeff, al));
+					panel1.add(new ButtonSetting(htmlName, 15, 0xE0ECF8, al));
 				}
 				count++;
 				

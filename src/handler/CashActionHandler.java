@@ -191,9 +191,6 @@ public class CashActionHandler implements ActionListener {
 				}
 			}
 
-
-
-
 			int change = total - sale - cashMoney - cardMoney;
 
 
@@ -201,13 +198,6 @@ public class CashActionHandler implements ActionListener {
 				change = Math.abs(change); //잔돈 거스름을 주기위한 과정
 				String changestr = Integer.toString(change);
 				calcTable.setValueAt(changestr, 3, 1); // 거스름돈 금액
-
-
-
-
-
-
-
 
 				// DB에 데이터 넣기
 				String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
@@ -248,8 +238,11 @@ public class CashActionHandler implements ActionListener {
 					hPpstmt.setInt(2, total);
 					hPpstmt.setInt(3, cardMoney);
 					hPpstmt.setInt(4, cashMoney > total ? cashMoney - change : cashMoney);
-
-					hPpstmt.setInt(5, 1000);
+					if(msal.cus_no == 0) { 
+						hPpstmt.setInt(5, 1000);
+					} else {
+						hPpstmt.setInt(5, msal.cus_no);
+					}
 					hPpstmt.setInt(6, msal.usePoint);
 					hPpstmt.setInt(7, addPoint);
 

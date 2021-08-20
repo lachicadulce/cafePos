@@ -133,7 +133,6 @@ public class Receipt extends PosFrame {
 
             	
             	Receipt_list += " where " +  date_s_e + " + 1 order by datetime asc";
-
             	
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
@@ -1396,11 +1395,23 @@ public class Receipt extends PosFrame {
 					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
 					"!!22Qorthdud");
 
+			
+
+			String sql_receipt = "SELECT * from PAYMENT_VIEW";
+			PreparedStatement pstmt2 = conn.prepareStatement(sql_receipt);
+			ResultSet rs2 = pstmt2.executeQuery();
+			
+			while (rs2.next()) {
+				if (Integer.parseInt(RECEIPT_NO) <= rs2.getInt("RECEIPT_NO")) {
+					RECEIPT_NO = rs2.getString("RECEIPT_NO");
+				}
+			}
+
 			String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = " + RECEIPT_NO;
-
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-
 			ResultSet rs = pstmt.executeQuery();
+
+			
 			drink = new HashMap<>();
 			while (rs.next()) {
 				// HashMap에 음료수 내역 넣기
@@ -1415,12 +1426,13 @@ public class Receipt extends PosFrame {
 				point = rs.getInt("POINT");
 				credit = rs.getInt("CREDIT");
 				receipt_chk = rs.getString("RECEIPT_CHK");
-				transaction_date = rs.getDate("DATETIME");
-				
+				transaction_date = rs.getDate("DATETIME");	
 			}
-
+			
 			rs.close();
 			pstmt.close();
+			rs2.close();
+			pstmt2.close();
 			conn.close(); 
 
 		} catch (SQLException e) {

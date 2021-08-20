@@ -325,9 +325,12 @@ public class Receipt extends PosFrame {
             }
             
             String update_sql = "update customer_info set point = (select point from customer_info where cus_no = " + temp[0] + ") + (" + set_point + ") where cus_no = " + temp[0];
+            String update_sql1 = "update history_payment set state = 'cancel' where receipt_no = " + receipt_no;
             
             PreparedStatement update_customer_info = conn.prepareStatement(update_sql);
+            PreparedStatement update_history_payment = conn.prepareStatement(update_sql1);
 
+            update_history_payment.executeUpdate();
 			int row = update_customer_info.executeUpdate();
 			
 			update_customer_info.close();

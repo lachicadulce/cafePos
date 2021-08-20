@@ -49,6 +49,7 @@ public class ManagerSales extends PosFrame {
 
 	public ManagerSales() {
 		super();
+		setTitle("매출 현황");
 		init();
 		refreshTB();
 	}

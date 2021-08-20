@@ -48,6 +48,7 @@ public class ManagerPage extends PosFrame {
 	
 	public ManagerPage() {
 		super();
+		setTitle("출퇴근 기록 열람");
 
 		init();
 		refreshTB();

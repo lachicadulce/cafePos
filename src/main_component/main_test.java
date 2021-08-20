@@ -69,6 +69,8 @@ public class main_test extends PosFrame {
 	
 		jsp1.setResizeWeight(0.9);
 		jsp2.setResizeWeight(0.8);
+		jsp1.setEnabled(false);
+		jsp2.setEnabled(false);
 		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());

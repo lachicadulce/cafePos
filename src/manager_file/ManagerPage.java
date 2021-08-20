@@ -1,5 +1,6 @@
 package manager_file;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -35,23 +37,20 @@ public class ManagerPage extends PosFrame {
 	
 	private JSplitPane jsp = new JSplitPane();
 	private JScrollPane scrollpane;
-	private String sql = "SELECT a_no, emp_no, name, emp_degree, "
-			+ "start_work, "
-			+ "fin_work, "
-			+ "round((fin_work - start_work) * 24) AS wtime, "
-			+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-			+ "FROM absent_info INNER JOIN employees_info  USING (emp_no)";
+	private String sql;
 	private JTable tb;
 	private DefaultTableModel model;
 	private JButton selBtn = new JButton("조회");
 	private String header[] = {"No", "사번", "이름", "직위", "출근시간", "퇴근시간", "근무시간", "근무시작일"};
 	private String date_s, date_e;
+	private JDatePickerImpl datePicker, datePicker2;
+	final public static int MAX_BUTTON = 6; // 우측 버튼 총 개수
 	
 	public ManagerPage() {
 		super();
 
 		init();
-		setTB();
+		refreshTB();
 	}
 	
 	// db에서 table에 띄울 데이타 가져오기.
@@ -93,7 +92,7 @@ public class ManagerPage extends PosFrame {
 		tb = new JTable(model);
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
-		tbheader.setFont(new Font("", Font.PLAIN, 15));
+		tbheader.setFont(new Font("", Font.BOLD, 15));
 		TableColumnModel colModel = tb.getColumnModel();
 		colModel.getColumn(0).setPreferredWidth(40);
 		colModel.getColumn(1).setPreferredWidth(50);
@@ -106,25 +105,37 @@ public class ManagerPage extends PosFrame {
 	
 		scrollpane = new JScrollPane(tb);
 		
-		jsp.setResizeWeight(0.9);
+		tbheader.setBackground(new Color(0xEFF8FB)); // Header 컬러 설정
+		jsp.setResizeWeight(1.0);
+		jsp.setEnabled(false); // 테이블 <> 버튼 사이에 사이즈 조정 불가능하게 설정
+		
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
 
 		JPanel p1  = new JPanel(new BorderLayout());
-		JPanel p2 = new JPanel(new GridLayout(5, 1));
+		JPanel p2 = new JPanel(new GridLayout(MAX_BUTTON, 1));
 		JPanel p3 = new JPanel(new FlowLayout());
 		
 		// 달력 출력
+		LocalDate now = LocalDate.now();
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		UtilDateModel model1 = new UtilDateModel();
 		JDatePanelImpl datePanel = new JDatePanelImpl(model1, p);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		UtilDateModel model2 = new UtilDateModel();
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p);
-		JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		datePicker2 = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		
+		// JDatePickerImpl 디폴트 날짜 set
+ 		model1.setDate(now.getYear(), now.getMonthValue()-1, 1);
+ 		model1.setSelected(true);
+ 		
+ 		model2.setDate(now.getYear(), now.getMonthValue()-1, now.getDayOfMonth());
+ 		model2.setSelected(true);
+		
 		
 		// p3에 달력 ~ 달력 조회버튼 추가
 		p3.add(datePicker);
@@ -136,15 +147,7 @@ public class ManagerPage extends PosFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
-				sql = "SELECT a_no, emp_no, name, emp_degree, "
-						+ "start_work, "
-						+ "fin_work, "
-						+ "round((fin_work - start_work) * 24) AS wtime, "
-						+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-						+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
-				setTB();
+				refreshTB();
 			}
 		});
 		
@@ -155,8 +158,9 @@ public class ManagerPage extends PosFrame {
 		JPanel south = new JPanel(new GridLayout(1,2));
 		
 		Employees_List el = new Employees_List();
-		ImageIcon image = new ImageIcon("image/coffee.png");
+		ImageIcon image = new ImageIcon("manager/attendance.png");
 		JLabel south_left = new JLabel(image);
+		south.setBackground(new Color(0xD7E7F7)); // 이미지 배경색 설정
 		
 		south.add(south_left);
 		south.add(el);
@@ -171,7 +175,7 @@ public class ManagerPage extends PosFrame {
 			
 //		    btn.setBackground(new Color(0x66CCFF));
 
-		Manager_Btns mb = new Manager_Btns(this);
+		Manager_Btns mb = new Manager_Btns(this, 4);
 		for (JButton btns : mb.getJBtns()) {
 			p2.add(btns);
 		}
@@ -179,6 +183,18 @@ public class ManagerPage extends PosFrame {
 		// 오른쪽 구성요소 추가
 		jsp.setRightComponent(p2);
 		con.add("Center", jsp);
+	}
+	
+	public void refreshTB() {
+		date_s = "TO_DATE('" + datePicker.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		date_e = "TO_DATE('" + datePicker2.getJFormattedTextField().getText() + "', 'YYYY/MM/DD')";
+		sql = "SELECT a_no, emp_no, name, emp_degree, "
+				+ "start_work, "
+				+ "fin_work, "
+				+ "round((fin_work - start_work) * 24) AS wtime, "
+				+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
+				+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
+		setTB();
 	}
 	
 //	public static void main(String[] args) {

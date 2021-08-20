@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import baseSettings.DBConnector;
@@ -50,7 +51,7 @@ public class MenuDialog extends JDialog {
 	JButton btn_can = new JButton("취소");
 	
 	
-	public MenuDialog(JFrame frame, String title, JButton selBtn) {		
+	public MenuDialog(JFrame frame, String title, JButton selBtn, JPanel panel) {		
 		super(frame, title);
 
 		types = new ArrayList();
@@ -71,6 +72,7 @@ public class MenuDialog extends JDialog {
 		add(btn_can);
 		setSize(270, 160);
 		setLocation(100, 100);
+		setResizable(false);
 		setModal(true);
 		
 		btn_ok.addActionListener(new ActionListener() {
@@ -94,14 +96,16 @@ public class MenuDialog extends JDialog {
 						System.out.println("입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
 						return;
 					}
-					insert.dbinsert("INSERT INTO menu VALUES((SELECT MAX(menu_no) + 1 FROM menu), '" + tf_name.getText() + "', " + tf_price.getText() + ", '" + type_name + "', 1, 'Y')");
-					
-					// 분류 새로 가져오기.
-					types.clear();
-					selTypes();
-					cb_type.removeAllItems();
-					for(String type : types) {
-						cb_type.addItem(type);
+					if(JOptionPane.showConfirmDialog(panel, "정말 추가 하시겠습니까?", "추가", 0) == 0) {
+						insert.dbinsert("INSERT INTO menu VALUES((SELECT MAX(menu_no) + 1 FROM menu), '" + tf_name.getText() + "', " + tf_price.getText() + ", '" + type_name + "', 1, 'Y')");
+						
+						// 분류 새로 가져오기.
+						types.clear();
+						selTypes();
+						cb_type.removeAllItems();
+						for(String type : types) {
+							cb_type.addItem(type);
+						}
 					}
 				} else { // 분류 추가 없이 기존 분류에 추가한 경우
 					type_name = types.get(cb_type.getSelectedIndex());
@@ -130,7 +134,7 @@ public class MenuDialog extends JDialog {
 		});
 	}
 	
-	public MenuDialog(String menu_no, String menu_name, String menu_price, String menu_type, String menu_display_order, JButton selBtn) {
+	public MenuDialog(String menu_no, String menu_name, String menu_price, String menu_type, String menu_display_order, JButton selBtn, JPanel panel) {
 		super();
 		
 		types = new ArrayList();
@@ -164,6 +168,7 @@ public class MenuDialog extends JDialog {
 		add(btn_can);
 		setSize(270, 170);
 		setLocation(100, 100);
+		setResizable(false);
 		
 		btn_ok.addActionListener(new ActionListener() {
 			
@@ -175,22 +180,24 @@ public class MenuDialog extends JDialog {
 					return;
 				}
 
-				InsertDB insert = new InsertDB();
-				// 콤보 박스의 인덱스에 맞춰서 분류 이름 가져오기.
-				String type_name;
-				// 분류를 추가한 경우
-				if(cb_type.getSelectedIndex() == cb_type.getItemCount() - 1) {
-					type_name = tf_type.getText();
-					if(type_name.equals("")) {
-						System.out.println("입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
-						return;
+				if(JOptionPane.showConfirmDialog(panel, "정말 수정 하시겠습니까?", "수정", 0) == 0) {
+					InsertDB insert = new InsertDB();
+					// 콤보 박스의 인덱스에 맞춰서 분류 이름 가져오기.
+					String type_name;
+					// 분류를 추가한 경우
+					if(cb_type.getSelectedIndex() == cb_type.getItemCount() - 1) {
+						type_name = tf_type.getText();
+						if(type_name.equals("")) {
+							System.out.println("입력하신 정보가 올바르지 않습니다. 다시 확인해 주시기 바랍니다.");
+							return;
+						}
+					} else { // 분류 추가 없이 기존 분류를 선택한 경우
+						type_name = types.get(cb_type.getSelectedIndex());
 					}
-				} else { // 분류 추가 없이 기존 분류를 선택한 경우
-					type_name = types.get(cb_type.getSelectedIndex());
+					insert.dbinsert("UPDATE menu SET mname = '" + tf_name.getText() + "', price = " + tf_price.getText() + ", type = '" + type_name + "', display_order = " + tf_display_order.getText() + " WHERE menu_no = " + menu_no);
+					selBtn.doClick();
+					dispose();
 				}
-				insert.dbinsert("UPDATE menu SET mname = '" + tf_name.getText() + "', price = " + tf_price.getText() + ", type = '" + type_name + "', display_order = " + tf_display_order.getText() + " WHERE menu_no = " + menu_no);
-				selBtn.doClick();
-				dispose();			
 			}
 		});
 		

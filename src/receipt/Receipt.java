@@ -45,6 +45,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import baseSettings.PosFrame;
+import main_component.main_test;
 
 public class Receipt extends PosFrame {
 
@@ -535,7 +536,16 @@ public class Receipt extends PosFrame {
 		tomain.setBounds(20, 30, 150, 80);
 //		tomain.setBackground(new Color(0xffffff));
 		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
-		//
+		tomain.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				main_test mt = new main_test();
+				mt.setDefaultOptions();
+				dispose();
+			}
+		});
+		
 		receipt.setFont(new Font("MV Bold", Font.BOLD, 20));
 		receipt.setOpaque(true); // 백그라운드 색상 허용
 		receipt.setHorizontalAlignment(JLabel.CENTER); // 수평 가운데 표시 설정
@@ -772,15 +782,14 @@ public class Receipt extends PosFrame {
 	     				
 	     				}
 	     				
-	     			} else if (check[2].equals("N") && check[0].equals("0") && !check[1].equals("0")) {
-	     				// 현금 결제금액 없이 카드 결제금액만 있는 경우 
-	     				JOptionPane.showMessageDialog(null, "현금 결제 금액 없이, 카드 결제로 " + check[1] + "원 결제 하셨습니다.");
+	     			} else if (check[2].equals("N") && check[0].equals("0")) {
+	     				// 현금 결제금액이 없는 경우 
+	     				JOptionPane.showMessageDialog(null, "현금 결제 금액이 없습니다.");
 	     				
-	     			} else if (check[2].equals("N") && !check[1].equals("0")) {
-	     				
+	     			} else if (check[2].equals("N") && !check[0].equals("0")) {
 	     				// 카드 결제금액의 유무와 상관없이 현금 결제 금액이 있다면 현금영수증 처리를 할지 물어봄
 	     				
-	     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[1] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
+	     				yes_or_no = JOptionPane.showConfirmDialog(null, "현금으로 " + check[0] + "원 결제하셨습니다. 현금영수증 처리를 하시겠습니까?", "현금영수증 처리", JOptionPane.YES_NO_OPTION);
 	     				
 	     				if (yes_or_no == JOptionPane.CLOSED_OPTION) {
 	     				// 예 아니오 선택없이 창 닫은경우

@@ -1,20 +1,14 @@
 package manager_file;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -23,7 +17,7 @@ import baseSettings.DBConnector;
 
 public class Employees_List extends JPanel {
 
-	private JScrollPane scrollpane;
+	public static JScrollPane scrollpane;
 	private String sql = "SELECT emp_no, name, tel, TO_CHAR(start_date, 'YYYY-MM-DD') AS sdate, emp_degree FROM employees_info";
 	private JTable tb;
 	private DefaultTableModel model;
@@ -76,9 +70,10 @@ public class Employees_List extends JPanel {
 
 		scrollpane = new JScrollPane(tb);
 
-		setPreferredSize(new Dimension(0, 110));
+		setPreferredSize(new Dimension(0, 160));
 		setBackground(new Color(0xD7E7F7));
+		tbheader.setBackground(new Color(0xF7F8E0)); // Header 컬러 설정
 		
-		add(scrollpane);
+		add(scrollpane);		
 	}
 }

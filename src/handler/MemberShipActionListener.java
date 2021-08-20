@@ -85,7 +85,7 @@ public class MemberShipActionListener implements ActionListener {
 
 				String usePointstr = JOptionPane.showInputDialog(null, panel, "멤버쉽", 1);
 				
-				if(usePointstr != null) {
+				if(!usePointstr.equals("")) {
 					usePoint = Integer.parseInt(usePointstr);
 					
 					if( usePoint > point) {

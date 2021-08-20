@@ -59,7 +59,7 @@ public class MenuButtonActionListener implements ActionListener {
 			int quantity;
 			String quantityStr;
 			try {
-				
+				orderTable.clearSelection(); // 메뉴 클릭할때마다 테이블에 클릭내용 해제.
 				quantity = (int) orderTableModel.getValueAt(row, 1);
 				quantityStr = Integer.toString(++quantity);
 				orderTableModel.setValueAt(quantityStr, row, 1);

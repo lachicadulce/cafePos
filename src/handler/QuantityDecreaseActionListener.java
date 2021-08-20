@@ -3,6 +3,7 @@ package handler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,7 +15,7 @@ public class QuantityDecreaseActionListener implements ActionListener {
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
 	JTable calcTable; 
-	
+	static int quantity;
 	
 	
 	public QuantityDecreaseActionListener(JTable calcTable, DefaultTableModel orderTableModel, JTable orderTable) {
@@ -27,14 +28,16 @@ public class QuantityDecreaseActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		int quantity;
 		String quantitystr = null;
 		int selected = orderTable.getSelectedRow();
 
 		try {
+			if(selected >= 0) {
 			quantity = (int) orderTableModel.getValueAt(selected, 1);
-
-						
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "수량을 감소시킬 목차를 선택하세요.","Message",JOptionPane.ERROR_MESSAGE);
+			}
 		} catch (Exception e2) {
 			
 			quantitystr = (String) orderTableModel.getValueAt(selected, 1);

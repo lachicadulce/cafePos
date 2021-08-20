@@ -455,9 +455,10 @@ public class Receipt extends PosFrame {
 		
 		setLayout(null);
 		main = getContentPane(); // 메인 컨테이너 선언
-
+		
+		default_receipt(); // 영수증 기본값 세팅 
 		connection(); // 영수증 정보 커넥션
-
+		
 		receipt_print(); // 영수증 출력 함수
 		
 		payBox(); // 영수증 아래 박스 출력 함수
@@ -889,7 +890,7 @@ public class Receipt extends PosFrame {
      		   
      		  if (state.equals("cancel")) {
    				JOptionPane.showMessageDialog(null, "반품 기록입니다.");
-   			}else if (select_receipt_no > 0 ) {
+   			} else if (select_receipt_no > 0 ) {
     			   payment_change a = new payment_change(select_receipt_no);
     			   
     			   while(model.getRowCount() > 0) {
@@ -1387,6 +1388,27 @@ public class Receipt extends PosFrame {
 
 				main.add(scrollPane_yoo);
 	}
+	private static void default_receipt() {
+		try { 
+			Connection conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
+					"!!22Qorthdud");
+			String sql_receipt = "SELECT * from PAYMENT_VIEW";
+			PreparedStatement pstmt2 = conn.prepareStatement(sql_receipt);
+			ResultSet rs2 = pstmt2.executeQuery();
+			while (rs2.next()) { 
+				if (Integer.parseInt(RECEIPT_NO) <= rs2.getInt("RECEIPT_NO")) {
+					RECEIPT_NO = rs2.getString("RECEIPT_NO");
+				}
+			}
+			rs2.close();
+			pstmt2.close();
+			conn.close(); 
+
+		} catch (SQLException e) {
+			System.out.println("getConnection 하다가 문제 생김");
+		}
+	}
 
 	private static void connection() {
 
@@ -1394,18 +1416,6 @@ public class Receipt extends PosFrame {
 			Connection conn = DriverManager.getConnection(
 					"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe",
 					"!!22Qorthdud");
-
-			
-
-			String sql_receipt = "SELECT * from PAYMENT_VIEW";
-			PreparedStatement pstmt2 = conn.prepareStatement(sql_receipt);
-			ResultSet rs2 = pstmt2.executeQuery();
-			
-			while (rs2.next()) { 
-				if (Integer.parseInt(RECEIPT_NO) <= rs2.getInt("RECEIPT_NO")) {
-					RECEIPT_NO = rs2.getString("RECEIPT_NO");
-				}
-			}
 
 			String sql = "select * from PAYMENT_VIEW WHERE RECEIPT_NO = " + RECEIPT_NO;
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -1431,8 +1441,6 @@ public class Receipt extends PosFrame {
 			
 			rs.close();
 			pstmt.close();
-			rs2.close();
-			pstmt2.close();
 			conn.close(); 
 
 		} catch (SQLException e) {

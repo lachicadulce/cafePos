@@ -28,7 +28,7 @@ public class total_data {
         	int total_w_size, total_h_size;
         // ================================================================================================
             
-            
+             
             	String Receipt_list = "select * from payment_view_2 where " +  date + "+1 order by datetime asc";
             	            	
             	// 기본 디폴트 리스트 

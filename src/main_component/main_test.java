@@ -199,20 +199,6 @@ public class main_test extends PosFrame {
 		exchange.addActionListener(new SafeOpenActionListener());
 		add(exchange);
 		
-		// 환전계산
-		payment = new JButton("<html>환전<br />계산</html>");
-		payment.setLocation(420, 680);
-		payment.setSize(80,70);
-		payment.addActionListener(new ChangeActionListener(calcTable, cah, msal, orderTableModel));
-		add(payment);
-		
-
-//		JButton test2 = new JButton("<HTML><body style='text-align:center'>아메리카노(R)<br>3500</body></HTML>");
-//		test2.setLocation(220, 610);
-//		test2.setSize(75,70);
-//		test2.addActionListener(new MenuButtonActionListener(calcTable, orderTableModel, orderTable));
-//		add(test2);
-
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		

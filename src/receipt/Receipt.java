@@ -702,7 +702,7 @@ public class Receipt extends PosFrame {
 	     		 			
 	         			   for (int i = 0; i < data_change.length; i++) {
 	         				   model.addRow(data_change[i]);
-	         			   }
+	         			   } 
 	         			   
 	         			  JOptionPane.showMessageDialog(null, "반품이 완료되었습니다.");
 	     					

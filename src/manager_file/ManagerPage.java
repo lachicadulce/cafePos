@@ -88,9 +88,15 @@ public class ManagerPage extends PosFrame {
 	
 	// 화면 구성
 	private void init() {
-		model = new DefaultTableModel(header, 0);
+		model = new DefaultTableModel(header, 0){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		tb = new JTable(model);
+		tb.getTableHeader().setReorderingAllowed(false);
 		tb.setFont(new Font("", Font.PLAIN, 14));
 		JTableHeader tbheader = tb.getTableHeader();
 		tbheader.setFont(new Font("", Font.BOLD, 15));

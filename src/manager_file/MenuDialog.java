@@ -106,10 +106,12 @@ public class MenuDialog extends JDialog {
 						for(String type : types) {
 							cb_type.addItem(type);
 						}
+						JOptionPane.showMessageDialog(frame, "메뉴 추가가 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} else { // 분류 추가 없이 기존 분류에 추가한 경우
 					type_name = types.get(cb_type.getSelectedIndex());
 					insert.dbinsert("INSERT INTO menu VALUES((SELECT MAX(menu_no) + 1 FROM menu), '" + tf_name.getText() + "', " + tf_price.getText() + ", '" + type_name + "', (SELECT MAX(display_order) + 1 FROM menu WHERE type = '" + type_name + "'), 'Y')");
+					JOptionPane.showMessageDialog(frame, "메뉴 추가가 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 				// 초기화
@@ -196,6 +198,7 @@ public class MenuDialog extends JDialog {
 					}
 					insert.dbinsert("UPDATE menu SET mname = '" + tf_name.getText() + "', price = " + tf_price.getText() + ", type = '" + type_name + "', display_order = " + tf_display_order.getText() + " WHERE menu_no = " + menu_no);
 					selBtn.doClick();
+					JOptionPane.showMessageDialog(panel, "메뉴 수정이 완료되었습니다.", "확인", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				}
 			}

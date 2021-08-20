@@ -36,7 +36,7 @@ public class RightPanelBasic extends JPanel {
 		// als[0]는 MenuButtonActionListener내용이다.
 		setLayout(new BorderLayout());
 
-		GridLayout gl1 = new GridLayout(1, 4);
+		GridLayout gl1 = new GridLayout(2, 4);
 		//		GridLayout gl2 = new GridLayout(3, 4);
 		GridLayout gl3 = new GridLayout(1, 3);
 
@@ -67,12 +67,15 @@ public class RightPanelBasic extends JPanel {
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				){
 			ResultSet rs = pstmt.executeQuery();
-
+			int cnt = 0;
 			while(rs.next()) {
 
 				sortMenu = new ButtonSetting (rs.getString("type"),20, 0xb0e8f7, smal);
 				rightLUp.add(sortMenu);
-
+				cnt++;
+			}
+			for(int i = cnt; i < 8; i++) {
+				rightLUp.add(new UnusedButtonSetting("", 20, 0xeeeeee, null));
 			}
 
 		} catch (Exception e) {

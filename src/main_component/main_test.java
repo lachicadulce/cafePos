@@ -28,10 +28,11 @@ public class main_test extends PosFrame {
 	MemberShipActionListener msal;
 	ReceiptActionListener rcal;
 	String[] calcColumn = { "", "" };
-	String lumpSum;
-	String discount;
-	String received;
-	String change;
+
+	String lumpSum = "0";
+	String discount = "0";
+	String received = "0";
+	String change = "0";
 	
 	DefaultTableModel orderTableModel;
 	JTable orderTable;
@@ -78,13 +79,6 @@ public class main_test extends PosFrame {
 		// 왼쪽 화면
 		JPanel leftScreen = new JPanel();
 		leftScreen.setLayout(null);
-
-		
-		// 금액계산 변수	
-		lumpSum = "";
-		discount = "";
-		received = "";
-		change = "";
 
 		calcTable = new JTable(calcdata, calcColumn);
 		calcTable.setFont(new Font("default", Font.BOLD, 20)); // 글자 사이즈 조정

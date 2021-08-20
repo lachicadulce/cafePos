@@ -468,7 +468,7 @@ public class Receipt extends PosFrame {
 		// 메인으로 가는 버튼
 		
 
-		String message = "Main";
+		String message = "메인으로";
 
 		JButton  tomain = new JButton(message);
 
@@ -543,7 +543,7 @@ public class Receipt extends PosFrame {
 		// 메인으로 가는 버튼 세부 설정 
 		tomain.setBounds(20, 30, 150, 80);
 //		tomain.setBackground(new Color(0xffffff));
-		tomain.setFont(new Font("MV Bold", Font.BOLD, 25));
+		tomain.setFont(new Font("MV Bold", Font.BOLD, 20));
 		tomain.addActionListener(new ActionListener() {
 			
 			@Override

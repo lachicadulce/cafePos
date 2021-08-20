@@ -50,7 +50,7 @@ import main_component.main_test;
 public class Receipt extends PosFrame {
 
 	static Container main;
-	static String RECEIPT_NO = "24";
+	static String RECEIPT_NO = "1";
 	static HashMap<String, ArrayList<Integer>> drink;
 	static JPanel frame = new JPanel();
 
@@ -687,7 +687,26 @@ public class Receipt extends PosFrame {
 	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
 	     				// 사용자가 예를 선택한경우
 	     					refund(select_receipt_no);
-	     					JOptionPane.showMessageDialog(null, "반품이 완료되었습니다.");
+	     					
+	     					
+	     					while(model.getRowCount() > 0) {
+	         				   model.removeRow(0);
+	         			   }
+	     	
+	         			   data_change = table_change(date_s_e);
+	     	
+	         			   if (data_change.length == 0) {
+	         				   JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+	         			   }
+	     	
+	     		 			
+	         			   for (int i = 0; i < data_change.length; i++) {
+	         				   model.addRow(data_change[i]);
+	         			   }
+	         			   
+	         			  JOptionPane.showMessageDialog(null, "반품이 완료되었습니다.");
+	     					
+	     					
 	     				} else {
 	     				// 사용자가 아니오를 선택한경우
 	     					JOptionPane.showMessageDialog(null, "취소하셨습니다.");
@@ -782,7 +801,26 @@ public class Receipt extends PosFrame {
 	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {	// 사용자가 예를 선택한경우
 	     				
 	     					cash_receipt_executive(select_receipt_no, "Y");
-	     					JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
+	     					
+	     					
+	     					
+	     					while(model.getRowCount() > 0) {
+	         				   model.removeRow(0);
+	         			   }
+	     	
+	         			   data_change = table_change(date_s_e);
+	     	
+	         			   if (data_change.length == 0) {
+	         				   JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+	         			   }
+	     	
+	     		 			
+	         			   for (int i = 0; i < data_change.length; i++) {
+	         				   model.addRow(data_change[i]);
+	         			   }
+	         			   
+	         			  JOptionPane.showMessageDialog(null, "현금영수증을 취소처리 하였습니다.");
+	         			   
 	     					
 	     				} else {	// 사용자가 아니오를 선택한경우
 	     				
@@ -803,7 +841,26 @@ public class Receipt extends PosFrame {
 	     				} else if (yes_or_no == JOptionPane.YES_OPTION) {
 	     				// 사용자가 예를 선택한경우
 	     					cash_receipt_executive(select_receipt_no, "N");
-	     					JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+	     					
+	     					
+	     					
+	     					while(model.getRowCount() > 0) {
+	         				   model.removeRow(0);
+	         			   }
+	     	
+	         			   data_change = table_change(date_s_e);
+	     	
+	         			   if (data_change.length == 0) {
+	         				   JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+	         			   }
+	     	
+	     		 			
+	         			   for (int i = 0; i < data_change.length; i++) {
+	         				   model.addRow(data_change[i]);
+	         			   }
+	         			   
+	         			  JOptionPane.showMessageDialog(null, "현금영수증을 처리 하였습니다.");
+	     					
 	     				} else {
 	     				// 사용자가 아니오를 선택한경우
 	     					JOptionPane.showMessageDialog(null, "현금영수증 처리를 취소하셨습니다.");
@@ -828,10 +885,25 @@ public class Receipt extends PosFrame {
      			
      		  if (select_receipt_no > 0 ) {
     			   payment_change a = new payment_change(select_receipt_no);
+    			   
+    			   while(model.getRowCount() > 0) {
+    				   model.removeRow(0);
+    			   }
+	
+    			   data_change = table_change(date_s_e);
+	
+    			   if (data_change.length == 0) {
+    				   JOptionPane.showMessageDialog(null, "조회 결과가 없습니다.");
+    			   }
+    			   
+    			   for (int i = 0; i < data_change.length; i++) {
+    				   model.addRow(data_change[i]);
+    			   }
+    			   
     		   } else {
     			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
     		   }
-
+     		  
      		}
      		
      	});
@@ -1072,6 +1144,7 @@ public class Receipt extends PosFrame {
 			pay += point_used;
 
 		}
+		
 		if (receipt_chk.equals("Y")) { // 현금 영수증 체크
 			bill += "<br>[현금영수증 발급]" + "<br>발급 용도: 소비자 소득공제";
 		} else if (receipt_chk.equals("N")) {

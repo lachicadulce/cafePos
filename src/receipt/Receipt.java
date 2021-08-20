@@ -181,25 +181,27 @@ public class Receipt extends PosFrame {
             
             // ================================================================================================
         	// ================================================================================================
-
-            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
-            	w_size = list_data_default.size();
-            	h_size = list_data_default.get(0).size();
-            	
-            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
-             	data_default = new String[w_size][h_size];
-             	
-             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
-             	for (int i = 0; i < w_size; i++) {
-            		for (int x = 0; x < h_size; x++) {
-            			if (x == 0) {
-            				data_default[i][x] = "" + (i+1);
-            			}else {
-            				data_default[i][x] = list_data_default.get(i).get(x);
-            			}
-            		}
+            	if (list_data_default.size() > 0) {
+	            	// JTable에 담길 데이터의 사이즈를 설정하기 위한 각 데이터의 사이즈 구하기
+	            	w_size = list_data_default.size();
+	            	h_size = list_data_default.get(0).size();
+	            	
+	            	// 구한 각 데이터의 사이즈를 가지고 JTable의 크기 설정
+	             	data_default = new String[w_size][h_size];
+	             	
+	             	// 전체(total) 데이터를 JTable에 적용할 배열에 저장
+	             	for (int i = 0; i < w_size; i++) {
+	            		for (int x = 0; x < h_size; x++) {
+	            			if (x == 0) {
+	            				data_default[i][x] = "" + (i+1);
+	            			}else {
+	            				data_default[i][x] = list_data_default.get(i).get(x);
+	            			}
+	            		}
+	            	}
+            	} else if (list_data_default.size() == 0) {
+            		data_default = new String[0][12];
             	}
-            
 		} catch (SQLException e) {
             System.out.println("getConnection 하다가 문제 생김");
         }
@@ -235,6 +237,7 @@ public class Receipt extends PosFrame {
             	list_data_change.clear();
             	
             	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
+            	
             	while (rs_list.next()) {
             		ArrayList<String> data_total = new ArrayList<>();
             		data_total.clear();

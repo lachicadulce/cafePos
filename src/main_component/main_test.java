@@ -187,6 +187,7 @@ public class main_test extends PosFrame {
 		exchange.addActionListener(new SafeOpenActionListener());
 		add(exchange);
 		
+		
 
 /////////////////////////////////오르쪽 화면 ////////////////////////////////////////
 		

@@ -1401,7 +1401,7 @@ public class Receipt extends PosFrame {
 			PreparedStatement pstmt2 = conn.prepareStatement(sql_receipt);
 			ResultSet rs2 = pstmt2.executeQuery();
 			
-			while (rs2.next()) {
+			while (rs2.next()) { 
 				if (Integer.parseInt(RECEIPT_NO) <= rs2.getInt("RECEIPT_NO")) {
 					RECEIPT_NO = rs2.getString("RECEIPT_NO");
 				}

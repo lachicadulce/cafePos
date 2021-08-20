@@ -78,6 +78,7 @@ public class RightPanelBasic extends JPanel {
 				rightLUp.add(new UnusedButtonSetting("", 20, 0xeeeeee, null));
 			}
 
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

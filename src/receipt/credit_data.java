@@ -28,9 +28,9 @@ public class credit_data {
         	int credit_w_size, credit_h_size;
         // ================================================================================================
             
-            	String Receipt_list = "select * from payment_view_2 where credit > 0 and " +  date + "+1"; 
+            	String Receipt_list = "select * from payment_view_2 where credit > 0 and " +  date + "+1 order by datetime asc"; 
             	
-            	// 기본 디폴트 리스트 
+            	// 기본 디폴트 리스트  
             	PreparedStatement pstmt_Receipt_credit_list = conn.prepareStatement(Receipt_list);
             	
             	ResultSet rs_list = pstmt_Receipt_credit_list.executeQuery();

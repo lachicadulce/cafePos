@@ -130,7 +130,7 @@ public class Receipt extends PosFrame {
         // ================================================================================================
 
             	
-            	Receipt_list += " where " +  date_s_e + " + 1";
+            	Receipt_list += " where " +  date_s_e + " + 1 order by datetime asc";
 
             	
             	// 기본 디폴트 리스트 
@@ -220,8 +220,8 @@ public class Receipt extends PosFrame {
 //            	Receipt_list += " where datetime > TO_DATE('" + where_date + "')";
             	//	date_s, date_e;
          
-            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1";
-            	
+            	String Receipt_list = "select * from payment_view_2 where " +  date + "+1 order by datetime asc";
+            	 
             	// 기본 디폴트 리스트 
             	PreparedStatement pstmt_Receipt_list = conn.prepareStatement(Receipt_list);
             	
@@ -325,9 +325,12 @@ public class Receipt extends PosFrame {
             }
             
             String update_sql = "update customer_info set point = (select point from customer_info where cus_no = " + temp[0] + ") + (" + set_point + ") where cus_no = " + temp[0];
+            String update_sql1 = "update history_payment set state = 'cancel' where receipt_no = " + receipt_no;
             
             PreparedStatement update_customer_info = conn.prepareStatement(update_sql);
+            PreparedStatement update_history_payment = conn.prepareStatement(update_sql1);
 
+            update_history_payment.executeUpdate();
 			int row = update_customer_info.executeUpdate();
 			
 			update_customer_info.close();

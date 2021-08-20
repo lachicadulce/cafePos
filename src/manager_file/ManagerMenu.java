@@ -47,6 +47,7 @@ public class ManagerMenu extends PosFrame {
 	
 	public ManagerMenu() {
 		super();
+		setTitle("메뉴 관리");
 
 		init();
 		setTB();

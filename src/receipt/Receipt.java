@@ -231,7 +231,7 @@ public class Receipt extends PosFrame {
             	// 이후 테이블 사이즈를 구성하기 위한 가져온 컬럼의 숫자 저장
             	int column_size = md.getColumnCount();
             	
-            	// 기존에 담겨있던 데이터를 비움
+            	// 기존에 담겨있던 데이터를 비움 
             	list_data_change.clear();
             	
             	// 가져온 데이터를 list_data_default(ArrayList) 에 저장
@@ -1246,7 +1246,7 @@ public class Receipt extends PosFrame {
 
 			rs.close();
 			pstmt.close();
-			conn.close();
+			conn.close(); 
 
 		} catch (SQLException e) {
 			System.out.println("getConnection 하다가 문제 생김");

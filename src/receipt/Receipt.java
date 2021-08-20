@@ -58,6 +58,8 @@ public class Receipt extends PosFrame {
 	static JLabel receipt;
 	static String receipt_string;// 판매 영수증
 	static String return_string;// 환불 영수증 
+	static String reprint; // 재인쇄 영수증 
+	static String return_reprint; // 재인쇄 반품 영수증
 	static String info = "";
 	static int pay;
 
@@ -670,7 +672,9 @@ public class Receipt extends PosFrame {
      		@Override
      		public void actionPerformed(ActionEvent e) {
      			
-     			if (select_receipt_no > 0 ) {
+     			if (state.equals("cancel")) { 
+     				JOptionPane.showMessageDialog(null, "반품 기록입니다.");
+     			} else if (select_receipt_no > 0 ) {
      			
 	     			String a = "" + table.getValueAt(table.getSelectedRow(), 3);
 	     			
@@ -741,10 +745,11 @@ public class Receipt extends PosFrame {
 						PrintStream out = new PrintStream(bout);
 							
 					) {
+						
 						if (state.equals("complete")) { // 영수증 종류 확인
-							out.write(receipt_string.getBytes());
+							out.write(reprint.getBytes());
 						} else {
-							out.write(return_string.getBytes());
+							out.write(return_reprint.getBytes());
 						}
 						
 					} catch (FileNotFoundException e1) {
@@ -1057,9 +1062,11 @@ public class Receipt extends PosFrame {
 
 	private static void receipt_print() {
 		String product = "";
+		String reprint_product = "";
 		// 받아온 HashMap 음료 수량 가격 영수증에 출력
 		for (Entry<String, ArrayList<Integer>> entry : drink.entrySet()) {
 			String print = "";
+			String reprint_print = "";
 			int price = 0;
 			for (int number : entry.getValue()) {
 				price += number;
@@ -1078,10 +1085,20 @@ public class Receipt extends PosFrame {
 					+ formatter.format(price)
 					+ "</td>" 
 					+ "</tr>";
+			reprint_print += "\n" 
+					+ entry.getKey()
+					+ " "
+					+ formatter.format(entry.getValue().get(0)) 
+					+ "\t"
+					+ entry.getValue().size() 
+					+ " " 
+					+ formatter.format(price);
 			product += print;
+			reprint_product += reprint_print;
 		}
 //		----------------------사용한 결제금액 bill, pay에 출력
 		String bill = "";
+		String reprint_bill = "";
 		info = "";
 		pay = 0;
 		if (cash != 0) {
@@ -1093,6 +1110,9 @@ public class Receipt extends PosFrame {
 					+ "원</td>"
 					+ "</tr>" 
 					+ "</table>";
+			reprint_bill += "\n현금\t\t\t\t\t\t"
+					+ formatter.format(cash) 
+					+ "원";
 			if (info.equals("")) {
 				info += "현금";
 			} else {
@@ -1111,6 +1131,9 @@ public class Receipt extends PosFrame {
 					+ "원</td>"
 					+ "</tr>" 
 					+ "</table>";
+			reprint_bill += "\n카드\t\t\t\t\t\t"
+					+ formatter.format(credit) 
+					+ "원";
 			if (info.equals("")) {
 				info += "카드";
 			} else {
@@ -1137,6 +1160,12 @@ public class Receipt extends PosFrame {
 					+ "점</td>"
 					+ "</tr>" 
 					+ "</table>";
+			reprint_bill += "\n포인트\t\t\t\t\t\t"
+					+ formatter.format(point_used) 
+					+ "원"
+					+ "\n남은 포인트\t"
+					+ formatter.format(point)
+					+ "원";
 			if (info.equals("")) {
 				info += "포인트";
 			} else {
@@ -1269,9 +1298,73 @@ public class Receipt extends PosFrame {
 				+ "<br>[광고]스마일게이트 알피지의 차세대<br> 핵&슬래쉬 MMORPG 로스트아크."
 				+ "<br>-------------------------------------------------------------------"
 				+ "<center>감사합니다.<br><br> </center>" + "</html>";
-
 		// &nbsp 띄어쓰기 &emsp 크게 띄어쓰기
 		// <html> + + <br> + + </html> 줄 바꾸는 법
+		
+		reprint = 
+				"\t\t\t매출전표" 
+				+ "\n거래일시: "
+				+ transaction_date_string 
+				+ "\n--------------------------------"
+				+ "\n*정부방침에 의해 교환/환불은 반드시 영수증을"
+				+ "\n지참하셔야 하며, 카드결제는 30일" 
+				+ "(" + returnDayString + ")" // 데이터베이스에서 거래날짜 + 30																						
+				+ "\n이내 카드와 영수증 지참 시 가능합니다."
+				+ "\n--------------------------------" 
+				+ "\n품명\t\t\t단가\t\t수량\t\t금액"
+				+ "\n--------------------------------"
+				+ "\n"
+				+ reprint_product 
+				+ "\n--------------------------------"
+				+ "\n과세매출\t\t\t\t\t"
+				+ formatter.format(vat * 10 - vat)
+				+ "원" 
+				+ "\n부가세\t\t\t\t\t" 
+				+ formatter.format(vat) 
+				+ "원"
+				+ "\n합계\t\t\t\t\t\t"
+				+ formatter.format(total)
+				+ "원"
+				+ "\n--------------------------------"
+				+ "\n"
+				+ reprint_bill
+				+ "\n--------------------------------"
+				+ "\n\t[광고]스마일게이트 알피지의 차세대"
+				+ "\n\t핵&슬래쉬 MMORPG 로스트아크."
+				+ "\n--------------------------------"
+				+ "\n\t\t\t감사합니다.";
+		return_reprint = 
+				"\t\t\t환불전표" 
+				+ "\n거래일시: "
+				+ transaction_date_string 
+				+ "\n--------------------------------"
+				+ "\n*정부방침에 의해 교환/환불은 반드시 영수증을"
+				+ "\n지참하셔야 하며, 카드결제는 30일" 
+				+ "(환불완료)" 																					
+				+ "\n이내 카드와 영수증 지참 시 가능합니다."
+				+ "\n--------------------------------" 
+				+ "\n품명\t\t\t단가\t\t수량\t\t금액"
+				+ "\n--------------------------------"
+				+ "\n"
+				+ reprint_product 
+				+ "\n--------------------------------"
+				+ "\n과세매출\t\t\t\t\t"
+				+ formatter.format(vat * 10 - vat)
+				+ "원" 
+				+ "\n부가세\t\t\t\t\t" 
+				+ formatter.format(vat) 
+				+ "원"
+				+ "\n환불금액\t\t\t\t\t"
+				+ formatter.format(total)
+				+ "원"
+				+ "\n--------------------------------"
+				+ "\n"
+				+ reprint_bill
+				+ "\n--------------------------------"
+				+ "\n\t[광고]스마일게이트 알피지의 차세대"
+				+ "\n\t핵&슬래쉬 MMORPG 로스트아크."
+				+ "\n--------------------------------"
+				+ "\n\t\t\t감사합니다.";
 	}
 	
 	private static void payBox() {

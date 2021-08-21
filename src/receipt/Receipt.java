@@ -45,6 +45,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import baseSettings.DBConnector;
 import baseSettings.PosFrame;
 import main_component.main_test;
 
@@ -124,10 +125,7 @@ public class Receipt extends PosFrame {
 
 	public void total() {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+            Connection conn = DBConnector.getConnection();
             
         // ================================================================================================
         // ================================================================================================
@@ -296,10 +294,7 @@ public class Receipt extends PosFrame {
 	// 반품 처리
 	public void refund(int receipt_no) {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+            Connection conn = DBConnector.getConnection();
             
             String sql = "select cus_no, point_saved, point_used from history_payment where receipt_no = " + receipt_no;
             
@@ -348,10 +343,7 @@ public class Receipt extends PosFrame {
 	// 현금영수증 현재의 유무 확인
 	public String[] cash_receipt(int receipt_no) {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+            Connection conn = DBConnector.getConnection();
             String cash_receipt_chk = "select cash, credit, receipt_chk from history_payment WHERE receipt_no = ";
             cash_receipt_chk += ("" + receipt_no);
             
@@ -411,10 +403,7 @@ public class Receipt extends PosFrame {
 	// 반품 처리
 		public void DBsysdate() {
 			try {
-	            Connection conn = DriverManager.getConnection(
-	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-	            		"cafe",
-	            		"!!22Qorthdud");
+	            Connection conn = DBConnector.getConnection();
 	            
 	            String sql = "select sysdate from dual";
 	            
@@ -584,7 +573,7 @@ public class Receipt extends PosFrame {
 		scrollPane.setPreferredSize(new Dimension(540, 500)); // 스크롤바 크기조정
 
 		frame.add(scrollPane);
-
+		
 		// 좌측 위 버튼 추가
 		main.add(buttons.get(0));
 		main.add(buttons.get(1));

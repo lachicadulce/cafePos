@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import baseSettings.DBConnector;
+
 public class payment_change extends JDialog {
 	 
 	// =================================== 여기부터 패널 생성 ===================================
@@ -276,10 +278,7 @@ public class payment_change extends JDialog {
 	public void data_update(String sql) {
 		
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+            Connection conn = DBConnector.getConnection();
             System.out.println(sql);
             PreparedStatement cash_to_credit = conn.prepareStatement(sql);
 			
@@ -298,10 +297,7 @@ public class payment_change extends JDialog {
 	public String[] dbcheck(int receipt_no) {
 		
 		try {
-	            Connection conn = DriverManager.getConnection(
-	            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-	            		"cafe",
-	            		"!!22Qorthdud");
+	            Connection conn = DBConnector.getConnection();
 	            
 	            String sql = "select "
 						+ "a.RECEIPT_NO,"		// 영수증 번호

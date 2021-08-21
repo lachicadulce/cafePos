@@ -8,6 +8,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import baseSettings.DBConnector;
+
 public class cash_data {
 	
 	public cash_data() {
@@ -16,10 +18,7 @@ public class cash_data {
 	
 	public String[][] table_cash_data(String date) {
 		try {
-            Connection conn = DriverManager.getConnection(
-            		"jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL",
-            		"cafe",
-            		"!!22Qorthdud");
+            Connection conn = DBConnector.getConnection();
             
         // ================================================================================================
             String[] columnNames = null;

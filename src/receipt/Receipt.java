@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -468,9 +469,13 @@ public class Receipt extends PosFrame {
 		// 메인으로 가는 버튼
 		
 
-		String message = "메인으로";
+		
 
-		JButton  tomain = new JButton(message);
+		JButton  tomain = new JButton();
+		
+		ImageIcon to_main = new ImageIcon("manager/main.png");
+		tomain.setIcon(to_main);
+		tomain.setText("<html><font size=4>메인으로</font></html>");
 
 		JPanel frame = new JPanel();
 
@@ -524,7 +529,17 @@ public class Receipt extends PosFrame {
 		buttons.add(new JButton("결제변경"));
 		buttons.add(new JButton("전체"));
 		buttons.add(new JButton("현금"));
-		buttons.add(new JButton("신용카드")); // 6
+		buttons.add(new JButton("카드")); // 6
+		
+		ImageIcon print = new ImageIcon("image/print.png");
+		buttons.get(1).setIcon(print);
+		ImageIcon select = new ImageIcon("image/select.png");
+		buttons.get(4).setIcon(select);
+		buttons.get(5).setIcon(select);
+		buttons.get(6).setIcon(select);
+		
+		
+		
 
 		// 버튼 위치 조정
 		buttons.get(0).setBounds(190, 30, 150, 80);

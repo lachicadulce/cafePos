@@ -214,6 +214,8 @@ public class CashActionHandler implements ActionListener {
 
 					String hPCountSql = "SELECT MAX(receipt_no) AS cnt FROM history_payment";
 
+					String memPointDeductionSql = "UPDATE customer_info SET last_visit = sysdate,  point = point - ? WHERE tel LIKE ?" ;
+
 					int cnt = 0;
 					int addPoint = 0;
 
@@ -225,6 +227,7 @@ public class CashActionHandler implements ActionListener {
 							PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
 							PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
 							//				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
+							PreparedStatement memPointpstmt  = conn.prepareStatement(memPointDeductionSql);
 
 							){
 						; 
@@ -259,6 +262,14 @@ public class CashActionHandler implements ActionListener {
 						hPpstmt.executeUpdate();
 						System.out.println("history_payment DB add");
 
+						// 멤버쉽 포인트 사용 
+						
+						if(msal.usePoint != 0) {
+							memPointpstmt.setInt(1, msal.usePoint);
+							memPointpstmt.setString(2, "%"+msal.memTel+"%");
+							memPointpstmt.executeUpdate();
+							System.out.println("history_payment DB add");
+						}
 
 						// customer_info 에 멤버쉽 포인트 추가 + 설정
 
@@ -271,6 +282,8 @@ public class CashActionHandler implements ActionListener {
 
 							System.out.println("PointUpdate");
 						}
+
+
 
 						// history_beverage 데이터 DB에 추가
 

@@ -20,15 +20,21 @@ public class SortMenuActionListener implements ActionListener {
 		this.rpb = rpb;
 		this.al = al;
 		this.sortMenu = sortMenu;
+		setbg();
+	}
+	
+	// 첫화면에 선택되어 있는 coffee 버튼 배경색 설정
+	public void setbg() { 
+		sortMenu.get(0).setBackground(new Color(0x819FF7));
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		for(int i = 0 ; i < sortMenu.size(); i++) {
-			if (sortMenu.get(i).getText().equals(e.getActionCommand()) ) {
+			if (sortMenu.get(i).getText().equals(e.getActionCommand())) {
 				sortMenu.get(i).setFont(new Font("System",Font.BOLD, 20));
-				sortMenu.get(i).setBackground(new Color(0x9accd9));
+				sortMenu.get(i).setBackground(new Color(0x819FF7));
 			} else {
 				sortMenu.get(i).setFont(new Font("System",Font.BOLD,20));
 				sortMenu.get(i).setBackground(new Color(0xA9D0F5));

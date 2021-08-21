@@ -459,6 +459,7 @@ public class Receipt extends PosFrame {
 		ImageIcon to_main = new ImageIcon("manager/main.png");
 		tomain.setIcon(to_main);
 		tomain.setText("<html><font size=4>메인으로</font></html>");
+		tomain.setBackground(new Color(0xEFF5FB));
 
 		JPanel frame = new JPanel();
 
@@ -532,11 +533,12 @@ public class Receipt extends PosFrame {
 		buttons.get(4).setBounds(870, 30, 120, 80);
 		buttons.get(5).setBounds(1010, 30, 120, 80);
 		buttons.get(6).setBounds(1150, 30, 120, 80);
-
+		
 		p1.setBounds(20, 130, 660, 50); // 조회 패널
 
 		for (int i = 0; i < buttons.size(); ++i) {
 			buttons.get(i).setFont(new Font("MV Bold", Font.BOLD, 20));
+			buttons.get(i).setBackground(new Color(0xEFF5FB));
 		}
 		// 메인으로 가는 버튼 세부 설정 
 		tomain.setBounds(20, 30, 150, 80);

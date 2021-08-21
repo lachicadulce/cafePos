@@ -19,4 +19,6 @@ public class ButtonSetting extends JButton {
 	public void setActionListener(ActionListener al) {
 		addActionListener(al);
 	}
+	
+	
 }

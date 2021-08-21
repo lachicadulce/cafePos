@@ -34,7 +34,7 @@ public class RightPanelBasic extends JPanel {
 
 	public RightPanelBasic(JSplitPane jsp2, ActionListener ...als) {
 		// als[0] = mbal, als[1] = msal, als[2] = cah, als[3] = managerActionListener als[4] = receiptActionListener
-//		SortMenuActionListener smal = new SortMenuActionListener(this, als[0], sortMenu);
+		// SortMenuActionListener smal = new SortMenuActionListener(this, als[0], sortMenu);
 		// als[0]는 MenuButtonActionListener내용이다.
 		setLayout(new BorderLayout());
 

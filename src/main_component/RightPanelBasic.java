@@ -1,15 +1,13 @@
-package main_component;
-import java.awt.BorderLayout;
-
-import java.awt.GridLayout;
+ package main_component;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+
+import javax.swing.*;
+
 import baseSettings.DBConnector;
 import handler.SortMenuActionListener;
 
@@ -90,12 +88,15 @@ public class RightPanelBasic extends JPanel {
 
 		// 맨 아래 버튼(영수증관리, 멤버쉽, 결제 버튼)
 		ButtonSetting ManageReceipts = new ButtonSetting("<HTML><body style='text-align:center'>영수증<br>관리</body></HTML>",25 ,0xCEE3F6, als[4]);
+		ManageReceipts.setIcon(new ImageIcon("mainpng/iconr.png"));
 		rightLDown.add(ManageReceipts);
 
 		ButtonSetting MemberShip = new ButtonSetting("<HTML><body style='text-align:center'>멤버쉽</body></HTML>",25,0xCED8F6, als[1] );
+		MemberShip.setIcon(new ImageIcon("mainpng/iconm.png"));
 		rightLDown.add(MemberShip);
 
 		ButtonSetting Payment = new ButtonSetting("<HTML><body style='text-align:center'>결제</body></HTML>", 25, 0xCECEF6, als[2]);
+		Payment.setIcon(new ImageIcon("mainpng/iconp.png"));
 		rightLDown.add(Payment);
 
 

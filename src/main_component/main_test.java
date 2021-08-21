@@ -128,8 +128,8 @@ public class main_test extends PosFrame {
 		
 		
 		// 전체취소버튼
-		allCancel.setLocation(11, 410);
-		allCancel.setSize(124, 50);
+		allCancel.setLocation(10, 410);
+		allCancel.setSize(125, 50);
 		allCancel.addActionListener(new RevalidateActionListener(this.getFrames()[0], calcTable, orderTableModel));
 		allCancel.setFont(new Font("default", Font.BOLD, 14));
 		allCancel.setBackground(new Color(0xD8D8D8));
@@ -138,8 +138,8 @@ public class main_test extends PosFrame {
 		add(allCancel);
 		
 		// 선택 취소 버튼
-		selectCancel.setLocation(136, 410);
-		selectCancel.setSize(124, 50);
+		selectCancel.setLocation(135, 410);
+		selectCancel.setSize(125, 50);
 		selectCancel.addActionListener(new SelectCancelActionListener(orderTableModel, orderTable));
 		selectCancel.setFont(new Font("default", Font.BOLD, 14));
 		selectCancel.setBackground(new Color(0xF2F2F2));
@@ -148,7 +148,7 @@ public class main_test extends PosFrame {
 		add(selectCancel);
 
 		// 수량 추가
-		quantityPlus.setLocation(261, 410);
+		quantityPlus.setLocation(260, 410);
 		quantityPlus.setSize(125, 50);
 		quantityPlus.addActionListener(new QuantityIncreaseActionListener(calcTable, orderTableModel, orderTable));
 		quantityPlus.setFont(new Font("default", Font.BOLD, 14));
@@ -158,7 +158,7 @@ public class main_test extends PosFrame {
 		add(quantityPlus);
 
 		// 수량 차감
-		quantityMinus.setLocation(386, 410);
+		quantityMinus.setLocation(385, 410);
 		quantityMinus.setSize(125, 50);
 		quantityMinus.addActionListener(new QuantityDecreaseActionListener(calcTable, orderTableModel, orderTable));
 		quantityMinus.setFont(new Font("default", Font.BOLD, 14));

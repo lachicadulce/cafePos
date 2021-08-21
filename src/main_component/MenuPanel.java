@@ -27,8 +27,8 @@ public class MenuPanel extends JPanel {
 		card = new CardLayout();
 		JPanel rightCenter = rpb.getRightLCenter();
 		JPanel rightR = rpb.getRightR();
-		ButtonSetting up = new ButtonSetting("△", 15 ,0xE0E6F8, null);
-		ButtonSetting down  = new ButtonSetting("▽", 15 ,0xE0E6F8, null);
+		ButtonSetting up = new ButtonSetting("▲", 15 ,0xE0E6F8, null);
+		ButtonSetting down  = new ButtonSetting("▼", 15 ,0xE0E6F8, null);
 			
 		rightCenter.setLayout(card);
 		

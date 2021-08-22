@@ -33,309 +33,317 @@ import baseSettings.DBConnector;
 
 public class CashActionHandler implements ActionListener {
 
-	JTextField textField;
-	JTable calcTable;
-	int cashMoney;
-	int cardMoney;
-	boolean cashReceipt;
-	int cashReceiptCheck;
-	MemberShipActionListener msal;
-	DefaultTableModel orderTableModel;
-	Frame frame;
-	public CashActionHandler(JTable calcTable, MemberShipActionListener msal, DefaultTableModel orderTableModel, Frame frame) {
-		super();
-		this.calcTable = calcTable;
-		this.msal = msal;
-		this.orderTableModel = orderTableModel;
-		this.frame = frame;
-	}
-
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		JDialog dialog = null;
-
-		String[] commands = {"1", "2", "3", "4","5", "6", "7", "8", "9", "0", ">", "E"};
-		String input = "";
-
-		JPanel panel = new JPanel();
-		JLabel label = new JLabel("받은 현금을 입력해 주세요");
-		panel.add(label);
-		textField = new JTextField(10);
-		textField.setText("0");
-		panel.add(textField);
-
-		int total;
-		int sale;
-
-		try {
-			total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
-		} catch (Exception e2) {
-			total= 0;
-		}
-
-		try {
-			sale = Integer.parseInt((String)calcTable.getValueAt(1, 1));
-		} catch (Exception e3) {
-			sale = 0;
-		}
-
-		JOptionPane op = new JOptionPane
-				(
-						panel, // Prompt message
-						JOptionPane.QUESTION_MESSAGE, // Message type
-						JOptionPane.YES_NO_CANCEL_OPTION, // Option type
-						null, // Icon
-						commands, // List of commands
-						commands[commands.length - 1]
-						);
-
-		List<JButton> buttons = SwingUtils.getDescendantsOfType(JButton.class, op, true);
-
-		Container parent = buttons.get(0).getParent();
-		parent.setLayout( new GridLayout(4, 0, 5, 5) );
-		dialog = op.createDialog(null, "");
-
-		// 현금 결제 입력 받기
-		if( e.getActionCommand() != null) {
-
-			while(true) {
-				dialog = op.createDialog(null, "현금 결제");
-				dialog.setVisible(true);
-
-				// 닫기 버튼 눌렸을때
-				if(op.getValue() == null) {
-					dialog.dispose();
-					break;
-
-					// E 버튼 눌렸을때
-				} else if (op.getValue() == "E" ) {
-
-					calcTable.setValueAt(textField.getText(), 2, 1);
-					cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
-
-					input = "";
-					dialog.dispose();
-
-					if(cashMoney > 0 ) {					
-						cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "현금영수증 확인", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
-						if(cashReceiptCheck == 0) {// 영수증한다의 yes == 0 / cancel == 1 / 
-							cashReceipt = true;
-						} else {
-							cashReceipt = false;
-						}
-					}
-
-					break;
-
-					// 숫자 인지 확인후 추가
-				} else if (isNumeric((String)op.getValue())) {
-					input += op.getValue();
-					textField.setText(input);
+   JTextField textField;
+   JTable calcTable;
+   int cashMoney;
+   int cardMoney;
+   boolean cashReceipt;
+   int cashReceiptCheck;
+   MemberShipActionListener msal;
+   DefaultTableModel orderTableModel;
+   Frame frame;
+   public CashActionHandler(JTable calcTable, MemberShipActionListener msal, DefaultTableModel orderTableModel, Frame frame) {
+      super();
+      this.calcTable = calcTable;
+      this.msal = msal;
+      this.orderTableModel = orderTableModel;
+      this.frame = frame;
+   }
+
+
+
+   @Override
+   public void actionPerformed(ActionEvent e) {
+
+      JDialog dialog = null;
+
+      String[] commands = {"1", "2", "3", "4","5", "6", "7", "8", "9", "0", ">", "E"};
+      String input = "";
+
+      JPanel panel = new JPanel();
+      JLabel label = new JLabel("받은 현금을 입력해 주세요");
+      panel.add(label);
+      textField = new JTextField(10);
+      textField.setText("0");
+      panel.add(textField);
+
+      int total;
+      int sale;
+
+      try {
+         total = Integer.parseInt((String)calcTable.getValueAt(0, 1));
+      } catch (Exception e2) {
+         total= 0;
+      }
+
+      try {
+         sale = Integer.parseInt((String)calcTable.getValueAt(1, 1));
+      } catch (Exception e3) {
+         sale = 0;
+      }
+
+      JOptionPane op = new JOptionPane
+            (
+                  panel, // Prompt message
+                  JOptionPane.QUESTION_MESSAGE, // Message type
+                  JOptionPane.YES_NO_CANCEL_OPTION, // Option type
+                  null, // Icon
+                  commands, // List of commands
+                  commands[commands.length - 1]
+                  );
+
+      List<JButton> buttons = SwingUtils.getDescendantsOfType(JButton.class, op, true);
+
+      Container parent = buttons.get(0).getParent();
+      parent.setLayout( new GridLayout(4, 0, 5, 5) );
+      dialog = op.createDialog(null, "");
+
+      // 현금 결제 입력 받기
+      
+      boolean cashChk = true;
+
+      if( e.getActionCommand() != null) {  // "결제"버튼 클릭하면 e.getActionCommand()내용 = <HTML><body style='text-align:center'>결제</body></HTML>
+    	  System.out.println("현금결제클릭 : " +e.getActionCommand());
+         while(true) {
+            dialog = op.createDialog(null, "현금 결제");
+            dialog.setVisible(true);
+
+            // 닫기 버튼 눌렸을때
+            if(op.getValue() == null) {
+               dialog.dispose();
+               cashChk = false;
+               break;
+
+            // E 버튼 눌렸을때
+            } else if (op.getValue() == "E" ) {
+
+               calcTable.setValueAt(textField.getText(), 2, 1);
+               cashMoney = Integer.parseInt((String) calcTable.getValueAt(2, 1));
+
+               input = "";
+               dialog.dispose();
+
+               if(cashMoney > 0 ) {// 현금결제가 진행되었으면   ,      
+                  cashReceiptCheck = JOptionPane.showOptionDialog(null, "현금영수증 하시나요", "현금영수증 확인", 0, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                  if(cashReceiptCheck == 0) {// 영수증한다의 yes == 0 / cancel == 1 / 
+                     cashReceipt = true;
+                  } else {
+                     cashReceipt = false;
+                  }
+               }
+
+               break;
+
+            //textField에 데이터를 입력할때 = [isNumeric : 숫자 인지 확인] ---> 숫자와 관련된입력이면 else if진행.
+            } else if (isNumeric((String)op.getValue())) {
+               input += op.getValue();
+               textField.setText(input);
 
-					// 취소버튼 눌렀을때 한자리수 지우기
-				} else if (op.getValue() == ">") {
-					int len = textField.getText().length();
-					String num = textField.getText();
-					String finnum = "";
-					char[] numChar = num.toCharArray();
-					for(int i = 0; i < len-1 ; i++) {
-						finnum += numChar[i];
-					}
-					input = finnum;
-					textField.setText(input);
-				}
+            // textField에서 한번누를때마다 데이터한개씩 지우기
+            } else if (op.getValue() == ">") {
+               int len = textField.getText().length();
+               String num = textField.getText();
+               String finnum = "";
+               char[] numChar = num.toCharArray();
+               for(int i = 0; i < len-1 ; i++) {
+                  finnum += numChar[i];
+               }
+               input = finnum;
+               textField.setText(input);
+            }
 
-			}
+         }//while
 
+         int mustRecevie = total;
+         if(cashChk) {
+            mustRecevie = mustRecevie - sale - cashMoney;
+         }
+
+         if(e.getActionCommand() != null) { // "결제"버튼 클릭된 상태일떄.
+            if( mustRecevie > 0) {
+
+               // 카드 결제 입력 받기
+               label.setText("카드 결제 금액을 입력해주세요");
+               textField.setText(Integer.toString(mustRecevie));
+
+               while(true) {
+                  dialog = op.createDialog(null, "카드 결제");
+                  dialog.setVisible(true);
+
+                  if(op.getValue() == null) { 
+                     dialog.dispose(); // 결제팝업창 끄기.
+                     calcTable.setValueAt("", 2, 1);
+                     calcTable.setValueAt("", 3, 1);
+                     break;
+                  } else if (op.getValue() == "E" ) {
+
+                     cardMoney = Integer.parseInt((String)textField.getText());
+                     calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
+                     dialog.dispose();
+                     break;
+
+                  } else if (isNumeric((String)op.getValue())) {
+                     input += op.getValue();
+                     textField.setText(input);
+
+                  } else if (op.getValue() == ">") {
+                     int len = textField.getText().length();
+                     String num = textField.getText();
+                     String finnum = "";
+                     char[] numChar = num.toCharArray();
+                     for(int i = 0; i < len-1 ; i++) {
+                        finnum += numChar[i];
+                     }
+                     input = finnum;
+                     textField.setText(input);
+                  }
 
-			int mustRecevie = total - sale - cashMoney;
+               } //end card while 
 
-			if(e.getActionCommand() != null) { // 팝업 닫기,취소 버튼 안눌러진 상황일때.
-				if( mustRecevie > 0) {
+            } 
 
-					// 카드 결제 입력 받기
-					label.setText("카드 결제 금액을 입력해주세요");
-					textField.setText(Integer.toString(mustRecevie));
 
-					while(true) {
-						dialog = op.createDialog(null, "카드 결제");
-						dialog.setVisible(true);
+            int change = total - sale - cashMoney - cardMoney;
 
-						if(op.getValue() == null) { // 결제팝업창에서 X버튼눌렀을때
-							dialog.dispose(); // 결제팝업창 끄기.
-							break;
-						} else if (op.getValue() == "E" ) {
-
-							cardMoney = Integer.parseInt((String)textField.getText());
-							calcTable.setValueAt(""+(cardMoney+cashMoney), 2, 1);
-							dialog.dispose();
-							break;
 
-						} else if (isNumeric((String)op.getValue())) {
-							input += op.getValue();
-							textField.setText(input);
-
-						} else if (op.getValue() == ">") {
-							int len = textField.getText().length();
-							String num = textField.getText();
-							String finnum = "";
-							char[] numChar = num.toCharArray();
-							for(int i = 0; i < len-1 ; i++) {
-								finnum += numChar[i];
-							}
-							input = finnum;
-							textField.setText(input);
-						}
+            if(change <= 0){
+               change = Math.abs(change); //잔돈 거스름을 주기위한 과정
+               String changestr = Integer.toString(change);
+               calcTable.setValueAt(changestr, 3, 1); // 거스름돈 금액
 
-					} //end card while 
+               // DB에 데이터 넣기
+               String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
 
-				} 
+               String mmShipAddPointSql = "UPDATE customer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
 
+               String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE TRIM(?)), ?)";
 
-				int change = total - sale - cashMoney - cardMoney;
+               //      String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
 
+               String hPCountSql = "SELECT MAX(receipt_no) AS cnt FROM history_payment";
 
-				if(change <= 0){
-					change = Math.abs(change); //잔돈 거스름을 주기위한 과정
-					String changestr = Integer.toString(change);
-					calcTable.setValueAt(changestr, 3, 1); // 거스름돈 금액
+               String memPointDeductionSql = "UPDATE customer_info SET last_visit = sysdate,  point = point - ? WHERE tel LIKE ?" ;
 
-					// DB에 데이터 넣기
-					String historyPaymentSql = "INSERT INTO history_payment VALUES(?,sysdate, ?, ?, ?, ?, ?, ?, "+"'"+"complete"+"'"+", ?)";
+               int cnt = 0;
+               int addPoint = 0;
 
-					String mmShipAddPointSql = "UPDATE customer_info SET point= ((SELECT point FROM customer_info WHERE cus_no = ?)+ ?) WHERE cus_no=?";
+               try (
+                     Connection conn = DBConnector.getConnection();
+                     PreparedStatement hPpstmt = conn.prepareStatement(historyPaymentSql);
+                     PreparedStatement hPCntpstmt = conn.prepareStatement(hPCountSql);   
 
-					String historyBeverageSql = "INSERT INTO history_beverage VALUES((SELECT MAX(no) FROM history_beverage)+1, ?, (SELECT menu_no FROM menu WHERE MNAME LIKE TRIM(?)), ?)";
+                     PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
+                     PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
+                     //            PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);   
+                     PreparedStatement memPointpstmt  = conn.prepareStatement(memPointDeductionSql);
 
-					//		String findmenuNoSql = "SELECT menu_no FROM menu WHERE MNAME LIKE ?";
+                     ){
+                  ; 
+                  ResultSet rs = hPCntpstmt.executeQuery();
 
-					String hPCountSql = "SELECT MAX(receipt_no) AS cnt FROM history_payment";
+                  while(rs.next()) {
+                     cnt = rs.getInt("cnt") + 1;
+                  }
+                  rs.close();
 
-					String memPointDeductionSql = "UPDATE customer_info SET last_visit = sysdate,  point = point - ? WHERE tel LIKE ?" ;
+                  addPoint = (total - msal.usePoint)/10;
 
-					int cnt = 0;
-					int addPoint = 0;
+                  // history_payment DB에 추가 + 설정
+                  hPpstmt.setInt(1, cnt);
+                  hPpstmt.setInt(2, total);
+                  hPpstmt.setInt(3, cardMoney);
+                  hPpstmt.setInt(4, cashMoney > total ? cashMoney - change : cashMoney);
+                  if(msal.cus_no == 0) { 
+                     hPpstmt.setInt(5, 1000);
+                  } else {
+                     hPpstmt.setInt(5, msal.cus_no);
+                  }
+                  hPpstmt.setInt(6, msal.usePoint);
+                  hPpstmt.setInt(7, addPoint);
 
-					try (
-							Connection conn = DBConnector.getConnection();
-							PreparedStatement hPpstmt = conn.prepareStatement(historyPaymentSql);
-							PreparedStatement hPCntpstmt = conn.prepareStatement(hPCountSql);	
+                  if(cashReceipt) {
+                     hPpstmt.setString(8, "Y");
+                  } else {
+                     hPpstmt.setString(8, "N");
+                  }
 
-							PreparedStatement addPointpstmt = conn.prepareStatement(mmShipAddPointSql);
-							PreparedStatement hBpstmt = conn.prepareStatement(historyBeverageSql);
-							//				PreparedStatement fMNpstmt = conn.prepareStatement(findmenuNoSql);	
-							PreparedStatement memPointpstmt  = conn.prepareStatement(memPointDeductionSql);
+                  hPpstmt.executeUpdate();
+                  System.out.println("history_payment DB add");
 
-							){
-						; 
-						ResultSet rs = hPCntpstmt.executeQuery();
+                  // 멤버쉽 포인트 사용 
+                  
+                  if(msal.usePoint != 0) {
+                     memPointpstmt.setInt(1, msal.usePoint);
+                     memPointpstmt.setString(2, "%"+msal.memTel+"%");
+                     memPointpstmt.executeUpdate();
+                     System.out.println("history_payment DB add");
+                  }
 
-						while(rs.next()) {
-							cnt = rs.getInt("cnt") + 1;
-						}
-						rs.close();
+                  // customer_info 에 멤버쉽 포인트 추가 + 설정
 
-						addPoint = (total - msal.usePoint)/10;
+                  if (msal.cus_no != 0 ) {
+                     addPointpstmt.setInt(1, msal.cus_no);
+                     addPointpstmt.setInt(2, addPoint);
+                     addPointpstmt.setInt(3, msal.cus_no);
 
-						// history_payment DB에 추가 + 설정
-						hPpstmt.setInt(1, cnt);
-						hPpstmt.setInt(2, total);
-						hPpstmt.setInt(3, cardMoney);
-						hPpstmt.setInt(4, cashMoney > total ? cashMoney - change : cashMoney);
-						if(msal.cus_no == 0) { 
-							hPpstmt.setInt(5, 1000);
-						} else {
-							hPpstmt.setInt(5, msal.cus_no);
-						}
-						hPpstmt.setInt(6, msal.usePoint);
-						hPpstmt.setInt(7, addPoint);
+                     addPointpstmt.executeUpdate();
 
-						if(cashReceipt) {
-							hPpstmt.setString(8, "Y");
-						} else {
-							hPpstmt.setString(8, "N");
-						}
+                     System.out.println("PointUpdate");
+                  }
 
-						hPpstmt.executeUpdate();
-						System.out.println("history_payment DB add");
 
-						// 멤버쉽 포인트 사용 
-						
-						if(msal.usePoint != 0) {
-							memPointpstmt.setInt(1, msal.usePoint);
-							memPointpstmt.setString(2, "%"+msal.memTel+"%");
-							memPointpstmt.executeUpdate();
-							System.out.println("history_payment DB add");
-						}
 
-						// customer_info 에 멤버쉽 포인트 추가 + 설정
+                  // history_beverage 데이터 DB에 추가
 
-						if (msal.cus_no != 0 ) {
-							addPointpstmt.setInt(1, msal.cus_no);
-							addPointpstmt.setInt(2, addPoint);
-							addPointpstmt.setInt(3, msal.cus_no);
+                  hBpstmt.setInt(1, cnt);
 
-							addPointpstmt.executeUpdate();
 
-							System.out.println("PointUpdate");
-						}
 
+                  for(int i = 0; i < orderTableModel.getRowCount(); i++) {
 
+                     //            fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
+                     //            ResultSet fMNRS = fMNpstmt.executeQuery();
 
-						// history_beverage 데이터 DB에 추가
+                     String menuName = (String)orderTableModel.getValueAt(i, 0);
+                     hBpstmt.setString(2, menuName.trim());
+                     try {
+                        hBpstmt.setInt(3, (int)orderTableModel.getValueAt(i, 1));
+                     } catch (Exception e3) {
+                        hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
+                     }
 
-						hBpstmt.setInt(1, cnt);
+                     hBpstmt.executeUpdate();
+                  }
+                  System.out.println("history_beverage DB add");
 
+               } catch (SQLException e1) {
+                  e1.printStackTrace();
 
+               } catch (Exception e2) {
+                  e2.printStackTrace();
+               }
 
-						for(int i = 0; i < orderTableModel.getRowCount(); i++) {
 
-							//				fMNpstmt.setString(1, (String)orderTableModel.getValueAt(i, 0) +"%");
-							//				ResultSet fMNRS = fMNpstmt.executeQuery();
 
-							String menuName = (String)orderTableModel.getValueAt(i, 0);
-							hBpstmt.setString(2, menuName.trim());
-							try {
-								hBpstmt.setInt(3, (int)orderTableModel.getValueAt(i, 1));
-							} catch (Exception e3) {
-								hBpstmt.setString(3, (String)orderTableModel.getValueAt(i, 1));
-							}
+               JOptionPane.showMessageDialog(null, "결제가 완료되었습니다.","Message",JOptionPane.INFORMATION_MESSAGE);
 
-							hBpstmt.executeUpdate();
-						}
-						System.out.println("history_beverage DB add");
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-
-					} catch (Exception e2) {
-						e2.printStackTrace();
-					}
-
-
-
-					JOptionPane.showMessageDialog(null, "결제가 완료되었습니다.","Message",JOptionPane.INFORMATION_MESSAGE);
-
-					orderTableModel.setRowCount(0);
-					for(int i= 0; i < calcTable.getRowCount(); i++) {
-						calcTable.setValueAt("", i, 1);	
-					}
-					frame.validate();
-				}
-			}
-		}
-	} // end AL
-	public static boolean isNumeric(String s) {
-		try {
-			Double.parseDouble(s);
-			return true;
-		} catch(NumberFormatException e) {
-			return false;
-		}
-	}
+               orderTableModel.setRowCount(0);
+               for(int i= 0; i < calcTable.getRowCount(); i++) {
+                  calcTable.setValueAt("", i, 1);   
+               }
+               frame.validate();
+            }
+         }
+      }// if( e.getActionCommand() != null)
+   } // end AL
+   
+   public static boolean isNumeric(String s) {
+      try {
+         Double.parseDouble(s);
+         return true;
+      } catch(NumberFormatException e) {
+         return false;
+      }
+   }
 
 }
-

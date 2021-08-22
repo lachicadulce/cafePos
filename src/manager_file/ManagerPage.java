@@ -65,20 +65,20 @@ public class ManagerPage extends PosFrame {
 	    	PreparedStatement pstmt = conn.prepareStatement(sql);
 	    	ResultSet rs = pstmt.executeQuery();
 	    	){
-	    	if(rs.next()) {
-				while(rs.next()) {
-					int a_no = rs.getInt("a_no");
-					int emp_no = rs.getInt("emp_no");
-					String name = rs.getString("name");
-					String emp_degree = rs.getString("emp_degree");
-					String start_work = rs.getString("start_work");
-					String fin_work = rs.getString("fin_work");
-					int worked_time = rs.getInt("wtime");
-					String start_date = rs.getString("swork");
-					Object data[] = {a_no, emp_no, name, emp_degree, start_work, fin_work, worked_time, start_date};
-					model.addRow(data);
-				}
-	    	} else {
+			while(rs.next()) {
+				int a_no = rs.getInt("a_no");
+				int emp_no = rs.getInt("emp_no");
+				String name = rs.getString("name");
+				String emp_degree = rs.getString("emp_degree");
+				String start_work = rs.getString("start_work");
+				String fin_work = rs.getString("fin_work");
+				int worked_time = rs.getInt("wtime");
+				String start_date = rs.getString("swork");
+				Object data[] = {a_no, emp_no, name, emp_degree, start_work, fin_work, worked_time, start_date};
+				model.addRow(data);
+			}
+
+	    	if(model.getColumnCount() < 0) {
 	    		JOptionPane.showMessageDialog(this, "조회 결과가 없습니다.");
 	    	}
 		} catch (SQLException e) {

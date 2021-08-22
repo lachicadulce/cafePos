@@ -64,18 +64,17 @@ public class ManagerMenu extends PosFrame {
 	    	PreparedStatement pstmt = conn.prepareStatement(sql);
 	    	ResultSet rs = pstmt.executeQuery();
 	    	){
-	    	if(rs.next()) {
-				while(rs.next()) {
-					int no = rs.getInt("menu_no");
-					String name = rs.getString("mname");
-					int price = rs.getInt("price");
-					String type = rs.getString("type");
-					String display_order = rs.getString("display_order");
-	//				String stock = rs.getString("stock_chk");
-					Object data[] = {no, name, price, type, display_order};
-					model.addRow(data);
-				}
-	    	} else {
+			while(rs.next()) {
+				int no = rs.getInt("menu_no");
+				String name = rs.getString("mname");
+				int price = rs.getInt("price");
+				String type = rs.getString("type");
+				String display_order = rs.getString("display_order");
+//				String stock = rs.getString("stock_chk");
+				Object data[] = {no, name, price, type, display_order};
+				model.addRow(data);
+			}
+	    	if(model.getColumnCount() < 0) {
 	    		JOptionPane.showMessageDialog(this, "조회 결과가 없습니다.");
 	    	}
 		} catch (SQLException e) {

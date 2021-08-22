@@ -116,7 +116,7 @@ public class MainPos extends PosFrame {
 		// 액션리스너 선언
 		msal = new MemberShipActionListener(calcTable);
 		cah = new CashActionHandler(calcTable, msal, orderTableModel, this.getFrames()[0]);
-		managerAl = new ManagerButtonActionListener(this.getFrames()[0]);
+		managerAl = new ManagerButtonActionListener(this);
 		rcal = new ReceiptActionListener(this);
 		
 		

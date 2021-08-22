@@ -17,7 +17,7 @@ import handler.RevalidateActionListener;
 import handler.SafeOpenActionListener;
 import handler.SelectCancelActionListener;
 
-public class main_test extends PosFrame {
+public class MainPos extends PosFrame {
 
 	private JSplitPane jsp1 = new JSplitPane();
 	private JSplitPane jsp2 = new JSplitPane();
@@ -60,7 +60,7 @@ public class main_test extends PosFrame {
 	
 	MenuButtonActionListener mbal;
 	
-	public main_test() {
+	public MainPos() {
 		super();
 		mainScreenInit();
 		setTitle("카페 메인화면");
@@ -225,9 +225,4 @@ public class main_test extends PosFrame {
 
 	}//mainScreenInit함수 끝.
 
-	public static void main(String[] args) {
-
-		main_test m = new main_test();
-		m.setDefaultOptions();
-	}
 }

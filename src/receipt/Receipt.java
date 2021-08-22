@@ -47,7 +47,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import baseSettings.DBConnector;
 import baseSettings.PosFrame;
-import main_component.main_test;
+import main_component.MainPos;
 
 public class Receipt extends PosFrame {
 
@@ -548,7 +548,7 @@ public class Receipt extends PosFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main_test mt = new main_test();
+				MainPos mt = new MainPos();
 				mt.setDefaultOptions();
 				dispose();
 			}
@@ -1480,8 +1480,8 @@ public class Receipt extends PosFrame {
 		}
 	}
 
-	public static void main(String[] args) {
-		Receipt frame = new Receipt();
-		frame.setDefaultOptions();
-	}
+//	public static void main(String[] args) {
+//		Receipt frame = new Receipt();
+//		frame.setDefaultOptions();
+//	}
 }

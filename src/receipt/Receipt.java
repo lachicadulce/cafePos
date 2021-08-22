@@ -719,6 +719,18 @@ public class Receipt extends PosFrame {
      			} else {
      	  			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
        		   }
+     			connection();
+				
+				receipt_print();
+				
+				if (state.equals("complete")) {
+					receipt.setText(receipt_string); 
+				} else {
+					receipt.setText(return_string); 
+				}
+				
+				main.add(frame);
+				payBox();
      			
      		}
      	});
@@ -875,6 +887,18 @@ public class Receipt extends PosFrame {
      		}else {
   			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
   		   }
+     			connection();
+				
+				receipt_print();
+				
+				if (state.equals("complete")) {
+					receipt.setText(receipt_string); 
+				} else {
+					receipt.setText(return_string); 
+				}
+				
+				main.add(frame);
+				payBox();
      			
      		}
      	});
@@ -910,6 +934,18 @@ public class Receipt extends PosFrame {
     		   } else {
     			  JOptionPane.showMessageDialog(null, "변경하실 내역을 선택 후 실행해주세요.");
     		   }
+     		 connection();
+				
+				receipt_print();
+				
+				if (state.equals("complete")) {
+					receipt.setText(receipt_string); 
+				} else {
+					receipt.setText(return_string); 
+				}
+				
+				main.add(frame);
+				payBox();
      		  
      		}
      		

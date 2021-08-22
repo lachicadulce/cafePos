@@ -1212,7 +1212,7 @@ public class Receipt extends PosFrame {
 				+ "<table style='width:100%;'>" 
 				+ "<tr>" 
 				+ "<td>품명</td>" 
-				+ "<td style='text-align:right;'>단가</td>"
+				+ "<td style='text-align:right;'>&emsp&emsp&emsp&emsp&emsp단가</td>"
 				+ "<td style='text-align:right;'>수량</td>" 
 				+ "<td style='text-align:right;'>금액</td>" 
 				+ "</tr>"
@@ -1267,7 +1267,7 @@ public class Receipt extends PosFrame {
 				+ "</center>"
 
 				+ "<table style='width:100%;'>" + "<tr>" + "<td>품명</td>"
-				+ "<td style='text-align:right;'>단가</td>" + "<td style='text-align:right;'>수량</td>"
+				+ "<td style='text-align:right;'>&emsp&emsp&emsp&emsp&emsp단가</td>" + "<td style='text-align:right;'>수량</td>"
 				+ "<td style='text-align:right;'>금액</td>" + "</tr>" + "</table>"
 				+ "-------------------------------------------------------------------"
 				+ "<table style='width:100%;'>" 

@@ -748,7 +748,12 @@ public class Receipt extends PosFrame {
 					
 					String receipt_time = receipt_time_format.format(LocalDateTime.now());
 					
+					File folder = new File("src/receipt/reprint");
+					if (!folder.exists()) {
+						folder.mkdirs();
+					}
 					File f = new File("src/receipt/reprint/" + receipt_time.replace(":", ".") +".txt");
+					
 					
 					
 					try (

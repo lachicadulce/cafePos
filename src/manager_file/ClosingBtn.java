@@ -49,12 +49,6 @@ public class ClosingBtn implements ActionListener {
 			sumDB();
 			end.showMessageDialog(null, "[ " + dateFormat2.format(showdate)+ " ]" 
 						+ "\n마감 용지 출력이 완료되었습니다.", "마감 용지 출력", JOptionPane.INFORMATION_MESSAGE);
-		}else {
-			JOptionPane cancel = new JOptionPane();
-			Font f1 = new Font("", Font.BOLD, 15);
-			UIManager.put("OptionPane.messageFont", f1);
-			UIManager.put("OptionPane.minimumSize",new Dimension(220,100)); 
-			cancel.showMessageDialog(null, "마감용지 출력을 취소했습니다.", "출력 취소", JOptionPane.OK_OPTION);
 		}
 	}
 	

@@ -201,7 +201,8 @@ public class ManagerPage extends PosFrame {
 				+ "fin_work, "
 				+ "round((fin_work - start_work) * 24) AS wtime, "
 				+ "TO_CHAR(start_date, 'YYYY/MM/DD') AS swork "
-				+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1";
+				+ "FROM absent_info INNER JOIN employees_info  USING (emp_no) WHERE start_work BETWEEN " + date_s + " AND " + date_e + " + 1"
+				+ "ORDER BY emp_no, start_work";
 		setTB();
 	}
 	

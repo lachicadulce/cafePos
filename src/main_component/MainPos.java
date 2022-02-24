@@ -207,7 +207,7 @@ public class MainPos extends PosFrame {
 		// 환전
 		exchange.setLocation(386, 675);
 		exchange.setSize(125,65);
-		exchange.addActionListener(new SafeOpenActionListener());
+		exchange.addActionListener(new SafeOpenActionListener(calcTable, orderTableModel));
 		exchange.setFont(new Font("default", Font.BOLD, 14));
 		exchange.setBackground(new Color(0xE0ECF8));
 		exchange.setHorizontalAlignment(SwingConstants.LEFT);

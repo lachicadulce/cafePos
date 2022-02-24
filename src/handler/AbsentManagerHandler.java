@@ -33,13 +33,13 @@ public class AbsentManagerHandler implements ActionListener {
 		String noChecksql = "SELECT * FROM absent_info ORDER BY a_no" ;
 		String sql = "SELECT emp_no, name FROM employees_info WHERE emp_no = ?" ;
 		String workSql = "SELECT start_work, fin_work FROM absent_info WHERE emp_no = ? ORDER BY start_work" ;
-		String workInsert = "INSERT INTO absent_info VALUES(?,?, sysdate, sysdate)";
-		String finUpdate = "UPDATE absent_info SET fin_work = sysdate WHERE emp_no = ? AND start_work LIKE ?" ;
-
+		String workInsert = "INSERT INTO absent_info VALUES(?,?, sysdate, ?)";
+		//String finUpdate = "UPDATE absent_info SET fin_work = sysdate WHERE emp_no = ? AND start_work LIKE ?" ;
+		String finUpdate = "UPDATE absent_info SET fin_work = sysdate WHERE emp_no = ?" ;
 		// 출근 인서트 , 근태번호 어떻게 설정되는지 물어보기
 
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-
+		//SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:MI:SS");
 		String name = null;
 
 		Date work = new Date(99, 01, 01);
@@ -52,7 +52,7 @@ public class AbsentManagerHandler implements ActionListener {
 		boolean check = false;
 		if (emp_no != null) {
 			try (
-					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@database-1.cxc98ia1oha4.us-east-2.rds.amazonaws.com:1521/ORCL", "cafe", "!!22Qorthdud");
+					Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/xepdb1", "cafe", "!!22Qorthdud");
 					PreparedStatement pstmt = conn.prepareStatement(sql);
 					PreparedStatement noCheckpstmt = conn.prepareStatement(noChecksql);
 					PreparedStatement workpstmt = conn.prepareStatement(workSql);
@@ -70,18 +70,27 @@ public class AbsentManagerHandler implements ActionListener {
 
 				// 최근 출근시간 구하기
 				workpstmt.setString(1, emp_no);
-				ResultSet workrs = workpstmt.executeQuery();
+				ResultSet workrs = workpstmt.executeQuery();//입력받은 사번에 맞춰서 출퇴근 기록중에서 start_work가 오래된 순부터 해서 보여준다.
+				timestr = format1.format(time);//제일 최근 시간을 format형태로 구하기
+				System.out.println("timestr의 형태 : " + timestr);
 				while(workrs.next()) {
 					Date worktemp = workrs.getDate("start_work");
 
-					if(work.before(worktemp)) {
+					if(work.before(worktemp)) { // a.before(b) : a가 b보다 더 이전 맞지?
+						System.out.println("-----------------------------------------");
+						System.out.println("work좀 확인해보자 : " + work);
+						System.out.println("worktemp좀 확인해보자 : " + worktemp);
+						
 						work = worktemp;
 					}
 					workstr = format1.format(work);
-					timestr = format1.format(time);
+					
+					System.out.println("^^^^^^^^");
+					System.out.println("workstr의 형태 : " + workstr);
+					
 				}
 
-
+				
 				// 이름 확인
 				pstmt.setString(1, emp_no);
 				ResultSet rs = pstmt.executeQuery();
@@ -103,13 +112,16 @@ public class AbsentManagerHandler implements ActionListener {
 						// 출근 체크
 						workInsertpstmt.setInt(1, recentNo);
 						workInsertpstmt.setString(2, emp_no);
+						workInsertpstmt.setString(3, "");
 						workInsertpstmt.executeUpdate();
 						JOptionPane.showMessageDialog(null, "출근확인됐습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
 					} else if (absent == 1){
 						if(workstr.equals(timestr)) {
 							// 퇴근 체크
 							finUpdatepstmt.setString(1, emp_no);
-							finUpdatepstmt.setString(2, timestr);
+							System.out.println("퇴근을 위한 시간체크1 : " + workstr);
+							System.out.println("퇴근을 위한 시간체크2 : " + timestr);
+							//finUpdatepstmt.setString(2, timestr);
 							finUpdatepstmt.executeUpdate();
 							JOptionPane.showMessageDialog(null, "퇴근확인됐습니다.", "완료", JOptionPane.INFORMATION_MESSAGE);
 						} else {
